@@ -1,0 +1,59 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'jetty'
+//java
+sourceCompatibility=1.6
+//war
+war.baseName='lnramirez'
+//jetty
+jettyRun.scanIntervalSeconds=1
+jettyRun.httpPort=8282
+jettyRun.stopPort=8081
+jettyRun.stopKey='s'
+//project
+group='com.bajoneando.lnramirez'
+version='0.1.0-SNAPSHOT'
+description='Official lnramirez site'
+//dependencies
+//versions
+springVersion = '3.1.1.RELEASE'
+springMongoVersion = '1.0.1.RELEASE'
+
+xstreamVersion = '1.3.1'
+
+junitVersion = '4.8.2'
+//repositories
+repositories {
+    mavenCentral()
+    mavenRepo urls: [
+        "http://repo.springsource.org/libs-release"]
+}
+//dependencies
+dependencies {
+    
+    compile "org.springframework:spring-core:$springVersion"
+    compile "org.springframework.data:spring-data-mongodb:$springMongoVersion"
+    compile "org.springframework:spring-web:$springVersion"
+    compile "org.springframework:spring-webmvc:$springVersion"
+    compile "org.springframework:spring-oxm:$springVersion"
+    compile "com.thoughtworks.xstream:xstream:$xstreamVersion"
+    compile "jstl:jstl:1.1.2"
+    compile "taglibs:standard:1.1.2"
+    
+    providedCompile "javax.servlet:servlet-api:2.5"
+    providedCompile "javax.servlet.jsp:jsp-api:2.1"
+
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.springframework:spring-test:$springVersion"
+
+}
+//tasks
+task createSources << {
+    sourceSets.all {
+        java.srcDirs.each { _srcDir ->
+            println (_srcDir.canonicalPath)
+        }
+        resources.srcDirs.each { println (it.canonicalPath)}
+    }   
+}
+
