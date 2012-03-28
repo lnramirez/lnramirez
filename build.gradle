@@ -47,13 +47,16 @@ dependencies {
     testCompile "org.springframework:spring-test:$springVersion"
 
 }
+
 //tasks
-task createSources << {
+task createDirSources << {
     sourceSets.all {
-        java.srcDirs.each { _srcDir ->
-            println (_srcDir.canonicalPath)
+        (java.srcDirs + resources.srcDirs + webAppDir).each { _srcDir ->
+            if (!_srcDir.exists()) {
+                println("mkdirs ${_srcDir.canonicalPath}")
+                _srcDir.mkdirs()
+            }
         }
-        resources.srcDirs.each { println (it.canonicalPath)}
     }   
 }
 
