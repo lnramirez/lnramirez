@@ -17,3 +17,5 @@ build/
 #mac files
 .DS_Store
 
+#maven
+pom.xml
