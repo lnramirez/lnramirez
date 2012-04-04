@@ -103,6 +103,52 @@ def customizePom(pom, gradleProject) {
             organization {
                 name = 'bajoneando'
             }
+            build {
+                plugins {
+                    plugin {
+                        groupId = 'org.apache.maven.plugins'
+                        artifactId = 'maven-compiler-plugin'
+                        configuration {
+                            source = '1.6'
+                            target = '1.6'
+                        }
+                    }
+                    plugin {
+                        groupId = 'org.apache.maven.plugins'
+                        artifactId = 'maven-surefire-plugin'
+                        configuration {
+                            includes {
+                                include = '**/*Tests.java'
+                            }
+                            excludes {
+                                exclude = '**/*Abstract*.java'
+                            }
+                        }
+                    }
+                }
+                resources {
+                    resource {
+                        directory = 'src/main/java'
+                        includes = ['**/*']
+                        excludes = ['**/*.java']
+                    }
+                    resource {
+                        directory = 'src/main/resources'
+                        includes = ['**/*']
+                    }
+                }
+                testResources {
+                    testResource {
+                        directory = 'src/test/java'
+                        includes = ['**/*']
+                        excludes = ['**/*.java']
+                    }
+                    testResource {
+                        directory = 'src/test/resources'
+                        includes = ['**/*']
+                    }
+                }
+            }
             developers {
                 developer {
                     id = 'lnramirez'
