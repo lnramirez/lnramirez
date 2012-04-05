@@ -1,5 +1,6 @@
 package com.bajoneando.lnramirez.blog;
 
+import java.io.Serializable;
 import java.util.Date;
 import org.springframework.data.annotation.Id;
 
@@ -7,7 +8,7 @@ import org.springframework.data.annotation.Id;
  *
  * @author lrmonterosa
  */
-public class BlogEntry {
+public class BlogEntry implements Serializable {
     
     @Id
     private Long id;
