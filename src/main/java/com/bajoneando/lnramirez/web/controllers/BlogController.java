@@ -37,5 +37,5 @@ public class BlogController {
         
     @Autowired
     private BlogEntryRepository blogEntryRepository;
-
+    
 }
