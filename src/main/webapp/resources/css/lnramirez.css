@@ -11,9 +11,10 @@ header, footer, aside, nav, article {
 
 body {  
     margin: 0 auto;  
-    width: 940px;  
-    font: 13px/22px Helvetica, Arial, sans-serif;  
-    background: #f0f0f0;  
+    width: 940px;
+    background-color: #55c0c7;
+    color: #444;
+    font-family: 'Helvetica Neue', "Helvetica Neue Light", Helvetica;
 }  
 
 h2 {  
@@ -36,7 +37,6 @@ nav {
     position: absolute;  
     left: 0;  
     width: 100%;
-    background: url("nav_background");
 }  
 
 nav ul {  
@@ -72,5 +72,26 @@ nav ul li.subscribe a {
     margin-left: 22px;  
     padding-left: 33px;  
     text-align: left;  
-    background: url("rss.png") left center no-repeat;  
+    background: left center no-repeat;  
 }  
+
+#rounded_box {  
+    margin-top: 66px;  
+    padding: 44px;  
+    background: #fff repeat-x;  
+    background-size: 100%;  
+    border-radius: 22px;  
+}  
+
+.container {  
+    margin-top: 66px;  
+    padding: 44px;  
+    background: #fff repeat-x;  
+    background-size: 100%;  
+    border-radius: 22px;  
+}  
+
+footer {  
+    margin-top: 66px;  
+    width: 940px; 
+}

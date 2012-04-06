@@ -10,8 +10,6 @@ import org.springframework.data.annotation.Id;
  */
 public class BlogEntry implements Serializable {
     
-    @Id
-    private Long id;
     private String subject;
     private String article;
     private Date date;
@@ -30,14 +28,6 @@ public class BlogEntry implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getSubject() {

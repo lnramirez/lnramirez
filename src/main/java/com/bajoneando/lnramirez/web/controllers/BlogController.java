@@ -2,11 +2,13 @@ package com.bajoneando.lnramirez.web.controllers;
 
 import com.bajoneando.lnramirez.blog.BlogEntry;
 import com.bajoneando.lnramirez.blog.services.BlogEntryRepository;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,16 +25,19 @@ public class BlogController {
     
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView init() {
-        List<BlogEntry> blogEntries = blogEntryRepository.findAll(new Sort("date"));
+        Sort sort = new Sort("date");
+        List<BlogEntry> blogEntries = blogEntryRepository.findAll(sort);
         ModelAndView modelAndView = new ModelAndView("/blog/list");
         modelAndView.addObject(blogEntries);
+        modelAndView.addObject("blogEntry", new BlogEntry());
         return modelAndView;
     }
     
     @RequestMapping(method=RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void addEntry(@RequestBody BlogEntry blogEntry) {
+    public String addEntry(@ModelAttribute(value="blogEntry") BlogEntry blogEntry) {
+        blogEntry.setDate(new Date());
         blogEntryRepository.save(blogEntry);
+        return "redirect:/blog/";
     }
         
     @Autowired
