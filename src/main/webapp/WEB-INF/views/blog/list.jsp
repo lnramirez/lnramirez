@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:url value="/" var="home" />
-<c:url value="/blog/" var="blogUrl"/>
-<c:url value="/resources/" var="resources" />
-<c:url value="/about/" var="about" />
+<spring:url value="/" var="home" />
+<spring:url value="/blog/" var="blogUrl"/>
+<spring:url value="/resources/icons/favicon.ico" var="favicon" />
+<spring:url value="/resources/css/lnramirez.css" var="css" />
+<spring:url value="/about/" var="about" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,8 +15,8 @@
         <title>Latest blog entries</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>    
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-        <link href="${resources}css/lnramirez.css" rel="stylesheet" type="text/css"/>
-        <link rel="icon" type="image/vnd.microsoft.icon" href="${resources}icons/favicon.ico">
+        <link href="${css}" rel="stylesheet" type="text/css">
+        <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
     </head>
     <body>
         <header>
