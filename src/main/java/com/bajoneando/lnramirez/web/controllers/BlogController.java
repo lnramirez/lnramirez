@@ -25,7 +25,7 @@ public class BlogController {
     
     @RequestMapping(method=RequestMethod.GET)
     public ModelAndView init() {
-        Sort sort = new Sort("date");
+        Sort sort = new Sort(Sort.Direction.DESC, "date");
         List<BlogEntry> blogEntries = blogEntryRepository.findAll(sort);
         ModelAndView modelAndView = new ModelAndView("/blog/list");
         modelAndView.addObject(blogEntries);
