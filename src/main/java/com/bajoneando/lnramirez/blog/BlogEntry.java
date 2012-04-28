@@ -2,7 +2,6 @@ package com.bajoneando.lnramirez.blog;
 
 import java.io.Serializable;
 import java.util.Date;
-import org.springframework.data.annotation.Id;
 
 /**
  *

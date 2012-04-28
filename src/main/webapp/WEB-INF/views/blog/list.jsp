@@ -58,7 +58,7 @@
                         </label>
                     </p>
                     <p><input type="submit" value="Post" ></p>
-                    </form:form>
+                </form:form>
             </article>
         </section>
         <footer>
