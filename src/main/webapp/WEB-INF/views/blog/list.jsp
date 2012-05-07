@@ -73,7 +73,7 @@
                     <h1>${blogEntry.subject}</h1>
                     <p>
                         Published on <time datetime="${blogEntry.date}">${blogEntry.date}</time>: 
-                        <a href="#" id="${blogEntry.id}">Edit</a>
+                        <a href="#blogEntryForm" id="${blogEntry.id}">Edit</a>
                     </p>
                     <p>${blogEntry.article}</p>
                 </article>
