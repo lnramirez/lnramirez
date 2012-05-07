@@ -7,14 +7,49 @@
 <spring:url value="/blog/" var="blogUrl"/>
 <spring:url value="/resources/icons/favicon.ico" var="favicon" />
 <spring:url value="/resources/css/lnramirez.css" var="css" />
+<spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
 <spring:url value="/about/" var="about" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <title>Latest blog entries</title>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>    
+        <script src="${dojo}"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+        <script>
+            function loadEntry(_id) {
+                var xhrArgs = {
+                    url: "${pageContext.request.contextPath}/blog/single/" + _id,
+                    handleAs: "json",
+                    load: function(data) {return data;},
+                    error: function(error) {return error;}
+                }
+                var deferred = dojo.xhrGet(xhrArgs);
+                deferred.then (
+                    function (blogEntry) {
+                        require(["dojo/query", "dojo/NodeList-traverse"], function(query){
+                            require(["dojo/dom-construct"], function(domConstruct){
+                                var nodeArticle = query("a#" + blogEntry.id).parents("article").first();
+                                var floatingForm = query("div#_floatingForm");
+                                domConstruct.place(floatingForm[0], nodeArticle[0]);
+                            });
+                        });
+                    },
+                    function (error) {
+                        alert(error);
+                    }
+                );
+            }
+            dojo.ready(function () {
+                dojo.query("article a").forEach(function(node) {
+                    dojo.connect(node,"onclick",function(event) {
+                        dojo.stopEvent(event);
+                        loadEntry(node.id);
+                    });
+                });
+            }); 
+        </script>
         <link href="${css}" rel="stylesheet" type="text/css">
         <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
     </head>
@@ -36,10 +71,14 @@
             <c:forEach items="${blogEntryList}" var="blogEntry">
                 <article>
                     <h1>${blogEntry.subject}</h1>
-                    <p>Published on <time datetime="${blogEntry.date}">${blogEntry.date}</time></p>
+                    <p>
+                        Published on <time datetime="${blogEntry.date}">${blogEntry.date}</time>: 
+                        <a href="#" id="${blogEntry.id}">Edit</a>
+                    </p>
                     <p>${blogEntry.article}</p>
                 </article>
             </c:forEach>
+            <div id="_floatingForm">
             <article>
                 <header>
                     <h2>Add a new entry</h2>
@@ -60,6 +99,7 @@
                     <p><input type="submit" value="Post" ></p>
                 </form:form>
             </article>
+            </div>
         </section>
         <footer>
             <p>

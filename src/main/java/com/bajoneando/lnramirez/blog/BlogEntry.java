@@ -9,9 +9,18 @@ import java.util.Date;
  */
 public class BlogEntry implements Serializable {
     
+    private String id;
     private String subject;
     private String article;
     private Date date;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getArticle() {
         return article;
