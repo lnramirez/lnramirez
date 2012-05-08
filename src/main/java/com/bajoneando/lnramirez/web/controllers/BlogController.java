@@ -43,6 +43,11 @@ public class BlogController {
         return "redirect:/blog/";
     }
     
+    @RequestMapping(value="/update", method=RequestMethod.PUT, headers="Accept=application/json")
+    public void updateEntry(@RequestBody BlogEntry blogEntry) {
+        blogEntryRepository.save(blogEntry);
+    }
+    
     @RequestMapping(value="/single/{id}", method=RequestMethod.GET, headers="Accept=application/json")
     @ResponseBody
     public BlogEntry getEntry(@PathVariable("id") String id) {
