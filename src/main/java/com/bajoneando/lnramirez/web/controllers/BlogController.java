@@ -3,12 +3,10 @@ package com.bajoneando.lnramirez.web.controllers;
 import com.bajoneando.lnramirez.blog.BlogEntry;
 import com.bajoneando.lnramirez.blog.services.BlogEntryRepository;
 import com.petebevin.markdown.MarkdownProcessor;
-import com.thoughtworks.xstream.mapper.CGLIBMapper;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -49,6 +47,7 @@ public class BlogController {
     @RequestMapping(value="/update", method=RequestMethod.PUT, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     public void updateEntry(@RequestBody BlogEntry blogEntry) {
+        blogEntry.setDate(new Date());
         blogEntry.setPrintableHtml(markdownProcessor.markdown(blogEntry.getArticle()));
         blogEntryRepository.save(blogEntry);
     }
