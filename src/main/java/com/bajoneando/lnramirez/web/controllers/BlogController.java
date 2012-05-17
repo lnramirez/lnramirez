@@ -47,6 +47,7 @@ public class BlogController {
     }
     
     @RequestMapping(value="/update", method=RequestMethod.PUT, headers="Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
     public void updateEntry(@RequestBody BlogEntry blogEntry) {
         blogEntry.setPrintableHtml(markdownProcessor.markdown(blogEntry.getArticle()));
         blogEntryRepository.save(blogEntry);

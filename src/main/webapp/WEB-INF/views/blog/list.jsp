@@ -14,7 +14,7 @@
     <head>
         <meta charset="utf-8">
         <title>Latest blog entries</title>
-        <script src="${dojo}"></script>
+        <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
         <script>
@@ -28,14 +28,15 @@
                 var deferred = dojo.xhrGet(xhrArgs);
                 deferred.then (
                     function (blogEntry) {
-                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate"], 
-                        function(query,domConstruct){
+                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/dom-attr"], 
+                        function(query,domConstruct,domAttr){
                             var nodeArticle = query("a#" + blogEntry.id).parents("article").first()[0];
                             var floatingDiv = query("div#_floatingForm")[0];
                             var floatingForm = query("#blogEntryForm")[0];
-                            query("subject",floatingForm).val(blogEntry.subject);
-                            query("article",floatingForm).val(blogEntry.printableHtml);
-                            dojo.create("input",{"type":"hidden","value":floatingForm.id,"id":"id","name":"id"},floatingForm.subject);
+                            dojo.attr("subject","value",blogEntry.subject);
+                            dojo.attr("article","value",blogEntry.article);
+                            var idNode = dojo.create("input",{"type":"hidden","value":blogEntry.id,"id":"id","name":"id"});
+                            domConstruct.place(idNode,"article");
                             dojo.connect(floatingForm,"onsubmit",function(event) {
                                 dojo.stopEvent(event);
                                 var xhrUpdateArgs = {
