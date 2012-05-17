@@ -2,6 +2,8 @@ package com.bajoneando.lnramirez.web.controllers;
 
 import com.bajoneando.lnramirez.blog.BlogEntry;
 import com.bajoneando.lnramirez.blog.services.BlogEntryRepository;
+import com.petebevin.markdown.MarkdownProcessor;
+import com.thoughtworks.xstream.mapper.CGLIBMapper;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +41,14 @@ public class BlogController {
     @RequestMapping(method=RequestMethod.POST)
     public String addEntry(@ModelAttribute(value="blogEntry") BlogEntry blogEntry) {
         blogEntry.setDate(new Date());
+        blogEntry.setPrintableHtml(markdownProcessor.markdown(blogEntry.getArticle()));
         blogEntryRepository.save(blogEntry);
         return "redirect:/blog/";
     }
     
     @RequestMapping(value="/update", method=RequestMethod.PUT, headers="Accept=application/json")
     public void updateEntry(@RequestBody BlogEntry blogEntry) {
+        blogEntry.setPrintableHtml(markdownProcessor.markdown(blogEntry.getArticle()));
         blogEntryRepository.save(blogEntry);
     }
     
@@ -56,5 +60,8 @@ public class BlogController {
         
     @Autowired
     private BlogEntryRepository blogEntryRepository;
+    
+    @Autowired
+    private MarkdownProcessor markdownProcessor;
     
 }

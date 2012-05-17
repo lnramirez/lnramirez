@@ -13,6 +13,7 @@ public class BlogEntry implements Serializable {
     private String subject;
     private String article;
     private Date date;
+    private String printableHtml;
 
     public String getId() {
         return id;
@@ -44,6 +45,14 @@ public class BlogEntry implements Serializable {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getPrintableHtml() {
+        return printableHtml;
+    }
+
+    public void setPrintableHtml(String printableHtml) {
+        this.printableHtml = printableHtml;
     }
 
 }

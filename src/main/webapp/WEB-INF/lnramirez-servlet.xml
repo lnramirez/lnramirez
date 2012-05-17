@@ -29,7 +29,9 @@
                 <ref bean="jacksonMessageConverter" />
             </list>
         </property>
-    </bean>  
+    </bean>
+    
+    <bean class="com.petebevin.markdown.MarkdownProcessor" />
 
     <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
     </bean>

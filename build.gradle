@@ -27,7 +27,8 @@ junitVersion = '4.8.2'
 repositories {
     mavenCentral()
     mavenRepo urls: [
-        "http://repo.springsource.org/libs-release"]
+        "http://repo.springsource.org/libs-release",
+        "http://scala-tools.org/repo-releases"]
 }
 //dependencies
 dependencies {
@@ -41,6 +42,7 @@ dependencies {
     compile "org.codehaus.jackson:jackson-jaxrs:$jacksonVersion"
     compile "jstl:jstl:1.1.2"
     compile "taglibs:standard:1.1.2"
+    compile "org.markdownj:markdownj:0.3.0-1.0.2b4"
     
     providedCompile "javax.servlet:servlet-api:2.5"
     providedCompile "javax.servlet.jsp:jsp-api:2.1"

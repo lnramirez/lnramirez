@@ -28,30 +28,29 @@
                 var deferred = dojo.xhrGet(xhrArgs);
                 deferred.then (
                     function (blogEntry) {
-                        require(["dojo/query", "dojo/NodeList-traverse"], function(query){
-                            require(["dojo/dom-construct"], function(domConstruct){
-                                var nodeArticle = query("a#" + blogEntry.id).parents("article").first()[0];
-                                var floatingDiv = query("div#_floatingForm")[0];
-                                var floatingForm = query("#blogEntryForm")[0];
-                                floatingForm.article.value = blogEntry.article;
-                                floatingForm.subject.value = blogEntry.subject;
-                                dojo.create("input",{"type":"hidden","value":floatingForm.id,"id":"id","name":"id"},floatingForm.subject);
-                                dojo.connect(floatingForm,"onsubmit",function(event) {
-                                    dojo.stopEvent(event);
-                                    var xhrUpdateArgs = {
-                                        url: "${pageContext.request.contextPath}/blog/update",
-                                        headers: { "Content-Type": "application/json"},
-                                        putData: dojo.formToJson(floatingForm)
-                                    }
-                                    var def = dojo.xhrPut(xhrUpdateArgs);
-                                    def.then(function(data) {
-                                        dojo.disconnect(floatingForm);
-                                    });
+                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate"], 
+                        function(query,domConstruct){
+                            var nodeArticle = query("a#" + blogEntry.id).parents("article").first()[0];
+                            var floatingDiv = query("div#_floatingForm")[0];
+                            var floatingForm = query("#blogEntryForm")[0];
+                            query("subject",floatingForm).val(blogEntry.subject);
+                            query("article",floatingForm).val(blogEntry.printableHtml);
+                            dojo.create("input",{"type":"hidden","value":floatingForm.id,"id":"id","name":"id"},floatingForm.subject);
+                            dojo.connect(floatingForm,"onsubmit",function(event) {
+                                dojo.stopEvent(event);
+                                var xhrUpdateArgs = {
+                                    url: "${pageContext.request.contextPath}/blog/update",
+                                    headers: { "Content-Type": "application/json"},
+                                    putData: dojo.formToJson(floatingForm)
+                                }
+                                var def = dojo.xhrPut(xhrUpdateArgs);
+                                def.then(function(data) {
+                                    dojo.disconnect(floatingForm);
                                 });
-                                
-                                domConstruct.place(floatingDiv, nodeArticle);
                             });
-                        });
+
+                            domConstruct.place(floatingDiv, nodeArticle);
+                    });
                     },
                     function (error) {
                         alert(error);
@@ -92,7 +91,7 @@
                         Published on <time datetime="${blogEntry.date}">${blogEntry.date}</time>: 
                         <a href="#blogEntryForm" id="${blogEntry.id}">Edit</a>
                     </p>
-                    <p>${blogEntry.article}</p>
+                    <p>${blogEntry.printableHtml}</p>
                 </article>
             </c:forEach>
             <div id="_floatingForm">
