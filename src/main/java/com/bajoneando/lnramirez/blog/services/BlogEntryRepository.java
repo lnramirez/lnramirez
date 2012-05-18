@@ -1,12 +1,12 @@
 package com.bajoneando.lnramirez.blog.services;
 
 import com.bajoneando.lnramirez.blog.BlogEntry;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  *
  * @author lrmonterosa
  */
-public interface BlogEntryRepository extends MongoRepository<BlogEntry, String> {
+public interface BlogEntryRepository extends PagingAndSortingRepository<BlogEntry, String> {
     
 }

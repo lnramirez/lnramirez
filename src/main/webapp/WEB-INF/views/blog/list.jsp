@@ -85,7 +85,8 @@
             <header>
                 <h2>Latest entries</h2>
             </header>
-            <c:forEach items="${blogEntryList}" var="blogEntry">
+            
+            <c:forEach items="${blogEntryPage.content}" var="blogEntry">
                 <article>
                     <h1>${blogEntry.subject}</h1>
                     <p>
@@ -95,6 +96,11 @@
                     <p>${blogEntry.printableHtml}</p>
                 </article>
             </c:forEach>
+            
+            <p>
+                ${blogEntryPage.size}
+            </p>
+            
             <div id="_floatingForm">
             <article>
                 <header>
