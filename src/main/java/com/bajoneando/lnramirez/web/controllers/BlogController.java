@@ -27,11 +27,12 @@ import org.springframework.web.servlet.ModelAndView;
  * @author lrmonterosa
  */
 @Controller
-@RequestMapping("/blog/")
+@RequestMapping("/blog")
 public class BlogController {
     
     @RequestMapping(method=RequestMethod.GET)
-    public ModelAndView list(@PageableDefaults (pageNumber=0, value=5) Pageable pageable) {
+    public ModelAndView list(@PageableDefaults(pageNumber=0, value=5) Pageable pageableRequest) {
+        Pageable pageable = new PageRequest(pageableRequest.getPageNumber(), pageableRequest.getPageSize(), Sort.Direction.DESC, "date");
         Page<BlogEntry> blogEntriesPage = blogEntryRepository.findAll(pageable);
         ModelAndView modelAndView = new ModelAndView("/blog/list");
         modelAndView.addObject("blogEntryPage", blogEntriesPage);
@@ -44,7 +45,7 @@ public class BlogController {
         blogEntry.setDate(new Date());
         blogEntry.setPrintableHtml(markdownProcessor.markdown(blogEntry.getArticle()));
         blogEntryRepository.save(blogEntry);
-        return "redirect:/blog/";
+        return "redirect:/blog";
     }
     
     @RequestMapping(value="/update", method=RequestMethod.PUT, headers="Accept=application/json")

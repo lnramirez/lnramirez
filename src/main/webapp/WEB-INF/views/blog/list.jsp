@@ -13,10 +13,8 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Latest blog entries</title>
+        <title>lnramirez Blog</title>
         <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
         <script>
             function loadEntry(_id) {
                 var xhrArgs = {
@@ -85,7 +83,6 @@
             <header>
                 <h2>Latest entries</h2>
             </header>
-            
             <c:forEach items="${blogEntryPage.content}" var="blogEntry">
                 <article>
                     <h1>${blogEntry.subject}</h1>
@@ -96,11 +93,20 @@
                     <p>${blogEntry.printableHtml}</p>
                 </article>
             </c:forEach>
-            
-            <p>
-                ${blogEntryPage.size}
-            </p>
-            
+            <div id="_nav">
+                <c:if test="${not blogEntryPage.firstPage}">
+                    <spring:url value="/blog" var="newer">
+                        <spring:param name="page.page" value="${blogEntryPage.number}" />
+                    </spring:url>
+                    <a href="${newer}">Later Entries</a>
+                </c:if>
+                <c:if test="${not blogEntryPage.lastPage}">
+                    <spring:url value="/blog" var="older">
+                        <spring:param name="page.page" value="${blogEntryPage.number + 2}" />
+                    </spring:url>
+                    <a href="${older}">Previous Entries</a>
+                </c:if>
+            </div>
             <div id="_floatingForm">
             <article>
                 <header>
