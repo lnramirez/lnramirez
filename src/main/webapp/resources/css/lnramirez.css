@@ -75,6 +75,27 @@ nav ul li.subscribe a {
     background: left center no-repeat;  
 }  
 
+nav.pagination {
+    position: relative;
+    display: inline;
+    float: left;
+    line-height: 44px;
+    bottom: 20px;
+    width: 852px;
+}
+
+nav.pagination a.later {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+nav.pagination a.previous {
+    position: absolute;
+    top:0;
+    right: 0;
+}
+
 #rounded_box {  
     margin-top: 66px;  
     padding: 44px;  

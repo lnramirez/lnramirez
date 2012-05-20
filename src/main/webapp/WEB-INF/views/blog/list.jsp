@@ -93,20 +93,20 @@
                     <p>${blogEntry.printableHtml}</p>
                 </article>
             </c:forEach>
-            <div id="_nav">
+            <nav class="pagination">
                 <c:if test="${not blogEntryPage.firstPage}">
                     <spring:url value="/blog" var="newer">
                         <spring:param name="page.page" value="${blogEntryPage.number}" />
                     </spring:url>
-                    <a href="${newer}">Later Entries</a>
+                    <a href="${newer}" class="later">Later Entries</a>
                 </c:if>
                 <c:if test="${not blogEntryPage.lastPage}">
                     <spring:url value="/blog" var="older">
                         <spring:param name="page.page" value="${blogEntryPage.number + 2}" />
                     </spring:url>
-                    <a href="${older}">Previous Entries</a>
+                    <a href="${older}" class="previous">Previous Entries</a>
                 </c:if>
-            </div>
+            </nav>
             <div id="_floatingForm">
             <article>
                 <header>
@@ -121,7 +121,7 @@
                     </p>
                     <p>
                         <label>Article:
-                            <form:textarea path="article" id="article" cols="50" rows="7"  
+                            <form:textarea path="article" id="article" cols="100" rows="10"  
                                            placeholder="Main content of article" required="required" />
                         </label>
                     </p>
