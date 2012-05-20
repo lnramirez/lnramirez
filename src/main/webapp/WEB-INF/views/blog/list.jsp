@@ -116,12 +116,12 @@
                     <p>
                         <label>Subject:
                             <form:input path="subject" type="text" id="subject" 
-                                        name="subject" placeholder="Subject" required="required" />
+                                        placeholder="Subject" required="required" />
                         </label>
                     </p>
                     <p>
                         <label>Article:
-                            <form:textarea path="article" id="article" name="article" cols="50" rows="7"  
+                            <form:textarea path="article" id="article" cols="50" rows="7"  
                                            placeholder="Main content of article" required="required" />
                         </label>
                     </p>
