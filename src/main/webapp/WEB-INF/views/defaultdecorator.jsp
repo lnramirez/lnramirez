@@ -27,7 +27,7 @@
             </ul>
         </nav>
         <section id="rounded_box">
-            <sitemesh:write property='body'>Body goes here</sitemesh:write>
+            <sitemesh:write property="body">Body goes here</sitemesh:write>
         </section>
         <footer>
             <p>
