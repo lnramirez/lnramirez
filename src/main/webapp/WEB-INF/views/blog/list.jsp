@@ -57,7 +57,7 @@
                 );
             }
             dojo.ready(function () {
-                dojo.query("article a").forEach(function(node) {
+                dojo.query("article a.editanchor").forEach(function(node) {
                     dojo.connect(node,"onclick",function(event) {
                         dojo.stopEvent(event);
                         loadEntry(node.id);
@@ -88,7 +88,7 @@
                     <h1>${blogEntry.subject}</h1>
                     <p>
                         Published on <time datetime="${blogEntry.date}">${blogEntry.date}</time>: 
-                        <a href="#blogEntryForm" id="${blogEntry.id}">Edit</a>
+                        <a href="#blogEntryForm" id="${blogEntry.id}" class="editanchor">Edit</a>
                     </p>
                     <p>${blogEntry.printableHtml}</p>
                 </article>
