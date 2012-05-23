@@ -33,6 +33,9 @@
                             var floatingForm = query("#blogEntryForm")[0];
                             dojo.attr("subject","value",blogEntry.subject);
                             dojo.attr("article","value",blogEntry.article);
+                            var pubDate = new Date();
+                            pubDate.setTime(blogEntry.publishDate);
+                            dojo.attr("publishDate","value",pubDate);
                             var idNode = dojo.create("input",{"type":"hidden","value":blogEntry.id,"id":"id","name":"id"});
                             domConstruct.place(idNode,"article");
                             dojo.connect(floatingForm,"onsubmit",function(event) {
@@ -87,7 +90,7 @@
                 <article>
                     <h1>${blogEntry.subject}</h1>
                     <p>
-                        Published on <time datetime="${blogEntry.date}">${blogEntry.date}</time>: 
+                        Published on <time datetime="${blogEntry.publishDate}">${blogEntry.publishDate}</time>: 
                         <a href="#blogEntryForm" id="${blogEntry.id}" class="editanchor">Edit</a>
                     </p>
                     <p>${blogEntry.printableHtml}</p>
@@ -117,6 +120,12 @@
                         <label>Subject:
                             <form:input path="subject" type="text" id="subject" 
                                         placeholder="Subject" required="required" />
+                        </label>
+                    </p>
+                    <p>
+                        <label>Publish Date:
+                            <form:input path="publishDate" type="text" id="publishDate" 
+                                        placeholder="Publish Date" required="required" />
                         </label>
                     </p>
                     <p>

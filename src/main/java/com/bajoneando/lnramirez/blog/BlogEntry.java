@@ -12,7 +12,8 @@ public class BlogEntry implements Serializable {
     private String id;
     private String subject;
     private String article;
-    private Date date;
+    private Date publishDate;
+    private Date lastUpdateDate;
     private String printableHtml;
 
     public String getId() {
@@ -31,12 +32,20 @@ public class BlogEntry implements Serializable {
         this.article = article;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public Date getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
     public String getSubject() {
