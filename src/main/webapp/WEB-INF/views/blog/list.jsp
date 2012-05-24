@@ -101,6 +101,16 @@
                         </p>
                     </header>
                     ${blogEntry.printableHtml}
+                    <c:if test="${not empty blogEntry.lastUpdateDate}">
+                        <p>
+                            <small>
+                                Last update 
+                                <time datetime="<fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="yyyy-MM-dd"/>">
+                                    <fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="dd-MMM-yyyy HH:mm"/>
+                                </time>
+                            </small>
+                        </p>
+                    </c:if>
                 </article>
             </c:forEach>
             <nav class="pagination">
