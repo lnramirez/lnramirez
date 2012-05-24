@@ -2,7 +2,8 @@
          pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
 <spring:url value="/" var="home" />
 <spring:url value="/blog/" var="blogUrl"/>
 <spring:url value="/resources/icons/favicon.ico" var="favicon" />
@@ -88,12 +89,17 @@
             </header>
             <c:forEach items="${blogEntryPage.content}" var="blogEntry">
                 <article>
-                    <h1>${blogEntry.subject}</h1>
-                    <p>
-                        Published on <time datetime="${blogEntry.publishDate}">${blogEntry.publishDate}</time>: 
-                        <a href="#blogEntryForm" id="${blogEntry.id}" class="editanchor">Edit</a>
-                    </p>
-                    <p>${blogEntry.printableHtml}</p>
+                    <header>
+                        <h1>${blogEntry.subject}</h1>
+                        <p>
+                            Published on 
+                            <time datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
+                                    <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy"/>
+                                </time>: 
+                                <a href="#blogEntryForm" id="${blogEntry.id}" class="editanchor">Edit</a>
+                        </p>
+                    </header>
+                    ${blogEntry.printableHtml}
                 </article>
             </c:forEach>
             <nav class="pagination">
