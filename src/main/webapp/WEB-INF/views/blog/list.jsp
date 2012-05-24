@@ -27,8 +27,8 @@
                 var deferred = dojo.xhrGet(xhrArgs);
                 deferred.then (
                     function (blogEntry) {
-                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/dom-attr"], 
-                        function(query,domConstruct,domAttr){
+                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/dom-attr","dojo/date/locale"], 
+                        function(query,domConstruct,domAttr,locale){
                             var nodeArticle = query("a#" + blogEntry.id).parents("article").first()[0];
                             var floatingDiv = query("div#_floatingForm")[0];
                             var floatingForm = query("#blogEntryForm")[0];
@@ -36,7 +36,8 @@
                             dojo.attr("article","value",blogEntry.article);
                             var pubDate = new Date();
                             pubDate.setTime(blogEntry.publishDate);
-                            dojo.attr("publishDate","value",pubDate);
+                            var formattedPubDate = dojo.date.locale.format(pubDate, {selector:'date', datePattern:'yyyy-MM-dd'});
+                            dojo.attr("publishDate","value",formattedPubDate);
                             var idNode = dojo.create("input",{"type":"hidden","value":blogEntry.id,"id":"id","name":"id"});
                             domConstruct.place(idNode,"article");
                             dojo.connect(floatingForm,"onsubmit",function(event) {
