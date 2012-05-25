@@ -11,7 +11,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>lnramirez</title>
+        <title>lnramirez - <sitemesh:write property="title"></sitemesh:write></title>
         <link href="${css}" rel="stylesheet" type="text/css">
         <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
     </head>
