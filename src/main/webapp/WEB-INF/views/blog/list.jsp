@@ -4,17 +4,11 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
-<spring:url value="/" var="home" />
-<spring:url value="/blog/" var="blogUrl"/>
-<spring:url value="/resources/icons/favicon.ico" var="favicon" />
-<spring:url value="/resources/css/lnramirez.css" var="css" />
 <spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
-<spring:url value="/about/" var="about" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <title>lnramirez Blog</title>
+        <title>Blog</title>
         <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
         <script>
             function loadEntry(_id) {
@@ -70,21 +64,8 @@
                 });
             }); 
         </script>
-        <link href="${css}" rel="stylesheet" type="text/css">
-        <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
     </head>
     <body>
-        <header>
-            <h1>lnramirez website</h1>
-        </header>
-        <nav>
-            <ul>
-                <li><a href="${home}">Home</a></li>
-                <li><a href="${blogUrl}" >Blog</a></li>                
-                <li><a href="${about}">About</a></li>
-            </ul>
-        </nav>
-        <section id="rounded_box">
             <header>
                 <h2>Latest entries</h2>
             </header>
@@ -155,11 +136,5 @@
                 </form:form>
             </article>
             </div>
-        </section>
-        <footer>
-            <p>
-                <small>Copyright to Bajoneando</small>
-            </p>
-        </footer>
     </body>
 </html>
