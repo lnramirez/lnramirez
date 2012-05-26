@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="MacRoman"?>
+<decorators>
+    <decorator name="mydecorator" page="/WEB-INF/views/defaultdecorator.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+</decorators>

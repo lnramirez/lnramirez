@@ -2,6 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib prefix="decorator"uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <!DOCTYPE html>
 <c:url value="/" var="home" />
 <c:url value="/blog/" var="blogUrl" />
@@ -11,10 +12,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>lnramirez - <sitemesh:write property="title"></sitemesh:write></title>
+        <title>lnramirez - <decorator:title /></title>
         <link href="${css}" rel="stylesheet" type="text/css">
         <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
-        <sitemesh:write property="head"></sitemesh:write>
+        <decorator:head />
     </head>
     <body>
         <header>
@@ -28,7 +29,7 @@
             </ul>
         </nav>
         <section id="rounded_box">
-            <sitemesh:write property="body">Body goes here</sitemesh:write>
+            <decorator:body />
         </section>
         <footer>
             <p>

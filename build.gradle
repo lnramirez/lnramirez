@@ -51,7 +51,7 @@ dependencies {
     testCompile "org.springframework:spring-test:$springVersion"
 
     runtime "org.tuckey:urlrewritefilter:3.2.0"
-    runtime "org.sitemesh:sitemesh:3.0-alpha-1"
+    runtime "opensymphony:sitemesh:2.4.2"
 }
 
 //tasks
