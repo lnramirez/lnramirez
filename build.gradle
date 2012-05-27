@@ -52,6 +52,13 @@ dependencies {
 
     runtime "org.tuckey:urlrewritefilter:3.2.0"
     runtime "opensymphony:sitemesh:2.4.2"
+    
+    //logging
+    providedCompile "commons-logging:commons-logging:1.0"
+    compile "org.slf4j:slf4j-api:1.6.4"
+    runtime "org.slf4j:jcl-over-slf4j:1.6.4"
+    runtime "org.slf4j:slf4j-log4j12:1.6.4"
+    runtime "log4j:log4j:1.2.16"
 }
 
 //tasks
