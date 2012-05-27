@@ -24,6 +24,7 @@
                         require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/date/locale"], 
                         function(query,domConstruct,domAttr,locale){
                             var nodeArticle = query("a#" + blogEntry.id).parents("article").first()[0];
+                            query("h1",nodeArticle).attr("innerHTML",blogEntry.subject);
                             var articleNodeList = query("div",nodeArticle);
                             var articleContent = articleNodeList[0];
                             articleNodeList.attr("innerHTML",blogEntry.printableHtml);
