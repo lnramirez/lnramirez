@@ -11,6 +11,37 @@
         <title>Blog</title>
         <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
         <script>
+            function updateArticle(_id) {
+                var xhrArgs = {
+                        url: "${pageContext.request.contextPath}/blog/single/" + _id,
+                        handleAs: "json",
+                        load: function(data) {return data;},
+                        error: function(error) {return error;}
+                }
+                var deferred = dojo.xhrGet(xhrArgs);
+                deferred.then (
+                    function (blogEntry) {
+                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/date/locale"], 
+                        function(query,domConstruct,domAttr,locale){
+                            var nodeArticle = query("a#" + blogEntry.id).parents("article").first()[0];
+                            var articleNodeList = query("div",nodeArticle);
+                            var articleContent = articleNodeList[0];
+                            articleNodeList.attr("innerHTML",blogEntry.printableHtml);
+                            var lastDate = new Date();
+                            lastDate.setTime(blogEntry.lastUpdateDate);
+                            var fLastDate = dojo.date.locale.format(lastDate, {selector:'date', datePattern:'yyyy-MM-dd'}); 
+                            query("time.lastUpdateDate",articleContent).attr("datetime",fLastDate).attr("innerHTML",fLastDate);
+                            var pubDate = new Date();
+                            pubDate.setTime(blogEntry.publishDate);
+                            var fPubDate = dojo.date.locale.format(pubDate, {selector:'date', datePattern:'yyyy-MM-dd'});
+                            query("time.publishDate",articleContent).attr("datetime",fPubDate).attr("innerHTML",fPubDate);
+                        });
+                    },
+                    function (error_) {
+                        console.error(error_);
+                    }
+                );
+            }
             function loadEntry(_id) {
                 var xhrArgs = {
                     url: "${pageContext.request.contextPath}/blog/single/" + _id,
@@ -32,9 +63,10 @@
                             pubDate.setTime(blogEntry.publishDate);
                             var formattedPubDate = dojo.date.locale.format(pubDate, {selector:'date', datePattern:'yyyy-MM-dd'});
                             dojo.attr("publishDate","value",formattedPubDate);
+                            dojo.attr("formButton","value","Update entry");
                             var idNode = dojo.create("input",{"type":"hidden","value":blogEntry.id,"id":"id","name":"id"});
                             domConstruct.place(idNode,"article");
-                            dojo.connect(floatingForm,"onsubmit",function(event) {
+                            var handle = dojo.connect(floatingForm,"onsubmit",function(event) {
                                 dojo.stopEvent(event);
                                 var xhrUpdateArgs = {
                                     url: "${pageContext.request.contextPath}/blog/update",
@@ -42,8 +74,20 @@
                                     putData: dojo.formToJson(floatingForm)
                                 }
                                 var def = dojo.xhrPut(xhrUpdateArgs);
-                                def.then(function(data) {
-                                    dojo.disconnect(floatingForm);
+                                def.then(function(res) {
+                                    var navPagination = query("nav.pagination")[0]
+                                    if (idNode) {
+                                        idNode.parentNode.removeChild(idNode);
+                                    }
+                                    dojo.attr("subject","value","");
+                                    dojo.attr("article","value","");
+                                    dojo.attr("publishDate","value","");
+                                    dojo.attr("formButton","value","Add new entry");
+                                    domConstruct.place(floatingDiv, navPagination,"after");
+                                    updateArticle(blogEntry.id);
+                                    dojo.disconnect(handle);
+                                },function (error_) {
+                                    console.error(error_);
                                 });
                             });
 
@@ -51,7 +95,7 @@
                     });
                     },
                     function (error) {
-                        alert(error);
+                        console.error(error);
                     }
                 );
             }
@@ -75,18 +119,18 @@
                         <h1>${blogEntry.subject}</h1>
                         <p>
                             Published on 
-                            <time datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
-                                    <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy"/>
-                                </time>: 
-                                <a href="#blogEntryForm" id="${blogEntry.id}" class="editanchor">Edit</a>
+                            <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
+                                <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy"/>
+                            </time>: 
+                            <a href="#blogEntryForm" id="${blogEntry.id}" class="editanchor">Edit</a>
                         </p>
                     </header>
-                    ${blogEntry.printableHtml}
+                    <div>${blogEntry.printableHtml}</div>
                     <c:if test="${not empty blogEntry.lastUpdateDate}">
                         <p>
                             <small>
                                 Last update 
-                                <time datetime="<fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="yyyy-MM-dd"/>">
+                                <time class="lastUpdateDate" datetime="<fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="yyyy-MM-dd"/>">
                                     <fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="dd-MMM-yyyy HH:mm"/>
                                 </time>
                             </small>
@@ -132,7 +176,7 @@
                                            placeholder="Main content of article" required="required" />
                         </label>
                     </p>
-                    <p><input type="submit" value="Post" ></p>
+                    <p><input type="submit" id="formButton" value="Add new entry" ></p>
                 </form:form>
             </article>
             </div>
