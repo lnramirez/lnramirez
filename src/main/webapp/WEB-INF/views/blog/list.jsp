@@ -28,18 +28,17 @@
                             var nodeArticle = query("article#" + blogEntry.id)[0];
                             query("h1",nodeArticle).attr("innerHTML",blogEntry.subject);
                             var articleNodeList = query("div",nodeArticle);
-                            var articleContent = articleNodeList[0];
                             articleNodeList.attr("innerHTML",blogEntry.printableHtml);
                             var lastDate = new Date();
                             lastDate.setTime(blogEntry.lastUpdateDate);
-                            var fLastDate = dojo.date.locale.format(lastDate, {selector:'date', datePattern:'yyyy-MM-dd'}); 
-                            var nodeLastUpdate = query("time.lastUpdateDate",articleContent);
+                            var fLastDate = dojo.date.locale.format(lastDate, {selector:'date', datePattern:'yyyy-MMM-dd HH:mm'}); 
+                            var nodeLastUpdate = query("time.lastUpdateDate",nodeArticle);
                             nodeLastUpdate.attr("datetime",fLastDate);
                             nodeLastUpdate.attr("innerHTML",fLastDate);
                             var pubDate = new Date();
                             pubDate.setTime(blogEntry.publishDate);
-                            var fPubDate = dojo.date.locale.format(pubDate, {selector:'date', datePattern:'yyyy-MM-dd'});
-                            var nodePublishDate = query("time.publishDate",articleContent);
+                            var fPubDate = dojo.date.locale.format(pubDate, {selector:'date', datePattern:'yyyy-MMM-dd'});
+                            var nodePublishDate = query("time.publishDate",nodeArticle);
                             nodePublishDate.attr("datetime",fPubDate);
                             nodePublishDate.attr("innerHTML",fPubDate)
                         });
@@ -64,6 +63,7 @@
                             var nodeArticle = query("article#" + blogEntry.id)[0];
                             var floatingDiv = query("div#_floatingForm")[0];
                             var floatingForm = query("#blogEntryForm")[0];
+                            query("h2",floatingDiv).attr("innerHTML","Update '" + blogEntry.subject + "' entry");
                             dojo.attr("subject","value",blogEntry.subject);
                             dojo.attr("article","value",blogEntry.article);
                             var pubDate = new Date();
@@ -93,6 +93,7 @@
                                     dojo.attr("article","value","");
                                     dojo.attr("publishDate","value","");
                                     dojo.attr("formButton","value","Add new entry");
+                                    query("h2",floatingDiv).attr("innerHTML","Add a new entry");
                                     domConstruct.place(floatingDiv, navPagination,"after");
                                     updateArticle(blogEntry.id);
                                     dojo.window.scrollIntoView(blogEntry.id);
