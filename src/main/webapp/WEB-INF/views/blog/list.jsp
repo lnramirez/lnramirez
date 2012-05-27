@@ -11,6 +11,7 @@
         <title>Blog</title>
         <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
         <script>
+            dojo.require("dojo.window");
             function updateArticle(_id) {
                 var xhrArgs = {
                         url: "${pageContext.request.contextPath}/blog/single/" + _id,
@@ -21,9 +22,10 @@
                 var deferred = dojo.xhrGet(xhrArgs);
                 deferred.then (
                     function (blogEntry) {
-                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/date/locale"], 
+                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate",
+                            "dojo/dom-attr", "dojo/dom","dojo/date/locale"], 
                         function(query,domConstruct,domAttr,locale){
-                            var nodeArticle = query("a#" + blogEntry.id).parents("article").first()[0];
+                            var nodeArticle = query("article#" + blogEntry.id)[0];
                             query("h1",nodeArticle).attr("innerHTML",blogEntry.subject);
                             var articleNodeList = query("div",nodeArticle);
                             var articleContent = articleNodeList[0];
@@ -31,11 +33,15 @@
                             var lastDate = new Date();
                             lastDate.setTime(blogEntry.lastUpdateDate);
                             var fLastDate = dojo.date.locale.format(lastDate, {selector:'date', datePattern:'yyyy-MM-dd'}); 
-                            query("time.lastUpdateDate",articleContent).attr("datetime",fLastDate).attr("innerHTML",fLastDate);
+                            var nodeLastUpdate = query("time.lastUpdateDate",articleContent);
+                            nodeLastUpdate.attr("datetime",fLastDate);
+                            nodeLastUpdate.attr("innerHTML",fLastDate);
                             var pubDate = new Date();
                             pubDate.setTime(blogEntry.publishDate);
                             var fPubDate = dojo.date.locale.format(pubDate, {selector:'date', datePattern:'yyyy-MM-dd'});
-                            query("time.publishDate",articleContent).attr("datetime",fPubDate).attr("innerHTML",fPubDate);
+                            var nodePublishDate = query("time.publishDate",articleContent);
+                            nodePublishDate.attr("datetime",fPubDate);
+                            nodePublishDate.attr("innerHTML",fPubDate)
                         });
                     },
                     function (error_) {
@@ -55,7 +61,7 @@
                     function (blogEntry) {
                         require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/dom-attr","dojo/date/locale"], 
                         function(query,domConstruct,domAttr,locale){
-                            var nodeArticle = query("a#" + blogEntry.id).parents("article").first()[0];
+                            var nodeArticle = query("article#" + blogEntry.id)[0];
                             var floatingDiv = query("div#_floatingForm")[0];
                             var floatingForm = query("#blogEntryForm")[0];
                             dojo.attr("subject","value",blogEntry.subject);
@@ -65,8 +71,11 @@
                             var formattedPubDate = dojo.date.locale.format(pubDate, {selector:'date', datePattern:'yyyy-MM-dd'});
                             dojo.attr("publishDate","value",formattedPubDate);
                             dojo.attr("formButton","value","Update entry");
+                            query("#id",floatingForm).forEach(function(node_){
+                                node_.parentNode.removeChild(node_);
+                            });
                             var idNode = dojo.create("input",{"type":"hidden","value":blogEntry.id,"id":"id","name":"id"});
-                            domConstruct.place(idNode,"article");
+                            domConstruct.place(idNode,"blogEntryForm");
                             var handle = dojo.connect(floatingForm,"onsubmit",function(event) {
                                 dojo.stopEvent(event);
                                 var xhrUpdateArgs = {
@@ -86,13 +95,14 @@
                                     dojo.attr("formButton","value","Add new entry");
                                     domConstruct.place(floatingDiv, navPagination,"after");
                                     updateArticle(blogEntry.id);
+                                    dojo.window.scrollIntoView(blogEntry.id);
                                     dojo.disconnect(handle);
                                 },function (error_) {
                                     console.error(error_);
                                 });
                             });
-
                             domConstruct.place(floatingDiv, nodeArticle);
+                            dojo.window.scrollIntoView("_floatingForm");
                     });
                     },
                     function (error) {
@@ -101,10 +111,12 @@
                 );
             }
             dojo.ready(function () {
-                dojo.query("article a.editanchor").forEach(function(node) {
-                    dojo.connect(node,"onclick",function(event) {
-                        dojo.stopEvent(event);
-                        loadEntry(node.id);
+                dojo.query("article.blogcontent").forEach(function(blogEntry) {
+                    dojo.query("a.editanchor",blogEntry).forEach(function(node) {
+                        dojo.connect(node,"onclick",function(event) {
+                            dojo.stopEvent(event);
+                            loadEntry(blogEntry.id);
+                        });
                     });
                 });
             }); 
@@ -115,7 +127,7 @@
                 <h2>Latest entries</h2>
             </header>
             <c:forEach items="${blogEntryPage.content}" var="blogEntry">
-                <article>
+                <article id="${blogEntry.id}" class="blogcontent">
                     <header>
                         <h1>${blogEntry.subject}</h1>
                         <p>
@@ -123,7 +135,7 @@
                             <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
                                 <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy"/>
                             </time>: 
-                            <a href="#blogEntryForm" id="${blogEntry.id}" class="editanchor">Edit</a>
+                            <a href="#blogEntryForm" class="editanchor">Edit</a>
                         </p>
                     </header>
                     <div>${blogEntry.printableHtml}</div>
