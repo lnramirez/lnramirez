@@ -12,6 +12,13 @@
         <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
         <script>
             dojo.require("dojo.window");
+            function toUTCAndFormatted(t,pattern) {
+                var d = new Date(t);
+                var utcDate = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),  d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds());
+                var datePattern_ = arguments.length == 2 ? pattern : 'yyyy-MM-dd';
+                var fDate = dojo.date.locale.format(utcDate, {selector:'date', datePattern:datePattern_});
+                return fDate;
+            }
             function updateArticle(_id) {
                 var xhrArgs = {
                         url: "${pageContext.request.contextPath}/blog/single/" + _id,
@@ -31,16 +38,14 @@
                             articleNodeList.attr("innerHTML",blogEntry.printableHtml);
                             var lastDate = new Date();
                             lastDate.setTime(blogEntry.lastUpdateDate);
-                            var fLastDate = dojo.date.locale.format(lastDate, {selector:'date', datePattern:'yyyy-MMM-dd HH:mm'}); 
+                            var fLastDate = dojo.date.locale.format(lastDate, {selector:'date', datePattern:'dd-MMM-yyyy HH:mm'}); 
                             var nodeLastUpdate = query("time.lastUpdateDate",nodeArticle);
                             nodeLastUpdate.attr("datetime",fLastDate);
-                            nodeLastUpdate.attr("innerHTML",fLastDate);
-                            var pubDate = new Date();
-                            pubDate.setTime(blogEntry.publishDate);
-                            var fPubDate = dojo.date.locale.format(pubDate, {selector:'date', datePattern:'yyyy-MMM-dd'});
+                            nodeLastUpdate.attr("innerHTML",fLastDate + " ");
+                            var fPubDate = toUTCAndFormatted(blogEntry.publishDate,"dd-MMM-yyyy");
                             var nodePublishDate = query("time.publishDate",nodeArticle);
                             nodePublishDate.attr("datetime",fPubDate);
-                            nodePublishDate.attr("innerHTML",fPubDate)
+                            nodePublishDate.attr("innerHTML",fPubDate + " ")
                         });
                     },
                     function (error_) {
@@ -66,9 +71,7 @@
                             query("h2",floatingDiv).attr("innerHTML","Update '" + blogEntry.subject + "' entry");
                             dojo.attr("subject","value",blogEntry.subject);
                             dojo.attr("article","value",blogEntry.article);
-                            var pubDate = new Date();
-                            pubDate.setTime(blogEntry.publishDate);
-                            var formattedPubDate = dojo.date.locale.format(pubDate, {selector:'date', datePattern:'yyyy-MM-dd'});
+                            var formattedPubDate = toUTCAndFormatted(blogEntry.publishDate);
                             dojo.attr("publishDate","value",formattedPubDate);
                             dojo.attr("formButton","value","Update entry");
                             query("#id",floatingForm).forEach(function(node_){
