@@ -5,10 +5,15 @@
 <%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
 <spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
+<spring:url value="/resources/js/prettify.js" var="prettifyjs" />
+<spring:url value="/resources/css/prettify.css" var="prettifycss" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Blog</title>
+        <link href="${css}" rel="stylesheet" type="text/css">
+        <link href="${prettifycss}" rel="stylesheet" type="text/css">
+        <script src="${prettifyjs}"></script>
         <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
         <script>
             dojo.require("dojo.window");
@@ -18,6 +23,19 @@
                 var datePattern_ = arguments.length == 2 ? pattern : 'yyyy-MM-dd';
                 var fDate = dojo.date.locale.format(utcDate, {selector:'date', datePattern:datePattern_});
                 return fDate;
+            }
+            function prettifyCode() {
+                var pretty = false;
+                require(["dojo/query","dojo/dom-class"], function(query,domClass){
+                   query("pre:not(.prettyprint)").forEach(function(_node) {
+                       dojo.addClass(_node,"prettyprint");
+                       dojo.addClass(_node,"codescroll");
+                       pretty = true;
+                   });
+                });
+                if (pretty) {
+                    prettyPrint();
+                }
             }
             function updateArticle(_id) {
                 var xhrArgs = {
@@ -45,7 +63,8 @@
                             var fPubDate = toUTCAndFormatted(blogEntry.publishDate,"dd-MMM-yyyy");
                             var nodePublishDate = query("time.publishDate",nodeArticle);
                             nodePublishDate.attr("datetime",fPubDate);
-                            nodePublishDate.attr("innerHTML",fPubDate + " ")
+                            nodePublishDate.attr("innerHTML",fPubDate + " ");
+                            prettifyCode();
                         });
                     },
                     function (error_) {
@@ -136,6 +155,7 @@
                 );
             }
             dojo.ready(function () {
+                prettifyCode();//the actual loading in bajoneando
                 dojo.query("article.blogcontent").forEach(function(blogEntry) {
                     dojo.query("a.editanchor",blogEntry).forEach(function(node) {
                         dojo.connect(node,"onclick",function(event) {

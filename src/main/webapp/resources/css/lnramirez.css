@@ -116,3 +116,9 @@ footer {
     margin-top: 66px;  
     width: 940px; 
 }
+
+.codescroll {
+    overflow-x: scroll;
+    overflow-y: scroll;
+    max-height: 500px;
+}
