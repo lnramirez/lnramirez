@@ -36,6 +36,11 @@
                     prettyPrint();
                 }
             }
+            function openAnchorsInTab() {
+                require(["dojo/query"], function(query) {
+                    query("article.blogcontent div  a:not([target='_BLANK'])").attr("target","_BLANK");
+                });
+            }
             function updateArticle(_id) {
                 var xhrArgs = {
                         url: "${pageContext.request.contextPath}/blog/single/" + _id,
@@ -64,6 +69,7 @@
                             nodePublishDate.attr("datetime",fPubDate);
                             nodePublishDate.attr("innerHTML",fPubDate + " ");
                             prettifyCode();
+                            openAnchorsInTab();
                         });
                     },
                     function (error_) {
@@ -154,7 +160,8 @@
                 );
             }
             dojo.ready(function () {
-                prettifyCode();//the actual loading in bajoneando
+                prettifyCode();
+                openAnchorsInTab();
                 dojo.query("article.blogcontent").forEach(function(blogEntry) {
                     dojo.query("a.editanchor",blogEntry).forEach(function(node) {
                         dojo.connect(node,"onclick",function(event) {
@@ -182,7 +189,7 @@
                             <a href="#blogEntryForm" class="editanchor">Edit</a>
                         </p>
                     </header>
-                    <div>${blogEntry.printableHtml}</div>
+                    <div class="printableHtml">${blogEntry.printableHtml}</div>
                     <c:if test="${not empty blogEntry.lastUpdateDate}">
                         <p>
                             <small>
