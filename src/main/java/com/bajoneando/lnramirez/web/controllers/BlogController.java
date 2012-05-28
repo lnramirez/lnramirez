@@ -5,6 +5,7 @@ import com.bajoneando.lnramirez.blog.services.BlogEntryRepository;
 import com.petebevin.markdown.MarkdownProcessor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
@@ -73,6 +74,7 @@ public class BlogController {
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(true);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
     }
         

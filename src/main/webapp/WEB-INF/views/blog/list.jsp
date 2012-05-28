@@ -134,7 +134,7 @@
                         <p>
                             Published on 
                             <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
-                                <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy"/>
+                                <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy" timeZone="GMT"/>
                             </time>: 
                             <a href="#blogEntryForm" class="editanchor">Edit</a>
                         </p>
@@ -179,7 +179,7 @@
                         </label>
                     </p>
                     <p>
-                        <label>Publish Date:
+                        <label>Publish Date (UTC):
                             <form:input path="publishDate" type="text" id="publishDate" 
                                         placeholder="Publish Date" required="required" />
                         </label>
