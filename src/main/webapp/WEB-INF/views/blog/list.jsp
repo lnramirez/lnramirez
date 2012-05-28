@@ -53,7 +53,7 @@
                     }
                 );
             }
-            function cleanAndMoveForm() {
+            function cleanAndMoveForm(/*optional move to id after deleting*/someid) {
                 require(["dojo/query","dojo/dom-construct"],function(query,domConstruct) {
                     var floatingDiv = query("div#_floatingForm")[0];
                     var navPagination = query("nav.pagination")[0];
@@ -70,6 +70,9 @@
                     query("#cancelBtn",floatingForm).forEach(function(node_){
                         node_.parentNode.removeChild(node_);
                     });
+                    if (someid) {
+                        dojo.window.scrollIntoView(someid);
+                    }
                 });
             }
             function loadEntry(_id) {
@@ -104,7 +107,7 @@
                             var cancelNode = dojo.create("input",
                                 {"type":"button","value":"Cancel",
                                  "id":"cancelBtn","name":"cancelBtn",
-                                 "onclick":cleanAndMoveForm});
+                                 "onclick":function(e) {cleanAndMoveForm(blogEntry.id)}});
                             domConstruct.place(cancelNode,"formButton","after");
                             var handle = dojo.connect(floatingForm,"onsubmit",function(event) {
                                 dojo.stopEvent(event);
@@ -115,16 +118,7 @@
                                 }
                                 var def = dojo.xhrPut(xhrUpdateArgs);
                                 def.then(function(res) {
-                                    var navPagination = query("nav.pagination")[0];
-                                    if (idNode) {
-                                        idNode.parentNode.removeChild(idNode);
-                                    }
-                                    dojo.attr("subject","value","");
-                                    dojo.attr("article","value","");
-                                    dojo.attr("publishDate","value","");
-                                    dojo.attr("formButton","value","Add new entry");
-                                    query("h2",floatingDiv).attr("innerHTML","Add a new entry");
-                                    domConstruct.place(floatingDiv, navPagination,"after");
+                                    cleanAndMoveForm();
                                     updateArticle(blogEntry.id);
                                     dojo.window.scrollIntoView(blogEntry.id);
                                     dojo.disconnect(handle);
