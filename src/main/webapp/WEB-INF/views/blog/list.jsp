@@ -11,7 +11,6 @@
 <html lang="en">
     <head>
         <title>Blog</title>
-        <link href="${css}" rel="stylesheet" type="text/css">
         <link href="${prettifycss}" rel="stylesheet" type="text/css">
         <script src="${prettifyjs}"></script>
         <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>

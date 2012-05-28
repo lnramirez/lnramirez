@@ -122,3 +122,7 @@ footer {
     overflow-y: scroll;
     max-height: 500px;
 }
+
+.blogcontent {
+    padding-bottom: 2.5em;
+}
