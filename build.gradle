@@ -15,14 +15,6 @@ jettyRun.stopKey='s'
 group='com.bajoneando.lnramirez'
 version='0.1.2-SNAPSHOT'
 description='Official lnramirez site'
-//dependencies
-//versions
-springVersion = '3.1.1.RELEASE'
-springMongoVersion = '1.0.1.RELEASE'
-jacksonVersion = '1.6.0'
-xstreamVersion = '1.3.1'
-
-junitVersion = '4.8.2'
 //repositories
 repositories {
     mavenCentral()
@@ -40,25 +32,25 @@ dependencies {
     compile "org.springframework:spring-oxm:$springVersion"
     compile "com.thoughtworks.xstream:xstream:$xstreamVersion"
     compile "org.codehaus.jackson:jackson-jaxrs:$jacksonVersion"
-    compile "jstl:jstl:1.1.2"
-    compile "taglibs:standard:1.1.2"
-    compile "org.markdownj:markdownj:0.3.0-1.0.2b4"
+    compile "jstl:jstl:$jstlVersion"
+    compile "taglibs:standard:$standardVersion"
+    compile "org.markdownj:markdownj:$markdownjVersion"
     
-    providedCompile "javax.servlet:servlet-api:2.5"
-    providedCompile "javax.servlet.jsp:jsp-api:2.1"
+    providedCompile "javax.servlet:servlet-api:$servletapiVersion"
+    providedCompile "javax.servlet.jsp:jsp-api:$jspapiVersion"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.springframework:spring-test:$springVersion"
 
-    runtime "org.tuckey:urlrewritefilter:3.2.0"
-    runtime "opensymphony:sitemesh:2.4.2"
+    runtime "org.tuckey:urlrewritefilter:$urlrewritefilter"
+    runtime "opensymphony:sitemesh:$sitemesh"
     
     //logging
-    providedCompile "commons-logging:commons-logging:1.0"
-    compile "org.slf4j:slf4j-api:1.6.4"
-    runtime "org.slf4j:jcl-over-slf4j:1.6.4"
-    runtime "org.slf4j:slf4j-log4j12:1.6.4"
-    runtime "log4j:log4j:1.2.16"
+    providedCompile "commons-logging:commons-logging:$commonsloggingVersion"
+    compile "org.slf4j:slf4j-api:$slf4japiVersion"
+    runtime "org.slf4j:jcl-over-slf4j:$jcloverslf4jVersion"
+    runtime "org.slf4j:slf4j-log4j12:$slf4jlog4j12Version"
+    runtime "log4j:log4j:$log4jVersion"
 }
 
 //tasks
