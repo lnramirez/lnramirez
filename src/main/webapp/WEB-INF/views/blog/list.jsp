@@ -53,6 +53,25 @@
                     }
                 );
             }
+            function cleanAndMoveForm() {
+                require(["dojo/query","dojo/dom-construct"],function(query,domConstruct) {
+                    var floatingDiv = query("div#_floatingForm")[0];
+                    var navPagination = query("nav.pagination")[0];
+                    dojo.attr("subject","value","");
+                    dojo.attr("article","value","");
+                    dojo.attr("publishDate","value","");
+                    dojo.attr("formButton","value","Add new entry");
+                    query("h2",floatingDiv).attr("innerHTML","Add a new entry");
+                    var floatingForm = query("#blogEntryForm")[0];
+                    query("#id",floatingForm).forEach(function(node_){
+                        node_.parentNode.removeChild(node_);
+                    });
+                    domConstruct.place(floatingDiv, navPagination,"after");
+                    query("#cancelBtn",floatingForm).forEach(function(node_){
+                        node_.parentNode.removeChild(node_);
+                    });
+                });
+            }
             function loadEntry(_id) {
                 var xhrArgs = {
                     url: "${pageContext.request.contextPath}/blog/single/" + _id,
@@ -77,8 +96,16 @@
                             query("#id",floatingForm).forEach(function(node_){
                                 node_.parentNode.removeChild(node_);
                             });
+                            query("#cancelBtn").forEach(function(node_){
+                                node_.parentNode.removeChild(node_);
+                            });
                             var idNode = dojo.create("input",{"type":"hidden","value":blogEntry.id,"id":"id","name":"id"});
                             domConstruct.place(idNode,"blogEntryForm");
+                            var cancelNode = dojo.create("input",
+                                {"type":"button","value":"Cancel",
+                                 "id":"cancelBtn","name":"cancelBtn",
+                                 "onclick":cleanAndMoveForm});
+                            domConstruct.place(cancelNode,"formButton","after");
                             var handle = dojo.connect(floatingForm,"onsubmit",function(event) {
                                 dojo.stopEvent(event);
                                 var xhrUpdateArgs = {
@@ -88,7 +115,7 @@
                                 }
                                 var def = dojo.xhrPut(xhrUpdateArgs);
                                 def.then(function(res) {
-                                    var navPagination = query("nav.pagination")[0]
+                                    var navPagination = query("nav.pagination")[0];
                                     if (idNode) {
                                         idNode.parentNode.removeChild(idNode);
                                     }
