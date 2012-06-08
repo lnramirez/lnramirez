@@ -223,10 +223,10 @@
                 </header>
                 <form:form commandName="blogEntry" action="${blogUrl}" id="blogEntryForm" name="blogEntryForm">
                     <p>
-                        <label>Subject:
+                        <label>Subject:</label>
                             <form:input path="subject" type="text" id="subject" 
                                         placeholder="Subject" required="required" />
-                        </label>
+                        
                     </p>
                     <p>
                         <label>Publish Date (UTC):

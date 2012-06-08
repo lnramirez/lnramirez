@@ -126,3 +126,12 @@ footer {
 .blogcontent {
     padding-bottom: 2.5em;
 }
+
+form > label {
+    float: left;
+    width: 110 px;
+}
+
+form > input {
+    margin: 0 auto;
+}
