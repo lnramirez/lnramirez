@@ -8,6 +8,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             /WEB-INF/enable-jmx.xml
+            /WEB-INF/security-app-context.xml
             classpath:com/bajoneando/lnramirez/application-context.xml
         </param-value>
     </context-param>
