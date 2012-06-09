@@ -9,10 +9,9 @@
 
     <global-method-security pre-post-annotations="enabled"/>
     
-    <http pattern="/resources/**" security="none" />
-
     <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/about/**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/resources/**" access="permitAll" />
         <logout logout-success-url="/" />
     </http>
 

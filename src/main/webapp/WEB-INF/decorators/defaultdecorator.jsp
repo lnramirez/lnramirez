@@ -32,7 +32,7 @@
                 <sec:authorize access="isAnonymous()">
                     <li><a href="${login}">Log In</a></li>
                 </sec:authorize>
-                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <sec:authorize access="permitAll">
                     <li><a href="${logout}">Log Out</a></li>
                 </sec:authorize>
             </ul>

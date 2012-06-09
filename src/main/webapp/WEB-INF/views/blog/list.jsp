@@ -4,6 +4,7 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
 <spring:url value="/resources/js/prettify.js" var="prettifyjs" />
 <spring:url value="/resources/css/prettify.css" var="prettifycss" />
@@ -185,8 +186,11 @@
                             Published on 
                             <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
                                 <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy" timeZone="GMT"/>
-                            </time>: 
+                            </time> 
+                            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                            :
                             <a href="#blogEntryForm" class="editanchor">Edit</a>
+                            </sec:authorize>
                         </p>
                     </header>
                     <div class="printableHtml">${blogEntry.printableHtml}</div>
@@ -216,33 +220,35 @@
                     <a href="${older}" class="previous">Previous Entries</a>
                 </c:if>
             </nav>
-            <div id="_floatingForm">
-            <article>
-                <header>
-                    <h2>Add a new entry</h2>
-                </header>
-                <form:form commandName="blogEntry" action="${blogUrl}" id="blogEntryForm" name="blogEntryForm">
-                    <p>
-                        <label>Subject:
-                            <form:input path="subject" type="text" id="subject" 
-                                        placeholder="Subject" required="required" />
-                        </label>
-                    </p>
-                    <p>
-                        <label>Publish Date (UTC):
-                            <form:input path="publishDate" type="text" id="publishDate" 
-                                        placeholder="Publish Date" required="required" />
-                        </label>
-                    </p>
-                    <p>
-                        <label>Article:
-                            <form:textarea path="article" id="article" cols="100" rows="10"  
-                                           placeholder="Main content of article" required="required" />
-                        </label>
-                    </p>
-                    <p><input type="submit" id="formButton" value="Add new entry" ></p>
-                </form:form>
-            </article>
-            </div>
+            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <div id="_floatingForm">
+                <article>
+                    <header>
+                        <h2>Add a new entry</h2>
+                    </header>
+                    <form:form commandName="blogEntry" action="${blogUrl}" id="blogEntryForm" name="blogEntryForm">
+                        <p>
+                            <label>Subject:
+                                <form:input path="subject" type="text" id="subject" 
+                                            placeholder="Subject" required="required" />
+                            </label>
+                        </p>
+                        <p>
+                            <label>Publish Date (UTC):
+                                <form:input path="publishDate" type="text" id="publishDate" 
+                                            placeholder="Publish Date" required="required" />
+                            </label>
+                        </p>
+                        <p>
+                            <label>Article:
+                                <form:textarea path="article" id="article" cols="100" rows="10"  
+                                            placeholder="Main content of article" required="required" />
+                            </label>
+                        </p>
+                        <p><input type="submit" id="formButton" value="Add new entry" ></p>
+                    </form:form>
+                </article>
+                </div>
+            </sec:authorize>
     </body>
 </html>
