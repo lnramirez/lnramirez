@@ -11,8 +11,8 @@
     
     <http pattern="/resources/**" security="none" />
 
-    <http auto-config="true">
-        <intercept-url pattern="/about/**" access="ROLE_ADMIN" />
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/about/**" access="hasRole('ROLE_ADMIN')" />
         <logout logout-success-url="/" />
     </http>
 
