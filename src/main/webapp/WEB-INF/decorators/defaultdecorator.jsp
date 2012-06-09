@@ -7,6 +7,7 @@
 <c:url value="/" var="home" />
 <c:url value="/blog/" var="blogUrl" />
 <c:url value="/about/" var="about" />
+<c:url value="/j_spring_security_logout" var="logout" />
 <spring:url value="/resources/icons/favicon.ico" var="favicon" />
 <spring:url value="/resources/css/lnramirez.css" var="css" />
 <html lang="en">
@@ -26,6 +27,7 @@
                 <li><a href="${home}">Home</a></li>
                 <li><a href="${blogUrl}" >Blog</a></li>                
                 <li><a href="${about}">About</a></li>
+                <li><a href="${logout}">Logout</a></li>
             </ul>
         </nav>
         <section id="rounded_box">
