@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="MacRoman"?>
+<?xml version="1.0" encoding="utf-8"?>
 <decorators>
     <decorator name="mydecorator" page="/WEB-INF/views/defaultdecorator.jsp">
         <pattern>/*</pattern>
