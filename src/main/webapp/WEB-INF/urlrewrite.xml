@@ -8,6 +8,10 @@
         <to>/resources/$1</to>
     </rule>
     <rule>
+        <from>/spring_security_login</from>
+        <to last="true">/spring_security_login</to>
+    </rule>
+    <rule>
         <from>/j_spring_security_check**</from>
         <to last="true">/j_spring_security_check/$1</to>
     </rule>

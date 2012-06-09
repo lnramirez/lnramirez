@@ -8,7 +8,7 @@
 <c:url value="/" var="home" />
 <c:url value="/blog/" var="blogUrl" />
 <c:url value="/about/" var="about" />
-<c:url value="/j_spring_security_login" var="login" />
+<c:url value="/spring_security_login" var="login" />
 <c:url value="/j_spring_security_logout" var="logout" />
 <spring:url value="/resources/icons/favicon.ico" var="favicon" />
 <spring:url value="/resources/css/lnramirez.css" var="css" />
@@ -29,12 +29,8 @@
                 <li><a href="${home}">Home</a></li>
                 <li><a href="${blogUrl}" >Blog</a></li>                
                 <li><a href="${about}">About</a></li>
-                <sec:authorize access="isAnonymous()">
-                    <li><a href="${login}">Log In</a></li>
-                </sec:authorize>
-                <sec:authorize access="permitAll">
-                    <li><a href="${logout}">Log Out</a></li>
-                </sec:authorize>
+                <li><a href="${login}">Log In</a></li>
+                <li><a href="${logout}">Log Out</a></li>
             </ul>
         </nav>
         <section id="rounded_box">
