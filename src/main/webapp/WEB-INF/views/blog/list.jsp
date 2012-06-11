@@ -6,6 +6,7 @@
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
 <spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
 <spring:url value="/resources/js/prettify.js" var="prettifyjs" />
+<spring:url value="/resources/js/blogcustomized.js" var="blogcustomizedjs" />
 <spring:url value="/resources/css/prettify.css" var="prettifycss" />
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +14,7 @@
         <title>Blog</title>
         <link href="${prettifycss}" rel="stylesheet" type="text/css">
         <script src="${prettifyjs}"></script>
+        <script src="${blogcustomizedjs}"></script>
         <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
         <script>
             dojo.require("dojo.window");
@@ -22,24 +24,6 @@
                 var datePattern_ = arguments.length == 2 ? pattern : 'yyyy-MM-dd';
                 var fDate = dojo.date.locale.format(utcDate, {selector:'date', datePattern:datePattern_});
                 return fDate;
-            }
-            function prettifyCode() {
-                var pretty = false;
-                require(["dojo/query","dojo/dom-class"], function(query,domClass){
-                   query("pre:not(.prettyprint)").forEach(function(_node) {
-                       dojo.addClass(_node,"prettyprint");
-                       dojo.addClass(_node,"codescroll");
-                       pretty = true;
-                   });
-                });
-                if (pretty) {
-                    prettyPrint();
-                }
-            }
-            function openAnchorsInTab() {
-                require(["dojo/query"], function(query) {
-                    query("article.blogcontent div  a:not([target='_BLANK'])").attr("target","_BLANK");
-                });
             }
             function updateArticle(_id) {
                 var xhrArgs = {
@@ -180,7 +164,7 @@
             <c:forEach items="${blogEntryPage.content}" var="blogEntry">
                 <article id="${blogEntry.id}" class="blogcontent">
                     <header>
-                        <h1>${blogEntry.subject}</h1>
+                        <h1><a href="blog/${blogEntry.id}/${blogEntry.subject}">${blogEntry.subject}</a></h1>
                         <p>
                             Published on 
                             <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">

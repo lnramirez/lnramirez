@@ -44,6 +44,14 @@ public class BlogController {
         return modelAndView;
     }
     
+    @RequestMapping(value="/{id}/{subject}", method= RequestMethod.GET)
+    public ModelAndView blogpost(@PathVariable("id") String id,@PathVariable("subject") String subject) {
+        BlogEntry blogEntry = blogEntryRepository.findOne(id);
+        ModelAndView modelAndView = new ModelAndView("/blog/blogpost");
+        modelAndView.addObject("blogEntry", blogEntry);
+        return modelAndView;
+    }
+    
     @RequestMapping(method=RequestMethod.POST)
     public String addEntry(@ModelAttribute(value="blogEntry") BlogEntry blogEntry) {
         if (blogEntry.getPublishDate() == null) {
