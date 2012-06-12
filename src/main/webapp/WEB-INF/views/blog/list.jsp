@@ -165,7 +165,7 @@
             <c:forEach items="${blogEntryPage.content}" var="blogEntry">
                 <article id="${blogEntry.id}" class="blogcontent">
                     <header>
-                        <h1><a href="blog/${blogEntry.id}/${blogEntry.subject}">${blogEntry.subject}</a></h1>
+                        <h1><a href="<c:url value="/blog/${blogEntry.id}/${blogEntry.subject}"/>">${blogEntry.subject}</a></h1>
                         <p>
                             Published on 
                             <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
