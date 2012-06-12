@@ -229,16 +229,14 @@
                         
                     </p>
                     <p>
-                        <label>Publish Date (UTC):
+                        <label>Publish Date (UTC):</label>
                             <form:input path="publishDate" type="text" id="publishDate" 
                                         placeholder="Publish Date" required="required" />
-                        </label>
                     </p>
                     <p>
-                        <label>Article:
+                        <label>Article:</label>
                             <form:textarea path="article" id="article" cols="100" rows="10"  
                                            placeholder="Main content of article" required="required" />
-                        </label>
                     </p>
                     <p><input type="submit" id="formButton" value="Add new entry" ></p>
                 </form:form>
