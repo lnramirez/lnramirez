@@ -127,11 +127,12 @@ footer {
     padding-bottom: 2.5em;
 }
 
-form > label {
+form label {
     float: left;
     width: 110 px;
 }
 
-form > input {
-    margin: 0 auto;
+form input:not([type=radio]), form textarea {
+    float: right,
+    padding: 5px;
 }

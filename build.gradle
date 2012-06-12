@@ -30,6 +30,11 @@ dependencies {
     compile "org.springframework:spring-web:$springVersion"
     compile "org.springframework:spring-webmvc:$springVersion"
     compile "org.springframework:spring-oxm:$springVersion"
+    compile "org.springframework.security:spring-security-core:$springSecurityVersion"
+    compile "org.springframework.security:spring-security-web:$springSecurityVersion"
+    compile "org.springframework.security:spring-security-config:$springSecurityVersion"
+    compile "org.springframework.security:spring-security-taglibs:$springSecurityVersion"
+    //compile "org.springframework.security:spring-security-openid:$springSecurityVersion"
     compile "com.thoughtworks.xstream:xstream:$xstreamVersion"
     compile "org.codehaus.jackson:jackson-jaxrs:$jacksonVersion"
     compile "jstl:jstl:$jstlVersion"
@@ -42,8 +47,9 @@ dependencies {
     testCompile "junit:junit:$junitVersion"
     testCompile "org.springframework:spring-test:$springVersion"
 
-    runtime "org.tuckey:urlrewritefilter:$urlrewritefilter"
-    runtime "opensymphony:sitemesh:$sitemesh"
+    runtime "org.tuckey:urlrewritefilter:$urlrewritefilterVersion"
+    runtime "opensymphony:sitemesh:$sitemeshVersion"
+    runtime "xerces:xercesImpl:$xercesVersion"
     
     //logging
     providedCompile "commons-logging:commons-logging:$commonsloggingVersion"

@@ -4,8 +4,10 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
 <spring:url value="/resources/js/prettify.js" var="prettifyjs" />
+<spring:url value="/resources/js/blogcustomized.js" var="blogcustomizedjs" />
 <spring:url value="/resources/css/prettify.css" var="prettifycss" />
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +15,7 @@
         <title>Blog</title>
         <link href="${prettifycss}" rel="stylesheet" type="text/css">
         <script src="${prettifyjs}"></script>
+        <script src="${blogcustomizedjs}"></script>
         <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
         <script>
             dojo.require("dojo.window");
@@ -22,24 +25,6 @@
                 var datePattern_ = arguments.length == 2 ? pattern : 'yyyy-MM-dd';
                 var fDate = dojo.date.locale.format(utcDate, {selector:'date', datePattern:datePattern_});
                 return fDate;
-            }
-            function prettifyCode() {
-                var pretty = false;
-                require(["dojo/query","dojo/dom-class"], function(query,domClass){
-                   query("pre:not(.prettyprint)").forEach(function(_node) {
-                       dojo.addClass(_node,"prettyprint");
-                       dojo.addClass(_node,"codescroll");
-                       pretty = true;
-                   });
-                });
-                if (pretty) {
-                    prettyPrint();
-                }
-            }
-            function openAnchorsInTab() {
-                require(["dojo/query"], function(query) {
-                    query("article.blogcontent div  a:not([target='_BLANK'])").attr("target","_BLANK");
-                });
             }
             function updateArticle(_id) {
                 var xhrArgs = {
@@ -180,13 +165,16 @@
             <c:forEach items="${blogEntryPage.content}" var="blogEntry">
                 <article id="${blogEntry.id}" class="blogcontent">
                     <header>
-                        <h1>${blogEntry.subject}</h1>
+                        <h1><a href="<c:url value="/blog/${blogEntry.id}/${blogEntry.subject}"/>">${blogEntry.subject}</a></h1>
                         <p>
                             Published on 
                             <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
                                 <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy" timeZone="GMT"/>
-                            </time>: 
+                            </time> 
+                            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                            :
                             <a href="#blogEntryForm" class="editanchor">Edit</a>
+                            </sec:authorize>
                         </p>
                     </header>
                     <div class="printableHtml">${blogEntry.printableHtml}</div>
@@ -216,31 +204,34 @@
                     <a href="${older}" class="previous">Previous Entries</a>
                 </c:if>
             </nav>
-            <div id="_floatingForm">
-            <article>
-                <header>
-                    <h2>Add a new entry</h2>
-                </header>
-                <form:form commandName="blogEntry" action="${blogUrl}" id="blogEntryForm" name="blogEntryForm">
-                    <p>
-                        <label>Subject:</label>
+            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <div id="_floatingForm">
+                <article>
+                    <header>
+                        <h2>Add a new entry</h2>
+                    </header>
+                    <form:form commandName="blogEntry" action="${blogUrl}" id="blogEntryForm" name="blogEntryForm">
+                        <p>
+                            <label for="subject">Subject:</label>
                             <form:input path="subject" type="text" id="subject" 
                                         placeholder="Subject" required="required" />
-                        
-                    </p>
-                    <p>
-                        <label>Publish Date (UTC):</label>
+                        </p>
+                        <p>
+                            <label for="publishDate">Publish Date (UTC):</label>
                             <form:input path="publishDate" type="text" id="publishDate" 
                                         placeholder="Publish Date" required="required" />
-                    </p>
-                    <p>
-                        <label>Article:</label>
+                        </p>
+                        <p>
+                            <label for="article">Article:</label>
                             <form:textarea path="article" id="article" cols="100" rows="10"  
-                                           placeholder="Main content of article" required="required" />
-                    </p>
-                    <p><input type="submit" id="formButton" value="Add new entry" ></p>
-                </form:form>
-            </article>
-            </div>
+                                        placeholder="Main content of article" required="required" />
+                        </p>
+                        <p>
+                            <input type="submit" id="formButton" value="Add new entry" >
+                        </p>
+                    </form:form>
+                </article>
+                </div>
+            </sec:authorize>
     </body>
 </html>
