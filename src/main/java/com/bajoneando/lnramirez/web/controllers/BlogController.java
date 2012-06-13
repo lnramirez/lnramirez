@@ -71,6 +71,12 @@ public class BlogController {
         blogEntryRepository.save(blogEntry);
     }
     
+    @RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE, headers="Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteEntry(@PathVariable("id") String id) {
+        blogEntryRepository.delete(id);
+    }
+    
     @RequestMapping(value="/single/{id}", method=RequestMethod.GET, headers="Accept=application/json")
     @ResponseBody
     public BlogEntry getEntry(@PathVariable("id") String id) {

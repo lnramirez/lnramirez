@@ -144,6 +144,24 @@
                     }
                 );
             }
+            function deleteEntry(_id) {
+                var xhrArgs = {
+                    url: "${pageContext.request.contextPath}/blog/delete/" + _id,
+                    handleAs: "json",
+                    load: function(data) {return data;},
+                    error: function(error) {return error;}
+                }
+                if (confirm("Are you sure you want to delete this entry?")) {
+                    var deferred = dojo.xhrDelete(xhrArgs);
+                    deferred.then (function(response){
+                        require(["dojo/query","dojo/dom-construct"], function(query,domConstruct) {
+                            query("article#" + _id).orphan();
+                        });
+                    }, function (error_) {
+                        console.error(error_);
+                    });
+                }
+            }
             dojo.ready(function () {
                 prettifyCode();
                 openAnchorsInTab();
@@ -152,6 +170,12 @@
                         dojo.connect(node,"onclick",function(event) {
                             dojo.stopEvent(event);
                             loadEntry(blogEntry.id);
+                        });
+                    });
+                    dojo.query("a.deleteanchor",blogEntry).forEach(function(node) {
+                        dojo.connect(node,"onclick",function(event) {
+                            dojo.stopEvent(event);
+                            deleteEntry(blogEntry.id);
                         });
                     });
                 });
@@ -174,6 +198,7 @@
                             <sec:authorize access="hasRole('ROLE_ADMIN')">
                             :
                             <a href="#blogEntryForm" class="editanchor">Edit</a>
+                            <a href="#blogEntryForm" class="deleteanchor">Delete</a>
                             </sec:authorize>
                         </p>
                     </header>
