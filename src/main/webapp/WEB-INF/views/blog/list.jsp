@@ -114,7 +114,7 @@
                             var idNode = dojo.create("input",{"type":"hidden","value":blogEntry.id,"id":"id","name":"id"});
                             domConstruct.place(idNode,"blogEntryForm");
                             var cancelNode = dojo.create("input",
-                                {"type":"button","value":"Cancel",
+                                {"type":"reset","value":"Cancel",
                                  "id":"cancelBtn","name":"cancelBtn",
                                  "onclick":function(e) {cleanAndMoveForm(blogEntry.id)}});
                             domConstruct.place(cancelNode,"formButton","after");
@@ -211,24 +211,26 @@
                         <h2>Add a new entry</h2>
                     </header>
                     <form:form commandName="blogEntry" action="${blogUrl}" id="blogEntryForm" name="blogEntryForm">
-                        <p>
-                            <label for="subject">Subject:</label>
-                            <form:input path="subject" type="text" id="subject" 
-                                        placeholder="Subject" required="required" />
-                        </p>
-                        <p>
-                            <label for="publishDate">Publish Date (UTC):</label>
-                            <form:input path="publishDate" type="text" id="publishDate" 
-                                        placeholder="Publish Date" required="required" />
-                        </p>
-                        <p>
-                            <label for="article">Article:</label>
-                            <form:textarea path="article" id="article" cols="100" rows="10"  
-                                        placeholder="Main content of article" required="required" />
-                        </p>
-                        <p>
-                            <input type="submit" id="formButton" value="Add new entry" >
-                        </p>
+                        <fieldset>
+                            <p>
+                                <label for="subject">Subject:</label>
+                                <form:input path="subject" type="text" id="subject" 
+                                            placeholder="Subject" required="required" />
+                            </p>
+                            <p>
+                                <label for="publishDate">Publish Date (UTC):</label>
+                                <form:input path="publishDate" type="text" id="publishDate" 
+                                            placeholder="Publish Date" required="required" />
+                            </p>
+                            <p>
+                                <label for="article">Article:</label>
+                                <form:textarea path="article" id="article" cols="100" rows="10"  
+                                            placeholder="Main content of article" required="required" />
+                            </p>
+                            <p>
+                                <input type="submit" id="formButton" value="Add new entry" >
+                            </p>
+                        </fieldset>
                     </form:form>
                 </article>
                 </div>
