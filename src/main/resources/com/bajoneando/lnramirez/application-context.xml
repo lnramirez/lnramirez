@@ -21,8 +21,12 @@
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
     </bean>
     
+    <bean id="markdownProcessor" class="com.petebevin.markdown.MarkdownProcessor" />
+    
     <mongo:repositories base-package="com.bajoneando.lnramirez">
     </mongo:repositories>
+    
+    <context:component-scan base-package="com.bajoneando.lnramirez"/>
  
     <!-- To translate any MongoExceptions thrown in @Repository annotated classes -->
     <context:annotation-config />
