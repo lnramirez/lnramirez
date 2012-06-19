@@ -1,5 +1,9 @@
 function (key, values) {
     var latest = values[0];
-    values.forEach(function (value) {if (latest.publishDate > value.publishDate) {latest = value;}});
+    for (var i=0;i<values.length;i++) {
+        if (latest.publishDate < values[i].publishDate) {
+            latest = values[i];
+        }
+    }
     return latest;
 }

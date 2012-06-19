@@ -2,11 +2,13 @@ package com.bajoneando.lnramirez.blog;
 
 import java.io.Serializable;
 import java.util.Date;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  *
  * @author lrmonterosa
  */
+@Document
 public class BlogEntry implements Serializable {
     
     private String id;
