@@ -35,7 +35,7 @@
                 why not?
             </p>
         </article>
-        <c:if test="blogEntry">
+        <c:if test="${not empty blogEntry}">
             <header>
                 <h2>Latest Entry</h2>
             </header>
