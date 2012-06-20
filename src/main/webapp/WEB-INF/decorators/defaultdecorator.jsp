@@ -12,12 +12,38 @@
 <c:url value="/j_spring_security_logout" var="logout" />
 <spring:url value="/resources/icons/favicon.ico" var="favicon" />
 <spring:url value="/resources/css/lnramirez.css" var="css" />
+<spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <title>lnramirez - <decorator:title /></title>
         <link href="${css}" rel="stylesheet" type="text/css">
         <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
+        <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
+        <script>
+            function addVisit(position) {
+                var payload = dojo.toJson({'latitude': position.coords.latitude, 'longitude':  position.coords.longitude});
+                var xhrArgs = {
+                    url: "${pageContext.request.contextPath}/visit/add",
+                    handleAs: 'json',
+                    postData: payload
+                }
+                var deferred = dojo.xhrPost(xhrArgs);
+                deferred.then (function(success) {
+                    alert("s" + success);
+                }, function(error) {
+                    alert(error);
+                });//*/
+            }
+            function noGeoLocation() {
+                
+            }
+            dojo.ready(function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(addVisit, noGeoLocation);
+                } 
+            });
+        </script>
         <decorator:head />
     </head>
     <body>
