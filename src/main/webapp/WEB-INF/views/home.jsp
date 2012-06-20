@@ -36,17 +36,14 @@
             </p>
         </article>
         <c:if test="${not empty blogEntry}">
-            <header>
-                <h2>Latest Entry</h2>
-            </header>
             <article id="${blogEntry.id}" class="blogcontent">
                 <header>
-                    <h2>${blogEntry.subject}</h2>
+                    <h1><a href="<c:url value="/blog/${blogEntry.id}/${blogEntry.subject}"/>">${blogEntry.subject}</a></h1>
                     <p>
                         Published on 
                         <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
                             <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy" timeZone="GMT"/>
-                        </time>
+                        </time> 
                     </p>
                 </header>
                 <div class="printableHtml">${blogEntry.printableHtml}</div>
