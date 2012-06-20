@@ -27,7 +27,9 @@ public class VisitController {
     
     @RequestMapping(value="/statistics")
     public ModelAndView summary() {
-        return new ModelAndView("visit/summary");
+        ModelAndView modelAndView = new ModelAndView("visit/summary");
+        modelAndView.addObject("hits", visitService.hits());
+        return modelAndView;
     }
     
     @Autowired

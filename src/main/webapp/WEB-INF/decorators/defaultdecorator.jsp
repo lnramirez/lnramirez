@@ -25,15 +25,15 @@
                 var payload = dojo.toJson({'latitude': position.coords.latitude, 'longitude':  position.coords.longitude});
                 var xhrArgs = {
                     url: "${pageContext.request.contextPath}/visit/add",
-                    handleAs: 'json',
+                    headers: { "Content-Type": "application/json"},
                     postData: payload
                 }
                 var deferred = dojo.xhrPost(xhrArgs);
                 deferred.then (function(success) {
-                    alert("s" + success);
+                    
                 }, function(error) {
-                    alert(error);
-                });//*/
+                    
+                });
             }
             function noGeoLocation() {
                 

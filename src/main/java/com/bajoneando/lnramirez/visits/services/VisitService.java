@@ -1,6 +1,7 @@
 package com.bajoneando.lnramirez.visits.services;
 
 import com.bajoneando.lnramirez.visits.Visit;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class VisitService {
     
     public void addVisit(Visit visit) {
+        visit.setDate(new Date());
         visitRepository.save(visit);
     }
     
