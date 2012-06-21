@@ -7,5 +7,6 @@
     </head>
     <body>
         <h1>Visits Statistics</h1>
+        ${hits}
     </body>
 </html>
