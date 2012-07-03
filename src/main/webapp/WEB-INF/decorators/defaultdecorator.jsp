@@ -63,9 +63,9 @@
                 </sec:authorize>
             </ul>
         </nav>
-        <section id="rounded_box">
+        <div id="rounded_box">
             <decorator:body />
-        </section>
+        </div>
         <footer>
             <p>
                 <small>Copyright to Bajoneando</small>

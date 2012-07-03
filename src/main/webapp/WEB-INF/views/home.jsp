@@ -21,41 +21,45 @@
         </script>
     </head>
     <body>
-        <header>
-            <h2>Luis Ramirez Monterosa Website</h2>
-        </header>
-        <article>
-            <p>
-                I have been web programming for the last 10 years but I haven't 
-                owned a web site ever. Why would I like to work after hours?...  
-            </p>
-            <p>
-                why not?
-            </p>
-        </article>
-        <c:if test="${not empty blogEntry}">
-            <article id="${blogEntry.id}" class="blogcontent">
-                <header>
-                    <h1><a href="<c:url value="/blog/${blogEntry.id}/${blogEntry.subject}"/>">${blogEntry.subject}</a></h1>
-                    <p>
-                        Published on 
-                        <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
-                            <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy" timeZone="GMT"/>
-                        </time> 
-                    </p>
-                </header>
-                <div class="printableHtml">${blogEntry.printableHtml}</div>
-                <c:if test="${not empty blogEntry.lastUpdateDate}">
-                    <p>
-                        <small>
-                            Last update 
-                            <time class="lastUpdateDate" datetime="<fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="yyyy-MM-dd"/>">
-                                <fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="dd-MMM-yyyy HH:mm"/>
-                            </time>
-                        </small>
-                    </p>
-                </c:if>
+        <section>
+            <header>
+                <h2>Luis Ramirez Monterosa Website</h2>
+            </header>
+            <article>
+                <p>
+                    I have been web programming for the last 10 years but I haven't 
+                    owned a web site ever. Why would I like to work after hours?...  
+                </p>
+                <p>
+                    why not?
+                </p>
             </article>
+        </section>
+        <c:if test="${not empty blogEntry}">
+            <section>
+                <article id="${blogEntry.id}" class="blogcontent">
+                    <header>
+                        <h1><a href="<c:url value="/blog/${blogEntry.id}/${blogEntry.subject}"/>">${blogEntry.subject}</a></h1>
+                        <p>
+                            Published on 
+                            <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
+                                <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy" timeZone="GMT"/>
+                            </time> 
+                        </p>
+                    </header>
+                    <div class="printableHtml">${blogEntry.printableHtml}</div>
+                    <c:if test="${not empty blogEntry.lastUpdateDate}">
+                        <p>
+                            <small>
+                                Last update 
+                                <time class="lastUpdateDate" datetime="<fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="yyyy-MM-dd"/>">
+                                    <fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="dd-MMM-yyyy HH:mm"/>
+                                </time>
+                            </small>
+                        </p>
+                    </c:if>
+                </article>
+            </section>
         </c:if>
     </body>
 </html>

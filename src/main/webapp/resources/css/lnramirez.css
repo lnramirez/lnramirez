@@ -1,9 +1,3 @@
-/* Makeshift CSS Reset */  
-{  
-    margin: 0;  
-    padding: 0;  
-}  
-
 /* Tell the browser to render HTML 5 elements as block */  
 header, footer, aside, nav, article {  
     display: block;  
@@ -104,15 +98,17 @@ nav.pagination a.previous {
     margin-top: 66px;  
     padding: 44px;  
     background: #fff repeat-x;  
-    background-size: 100%;  
-    border-radius: 22px;  
+    background-size: 100%;
+    -moz-border-radius: 22px;
+    border-radius: 22px;
 }  
 
 .container {  
     margin-top: 66px;  
     padding: 44px;  
     background: #fff repeat-x;  
-    background-size: 100%;  
+    background-size: 100%;
+    -moz-border-radius: 22px;
     border-radius: 22px;  
 }  
 
@@ -124,6 +120,7 @@ footer {
 .codescroll {
     overflow-x: scroll;
     overflow-y: scroll;
+    min-height: 80px;
     max-height: 500px;
 }
 
