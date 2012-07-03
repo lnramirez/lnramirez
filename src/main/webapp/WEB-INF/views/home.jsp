@@ -3,7 +3,6 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
-<spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
 <spring:url value="/resources/js/prettify.js" var="prettifyjs" />
 <spring:url value="/resources/js/blogcustomized.js" var="blogcustomizedjs" />
 <spring:url value="/resources/css/prettify.css" var="prettifycss" />
@@ -14,10 +13,9 @@
         <link href="${prettifycss}" rel="stylesheet" type="text/css">
         <script src="${prettifyjs}"></script>
         <script src="${blogcustomizedjs}"></script>
-        <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
         <script>
-            dojo.ready(function () {
-                prettifyCode();
+            require(["dojo/domReady!"], function(){
+                prettifyCode(prettyPrint);
                 openAnchorsInTab();
             }); 
         </script>

@@ -16,7 +16,6 @@
         <link href="${prettifycss}" rel="stylesheet" type="text/css">
         <script src="${prettifyjs}"></script>
         <script src="${blogcustomizedjs}"></script>
-        <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
         <script>
             dojo.require("dojo.window");
             function toUTCAndFormatted(t,pattern) {
@@ -53,7 +52,7 @@
                             var nodePublishDate = query("time.publishDate",nodeArticle);
                             nodePublishDate.attr("datetime",fPubDate);
                             nodePublishDate.attr("innerHTML",fPubDate + " ");
-                            prettifyCode();
+                            prettifyCode(prettyPrint);
                             openAnchorsInTab();
                         });
                     },
@@ -163,7 +162,7 @@
                 }
             }
             dojo.ready(function () {
-                prettifyCode();
+                prettifyCode(prettyPrint);
                 openAnchorsInTab();
                 dojo.query("article.blogcontent").forEach(function(blogEntry) {
                     dojo.query("a.editanchor",blogEntry).forEach(function(node) {
