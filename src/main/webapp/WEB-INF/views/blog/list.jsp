@@ -5,6 +5,7 @@
 <%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib prefix="bajoneando"    uri="http://www.bajoneando.com/tags"%>
 <spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
 <spring:url value="/resources/js/prettify.js" var="prettifyjs" />
 <spring:url value="/resources/js/blogcustomized.js" var="blogcustomizedjs" />
@@ -188,7 +189,10 @@
             <c:forEach items="${blogEntryPage.content}" var="blogEntry">
                 <article id="${blogEntry.id}" class="blogcontent">
                     <header>
-                        <h1><a href="<c:url value="/blog/${blogEntry.id}/${blogEntry.subject}"/>">${blogEntry.subject}</a></h1>
+                        <c:set var="subject">
+                            <bajoneando:htmlencode value="${blogEntry.subject}"/>
+                        </c:set>
+                        <h1><a href="<c:url value="/blog/${blogEntry.id}/${subject}" />">${blogEntry.subject}</a></h1>
                         <p>
                             Published on 
                             <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">

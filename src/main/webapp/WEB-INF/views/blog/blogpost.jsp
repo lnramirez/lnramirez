@@ -4,6 +4,7 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="bajoneando"    uri="http://www.bajoneando.com/tags"%>
 <spring:url value="/resources/js/prettify.js" var="prettifyjs" />
 <spring:url value="/resources/js/blogcustomized.js" var="blogcustomizedjs" />
 <spring:url value="/resources/css/prettify.css" var="prettifycss" />
@@ -24,7 +25,10 @@
     <body>
         <article id="${blogEntry.id}" class="blogcontent">
             <header>
-                <h2>${blogEntry.subject}</h2>
+                <c:set var="subject">
+                    <bajoneando:htmlencode value="${blogEntry.subject}"/>
+                </c:set>
+                <h1><a href="<c:url value="/blog/${blogEntry.id}/${subject}" />">${blogEntry.subject}</a></h1>
                 <p>
                     Published on 
                     <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">

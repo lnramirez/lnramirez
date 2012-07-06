@@ -18,6 +18,7 @@ description='Official lnramirez site'
 //repositories
 repositories {
     mavenCentral()
+    mavenLocal()
     mavenRepo urls: [
         "http://repo.springsource.org/libs-release",
         "http://scala-tools.org/repo-releases"]
@@ -26,7 +27,9 @@ repositories {
 dependencies {
     
     compile "org.springframework:spring-core:$springVersion"
-    compile "org.springframework.data:spring-data-mongodb:$springMongoVersion"
+    compile ("org.springframework.data:spring-data-mongodb:$springMongoVersion") {
+        exclude group: "org.springframework"
+    }
     compile "org.springframework:spring-web:$springVersion"
     compile "org.springframework:spring-webmvc:$springVersion"
     compile "org.springframework:spring-oxm:$springVersion"
@@ -40,6 +43,7 @@ dependencies {
     compile "jstl:jstl:$jstlVersion"
     compile "taglibs:standard:$standardVersion"
     compile "org.markdownj:markdownj:$markdownjVersion"
+    compile "com.bajoneando:bajoneandotags:$bajoneandoTagsVersion"
     
     providedCompile "javax.servlet:servlet-api:$servletapiVersion"
     providedCompile "javax.servlet.jsp:jsp-api:$jspapiVersion"
