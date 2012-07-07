@@ -17,7 +17,7 @@
         <script src="${blogcustomizedjs}"></script>        
         <script>
             dojo.ready(function () {
-                prettifyCode();
+                prettifyCode(prettyPrint);
                 openAnchorsInTab();
             }); 
         </script>
