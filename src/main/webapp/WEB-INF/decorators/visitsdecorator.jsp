@@ -21,30 +21,6 @@
         <link href="${css}" rel="stylesheet" type="text/css">
         <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
         <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
-        <script>
-            function addVisit(position) {
-                var payload = dojo.toJson({'latitude': position.coords.latitude, 'longitude':  position.coords.longitude});
-                var xhrArgs = {
-                    url: "${pageContext.request.contextPath}/visit/add",
-                    headers: { "Content-Type": "application/json"},
-                    postData: payload
-                }
-                var deferred = dojo.xhrPost(xhrArgs);
-                deferred.then (function(success) {
-                    
-                }, function(error) {
-                    
-                });
-            }
-            function noGeoLocation() {
-                
-            }
-            dojo.ready(function() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(addVisit, noGeoLocation);
-                } 
-            });
-        </script>
         <decorator:head />
     </head>
     <body>

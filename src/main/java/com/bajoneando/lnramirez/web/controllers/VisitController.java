@@ -29,6 +29,7 @@ public class VisitController {
     public ModelAndView summary() {
         ModelAndView modelAndView = new ModelAndView("visit/summary");
         modelAndView.addObject("hits", visitService.hits());
+        modelAndView.addObject("lastVisit", visitService.getLastVisit());
         return modelAndView;
     }
     
