@@ -13,18 +13,26 @@
 
                 MQA.EventUtil.observe(window, 'load', function() {
 
-                /*Create an object for options*/ 
-                var options={
-                    elt:document.getElementById('map'),       /*ID of element on the page where you want the map added*/ 
-                    zoom:13,                                  /*initial zoom level of the map*/ 
-                    latLng:{lat:${lastVisit.latitude}, lng:${lastVisit.longitude}},   /*center of map in latitude/longitude */ 
-                    mtype:'osm',                              /*map type (osm)*/ 
-                    bestFitMargin:0,                          /*margin offset from the map viewport when applying a bestfit on shapes*/ 
-                    zoomOnDoubleClick:true                    /*zoom in when double-clicking on map*/ 
-                };
+                    /*Create an object for options*/ 
+                    var options={
+                        elt:document.getElementById('map'),       /*ID of element on the page where you want the map added*/ 
+                        zoom:13,                                  /*initial zoom level of the map*/ 
+                        latLng:{lat:${lastVisit.latitude}, lng:${lastVisit.longitude}},   /*center of map in latitude/longitude */ 
+                        mtype:'osm',                              /*map type (osm)*/ 
+                        bestFitMargin:0,                          /*margin offset from the map viewport when applying a bestfit on shapes*/ 
+                        zoomOnDoubleClick:true                    /*zoom in when double-clicking on map*/ 
+                    };
 
-                /*Construct an instance of MQA.TileMap with the options object*/ 
-                window.map = new MQA.TileMap(options);
+                    /*Construct an instance of MQA.TileMap with the options object*/ 
+                    var map = new MQA.TileMap(options);
+                    MQA.withModule('smallzoom', function() {
+
+                        map.addControl(
+                        new MQA.SmallZoom(),
+                        new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5,5))
+                        );
+
+                    });
                 });
             }); 
         </script>        
