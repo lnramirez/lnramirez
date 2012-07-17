@@ -9,6 +9,7 @@
 <spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
 <spring:url value="/resources/js/prettify.js" var="prettifyjs" />
 <spring:url value="/resources/js/blogcustomized.js" var="blogcustomizedjs" />
+<spring:url value="/resources/js/yadateutil.js" var="yadateutil" />
 <spring:url value="/resources/css/prettify.css" var="prettifycss" />
 <!DOCTYPE html>
 <html lang="en">
@@ -17,15 +18,9 @@
         <link href="${prettifycss}" rel="stylesheet" type="text/css">
         <script src="${prettifyjs}"></script>
         <script src="${blogcustomizedjs}"></script>
+        <script src="${yadateutil}"></script>
         <script>
             dojo.require("dojo.window");
-            function toUTCAndFormatted(t,pattern) {
-                var d = new Date(t);
-                var utcDate = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),  d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds());
-                var datePattern_ = arguments.length == 2 ? pattern : 'yyyy-MM-dd';
-                var fDate = dojo.date.locale.format(utcDate, {selector:'date', datePattern:datePattern_});
-                return fDate;
-            }
             function updateArticle(_id) {
                 var xhrArgs = {
                         url: "${pageContext.request.contextPath}/blog/single/" + _id,
