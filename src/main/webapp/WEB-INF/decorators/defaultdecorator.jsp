@@ -70,7 +70,12 @@
         </div>
         <footer>
             <p>
-                <small>Copyright to Bajoneando</small>
+                <small>
+                    Copyright to Bajoneando
+                </small> | 
+                <small>
+                    <a href="https://www.iubenda.com/privacy-policy/923467" title="Privacy Policy">Privacy Policy</a>
+                </small>
             </p>
         </footer>
     </body>

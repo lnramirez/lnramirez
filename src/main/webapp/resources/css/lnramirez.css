@@ -177,3 +177,9 @@ form input#subject {
     padding: 5px; 
     margin: 0;	
 }
+
+footer {
+    text-align: center;
+    font-size: 0.8em;
+    clear: both;
+}
