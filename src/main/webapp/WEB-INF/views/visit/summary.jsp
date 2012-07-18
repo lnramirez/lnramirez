@@ -9,16 +9,27 @@
         <script src="http://open.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js"></script>
         <script src="${yadateutil}"></script>
         <script>
-            
             function updateLatestVisit(map) {
+                var fadeArgs = {node: "updating",duration:1000};                
                 var xhrArgs = {
-                    url: "${pageContext.request.contextPath}/visit/last",
+                    url: "${pageContext.request.contextPath}/visit/update",
                     handleAs: "json",
                     load: function(data) {return data;},
                     error: function(error) {return error;}
                 }
                 var deferred = dojo.xhrGet(xhrArgs);
-                deferred.then (function(lastVisit) {
+                deferred.then (function(summary) {
+                    var lastVisit = summary.lastVisit;
+                    require(["dojo/_base/fx", "dojo/fx", "dojo/dom","dojo/query", "dojo/dom-style"], function(baseFx, fx, dom, query, style) {
+                        style.set("updating","opacity","0");
+                        query(".updating").attr("innerHTML","Updating...");
+                        var anim = fx.chain([                            
+                            baseFx.fadeIn(fadeArgs),
+                            baseFx.fadeOut(fadeArgs)
+                        ]);
+                        anim.play();
+                        query(".hits").attr("innerHTML",summary.hits);
+                    });
                     var lastVisitPOI = new MQA.Poi({lat:lastVisit.latitude, lng:lastVisit.longitude});
                     var infoContent = 'Date (UTC): ' + toUTCAndFormatted(lastVisit.date,'dd-MMM-yyyy HH:mm')
                     lastVisitPOI.setRolloverContent(infoContent);
@@ -61,17 +72,21 @@
                     });
                 });
             }); 
-        </script>        
+        </script>
     </head>
     <body>
         <h1>Visits Statistics</h1>
-        <h2>Summary</h2>
+        
         <section>
-            Hits: ${hits}
+            <h2>Summary</h2>
+            Hits: <span id="hits" class="hits"></span>
         </section>
-        <h2>Last Visit</h2>
+        
         <section>
-            <a href="#" class="updateanchor">Update Last Visit</a>
+            <h2>Last Visit</h2>
+            <p>
+                <a href="#" class="updateanchor">Update Last Visit</a> <span id="updating" class="updating"></span>
+            </p>
             <div id="map" style="width:800px; height:300px;"></div>
         </section>
     </body>
