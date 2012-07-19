@@ -8,13 +8,14 @@
         <link href="${socialflaircss}" rel="stylesheet" type="text/css">
         <script>
             function truncateName(a){return a.length>28?a.substring(0,28)+"...":a}
+            dojo.require("dojo.io.script");
             require(["dojo/query","dojo/domReady!"], function(query) {
                 var xhrArgs = {
                     url : 'https://api.github.com/users/lnramirez',
                     handleAs: "json",
                     load: function(data) {return data;},
                     error: function(error) {return error;}
-                }
+                };
                 var deferred = dojo.xhrGet(xhrArgs);
                 deferred.then(function(data) {
                     var followers = data.followers;
@@ -33,15 +34,46 @@
                         +"</div>"
                         +"</div></div>​</a>");
                 });
+                dojo.io.script.get({
+                    url: 'http://api.twitter.com/1/followers/ids.json?screen_name=luisnramirez&cursor=-1',
+                    callbackParamName: "callback"
+                }).then(function(_data) {
+                    var followers = _data.ids.length;
+                    dojo.io.script.get({
+                        url: 'http://api.twitter.com/1/friends/ids.json?screen_name=luisnramirez&cursor=-1',
+                        callbackParamName: "callback"
+                    }).then(function(data) {
+                        var following = data.ids.length;
+                        var handler = 'luisnramirez';
+                        query('#twitterFlair').attr("innerHTML","<a class='sfLink' href='http://twitter.com/#!/" + handler +"'><div class='sfTable sfTwitter'><div class='sfRow'>"
+                            +" <div class='sfCell1'>"
+                            +"  <img class='sfProfilePic' src='https://api.twitter.com/1/users/profile_image?screen_name=" + handler + "&size=normal' width='48px' height='48px' />"
+                            +" </div>"
+                            +" <div class='sfCell2'>"
+                            +"  <div class='sfHandle'>" + truncateName(handler) + "</div>"
+                            +"  <div class='sfFans'>"
+                            +"	 <span class='following' alt='Following' title='Following'>" + following + "</span>"
+                            +" 	 <span class='followers' alt='Followers' title='Followers'>" + followers + "</span>"
+                            +"  </div>"
+                            +"</div>"
+                            +"</div></div>​</a>"
+                        );
+                    }).then(function() {
+                        var _q = query("a.sfLink");
+                        query("a.sfLink").attr("target","_BLANK");
+                    })
+                });
             });
         </script>
     </head>
     <body>
-        <section>
+        <section>            
             <div id='twitterFlair'></div>
             <div id='githubFlair'></div>
-            <a href="http://stackoverflow.com/users/542413/luis-ramirez-monterosa">
-                <img src="http://stackoverflow.com/users/flair/542413.png" width="208" height="58" alt="profile for Luis Ramirez-Monterosa at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for Luis Ramirez-Monterosa at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+            <a href="http://stackoverflow.com/users/542413/luis-ramirez-monterosa" class="sfLink">
+                <img src="http://stackoverflow.com/users/flair/542413.png" width="208" height="58" 
+                     alt="profile for Luis Ramirez-Monterosa at Stack Overflow, Q&amp;A for professional and enthusiast programmers" 
+                     title="profile for Luis Ramirez-Monterosa at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
             </a>
         </section>
         <section>
