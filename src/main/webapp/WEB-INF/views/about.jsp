@@ -10,14 +10,11 @@
             function truncateName(a){return a.length>28?a.substring(0,28)+"...":a}
             dojo.require("dojo.io.script");
             require(["dojo/query","dojo/domReady!"], function(query) {
-                var xhrArgs = {
+                dojo.io.script.get({
                     url : 'https://api.github.com/users/lnramirez',
-                    handleAs: "json",
-                    load: function(data) {return data;},
-                    error: function(error) {return error;}
-                };
-                var deferred = dojo.xhrGet(xhrArgs);
-                deferred.then(function(data) {
+                    callbackParamName: "callback"
+                }).then(function(data_) {
+                    var data = data_.data;
                     var followers = data.followers;
                     var public_repos = data.public_repos;
                     query("#githubFlair").attr("innerHTML","<a class='sfLink' href='" + data.html_url +"'><div class='sfTable sfGithub'><div class='sfRow'>"
