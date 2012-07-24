@@ -21,6 +21,9 @@
         <property name="suffix" value=".jsp"/>
     </bean>
     
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+    
     <bean class="com.petebevin.markdown.MarkdownProcessor" />
 
     <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">

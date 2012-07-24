@@ -21,7 +21,7 @@ public class FileService {
         inputFile.setContentType(file.getContentType());
         inputFile.setFilename(file.getName());
         inputFile.save();
-        return (String) inputFile.getId();
+        return inputFile.getId().toString();
     }
     
     @Autowired
