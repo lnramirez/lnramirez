@@ -7,6 +7,7 @@
 <!DOCTYPE html>
 <c:url value="/" var="home" />
 <c:url value="/blog/" var="blogUrl" />
+<c:url value="/images/startupload" var="images" />
 <c:url value="/visit/statistics" var="visits" />
 <c:url value="/about/" var="about" />
 <c:url value="/spring_security_login" var="login" />
@@ -31,7 +32,10 @@
             <ul>
                 <li><a href="${home}">Home</a></li>
                 <li><a href="${blogUrl}" >Blog</a></li>    
-                <li><a href="${visits}" >Visits</a></li>    
+                <li><a href="${visits}" >Visits</a></li> 
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <li><a href="${images}">Images</a></li>
+                </sec:authorize>
                 <li><a href="${about}">About</a></li>
                 <sec:authorize access="isAnonymous()">
                     <li><a href="${login}">Log In</a></li>

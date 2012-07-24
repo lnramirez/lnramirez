@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -23,11 +24,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImagesController {
     
     @RequestMapping("/startupload")
-    public String startupload() {
-        return "/images/upload";
+    public ModelAndView startupload() {
+        ModelAndView modelAndView = new ModelAndView("/images/upload");
+        modelAndView.addObject("mongoStoredFile", new MongoStoredFile());
+        return modelAndView;
     }
     
-    @RequestMapping(value="/upload", method=RequestMethod.POST)
+    @RequestMapping(value="/upload", method=RequestMethod.POST, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     public void upload(@RequestParam("file") MultipartFile multipartFile, final HttpServletResponse response) throws IOException {
         if (multipartFile == null) {
