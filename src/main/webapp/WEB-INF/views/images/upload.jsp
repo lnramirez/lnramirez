@@ -10,7 +10,33 @@
     <head>
         <script>
             dojo.require("dojo.io.iframe");
+            function updateFiles() {
+                var xhrArgs = {
+                    url: "${pageContext.request.contextPath}/images/list/1",
+                    handleAs: "json",
+                    load: function(data) {return data;},
+                    error: function(error) {return error;}
+                }
+                dojo.xhrGet(xhrArgs).then(function(files) {
+                    require(["dojo/query", "dojo/dom-construct","dojo/_base/array"], function (query,domConstruct,array) {
+                        array.forEach(files,function(file) {
+                            var url_ = '${pageContext.request.contextPath}/images/download/' + file.id + "/jpeg";
+                            var idNode = dojo.create("div",{
+                                "id": file.id, 
+                                "class": '_image',
+                                "innerHTML": "<img src='" + url_ + "' alt='" + file.name + "'>"
+                            });
+                            dojo.byId("fileslist").appendChild(idNode);
+                        });
+                    });
+                }, function (error) {
+                    require(["dojo/query"], function(query) {
+                       query("#fileslist").attr("innerHTML","Ooops... " + error);
+                    });
+                });
+            }
             require(["dojo/query","dojo/domReady!"], function(query) {
+                updateFiles();            
                 dojo.connect(query("#imageForm")[0],"onsubmit",function(event) {
                     dojo.stop(event);
                     dojo.io.iframe.send({
@@ -22,17 +48,24 @@
         </script>
     </head>
     <body>
-        <form:form action="${imagesUpload}" enctype="multipart/form-data" id="imageForm" commandName="mongoStoredFile" name="imageForm" method="POST">
-            <fieldset>
-                <p>
-                    <label for="subject">File:</label>
-                    <form:input path="file" type="file" id="file" 
-                                placeholder="File:" required="required" />
-                </p>
-                <p>
-                    <input type="submit" id="formButton" value="Upload File" >
-                </p>
-            </fieldset>
-        </form:form>
+        <section>
+            <form:form action="${imagesUpload}" enctype="multipart/form-data" id="imageForm" commandName="mongoStoredFile" name="imageForm" method="POST">
+                <fieldset>
+                    <p>
+                        <label for="subject">File:</label>
+                        <form:input path="file" type="file" id="file" 
+                                    placeholder="File:" required="required" />
+                    </p>
+                    <p>
+                        <input type="submit" id="formButton" value="Upload File" >
+                    </p>
+                </fieldset>
+            </form:form>
+        </section>
+        <section>
+            <div id="fileslist">
+                
+            </div>
+        </section>
     </body>
 </html>
