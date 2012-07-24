@@ -4,10 +4,12 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="sec"    uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <c:url value="/images/upload" var="imagesUpload" />
 <html lang="en">
     <head>
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
         <script>
             dojo.require("dojo.io.iframe");
             function updateFiles() {
@@ -24,7 +26,10 @@
                             var idNode = dojo.create("div",{
                                 "id": file.id, 
                                 "class": '_image',
-                                "innerHTML": "<img src='" + url_ + "' alt='" + file.name + "'>"
+                                "innerHTML": 
+                                    "<p>" + url_ + 
+                                    "<img src='" + url_ + "' alt='" + file.name + "'>" +
+                                    "</p>"
                             });
                             dojo.byId("fileslist").appendChild(idNode);
                         });
@@ -46,9 +51,11 @@
                 });
             });
         </script>
+        </sec:authorize>
     </head>
     <body>
         <section>
+            <sec:authorize access="hasRole('ROLE_ADMIN')">
             <form:form action="${imagesUpload}" enctype="multipart/form-data" id="imageForm" commandName="mongoStoredFile" name="imageForm" method="POST">
                 <fieldset>
                     <p>
@@ -61,6 +68,7 @@
                     </p>
                 </fieldset>
             </form:form>
+            </sec:authorize>
         </section>
         <section>
             <div id="fileslist">

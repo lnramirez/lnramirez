@@ -54,7 +54,7 @@ public class ImagesController {
     public void download(final HttpServletResponse response, 
             @PathVariable("objectId") String objectId,
             @PathVariable("contentType") String contentType) throws IOException {
-        response.setContentType(contentType);
+        response.setContentType("image/jpeg");//better read it directly
         OutputStream outputStream = response.getOutputStream();
         FileCopyUtils.copy(fileService.getFile(objectId),outputStream);
         outputStream.flush();
