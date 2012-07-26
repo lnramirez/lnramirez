@@ -50,13 +50,13 @@ public class ImagesController {
         fileService.save(image);
     }
     
-    @RequestMapping(value="/download/{objectId}/{contentType}", method=RequestMethod.GET)
+    @RequestMapping(value="/download/{objectId}", method=RequestMethod.GET)
     public void download(final HttpServletResponse response, 
-            @PathVariable("objectId") String objectId,
-            @PathVariable("contentType") String contentType) throws IOException {
-        response.setContentType("image/jpeg");//better read it directly
+            @PathVariable("objectId") String objectId) throws IOException {
         OutputStream outputStream = response.getOutputStream();
-        FileCopyUtils.copy(fileService.getFile(objectId),outputStream);
+        MongoStoredFile mongoStoredFile = fileService.getFile(objectId);
+        response.setContentType(mongoStoredFile.getContentType());
+        FileCopyUtils.copy(mongoStoredFile.getInputStream(),outputStream);
         outputStream.flush();
         outputStream.close();
     }

@@ -22,7 +22,7 @@
                 dojo.xhrGet(xhrArgs).then(function(files) {
                     require(["dojo/query", "dojo/dom-construct","dojo/_base/array"], function (query,domConstruct,array) {
                         array.forEach(files,function(file) {
-                            var url_ = '${pageContext.request.contextPath}/images/download/' + file.id + "/jpeg";
+                            var url_ = '${pageContext.request.contextPath}/images/download/' + file.id;
                             var idNode = dojo.create("div",{
                                 "id": file.id, 
                                 "class": '_image',

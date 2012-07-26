@@ -48,10 +48,15 @@ public class FileService {
         return files;
     }
     
-    public InputStream getFile(String objectId) throws IOException  {
+    public MongoStoredFile getFile(String objectId) throws IOException  {
         GridFS gridFS = new GridFS(mongoTemplate.getDb(),"images");
         GridFSDBFile file = gridFS.find(new ObjectId(objectId));
-        return file.getInputStream();
+        MongoStoredFile mongoStoredFile = new MongoStoredFile();
+        mongoStoredFile.setId(objectId.toString());
+        mongoStoredFile.setName((String) file.get("filename"));
+        mongoStoredFile.setContentType((String) file.get("contentType"));
+        mongoStoredFile.setInputStream(file.getInputStream());
+        return mongoStoredFile;
     }
     
     @Autowired

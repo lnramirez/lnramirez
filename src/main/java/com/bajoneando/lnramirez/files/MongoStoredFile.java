@@ -1,6 +1,7 @@
 package com.bajoneando.lnramirez.files;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -14,8 +15,8 @@ public class MongoStoredFile {
     private File file;
     private String name;
     private String contentType;
-    private String encodedContentType;
     private byte[] data;
+    private InputStream inputStream;
 
     public String getId() {
         return id;
@@ -46,12 +47,7 @@ public class MongoStoredFile {
     }
 
     public void setContentType(String contentType) {
-        try {
-            this.contentType = contentType;
-            setEncodedContentType(URLEncoder.encode(contentType, "UTF-8"));
-        } catch (UnsupportedEncodingException ex) {
-            //SRSLY
-        }
+        this.contentType = contentType;
     }
     
     public byte[] getData() {
@@ -62,12 +58,12 @@ public class MongoStoredFile {
         this.data = data;
     }
 
-    public String getEncodedContentType() {
-        return encodedContentType;
+    public InputStream getInputStream() {
+        return inputStream;
     }
 
-    public void setEncodedContentType(String encodedContentType) {
-        this.encodedContentType = encodedContentType;
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
     }
     
 }
