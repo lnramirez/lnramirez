@@ -50,6 +50,7 @@ dependencies {
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.springframework:spring-test:$springVersion"
+    testCompile "org.mockito:mockito-core:$mockitoCoreVersion"
 
     runtime "org.tuckey:urlrewritefilter:$urlrewritefilterVersion"
     runtime "opensymphony:sitemesh:$sitemeshVersion"
@@ -104,12 +105,6 @@ def customizePom(pom, gradleProject) {
         gradleProject.providedDeps.each { dep ->
             generatedPom.dependencies.find { it.artifactId == dep.name }?.scope = 'provided'
         }
-
-        // eliminate test-scoped dependencies (no need in maven central poms)
-        generatedPom.dependencies.removeAll { dep ->
-            dep.scope == 'test'
-        }
-
         // add all items necessary for maven central publication
         generatedPom.project {
             name = gradleProject.description
