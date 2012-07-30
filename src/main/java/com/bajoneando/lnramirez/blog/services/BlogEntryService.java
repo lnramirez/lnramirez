@@ -1,7 +1,7 @@
 package com.bajoneando.lnramirez.blog.services;
 
+import com.bajoneando.lnramirez.MappedEntry;
 import com.bajoneando.lnramirez.blog.BlogEntry;
-import com.bajoneando.lnramirez.blog.MappedBlogEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceOptions;
@@ -17,11 +17,11 @@ public class BlogEntryService {
     
     public BlogEntry getLastEntry() {
         MapReduceOptions options = new MapReduceOptions();
-        MapReduceResults<MappedBlogEntry> mapReduceResults = mongoTemplate.
+        MapReduceResults<MappedEntry> mapReduceResults = mongoTemplate.
                 mapReduce("blogEntry", "classpath:mongo/mapallblogs.js" , 
-                "classpath:mongo/reducelatestblog.js", MappedBlogEntry.class);
+                "classpath:mongo/reducelatestblog.js", MappedEntry.class);
         if (mapReduceResults.iterator().hasNext()) {
-            BlogEntry blogEntry = mapReduceResults.iterator().next().getValue();
+            BlogEntry blogEntry = (BlogEntry) mapReduceResults.iterator().next().getValue();
             return blogEntry;
         } else {
             throw new RuntimeException("No entries for blogEntry");
