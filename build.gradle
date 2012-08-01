@@ -56,7 +56,7 @@ dependencies {
     runtime "opensymphony:sitemesh:$sitemeshVersion"
     runtime "xerces:xercesImpl:$xercesVersion"
     runtime "commons-fileupload:commons-fileupload:$commonsfileuploadVersion"
-    
+    runtime "commons-io:commons-io:$commonsioVersion"   
     //logging
     providedCompile "commons-logging:commons-logging:$commonsloggingVersion"
     compile "org.slf4j:slf4j-api:$slf4japiVersion"
