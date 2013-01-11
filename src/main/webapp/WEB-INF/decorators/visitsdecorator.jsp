@@ -55,6 +55,9 @@
                 </small> | 
                 <small>
                     <a href="https://www.iubenda.com/privacy-policy/923467" title="Privacy Policy">Privacy Policy</a>
+                </small> |
+                <small>
+                    ver 1.6-SNAPSHOT
                 </small>
             </p>
         </footer>
