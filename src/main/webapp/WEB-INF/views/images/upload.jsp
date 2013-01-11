@@ -9,7 +9,6 @@
 <c:url value="/images/upload" var="imagesUpload" />
 <html lang="en">
     <head>
-        <sec:authorize access="hasRole('ROLE_ADMIN')">
         <script>
             dojo.require("dojo.io.iframe");
             function updateFiles() {
@@ -24,10 +23,10 @@
                         array.forEach(files,function(file) {
                             var url_ = '${pageContext.request.contextPath}/images/download/' + file.id;
                             var idNode = dojo.create("div",{
-                                "id": file.id, 
+                                "id": file.id,
                                 "class": '_image',
-                                "innerHTML": 
-                                    "<p>" + url_ + 
+                                "innerHTML":
+                                    "<p>" + url_ +
                                     "<img src='" + url_ + "' alt='" + file.name + "'>" +
                                     "</p>"
                             });
@@ -40,10 +39,14 @@
                     });
                 });
             }
+        </script>
+
+        <script>
+
             require(["dojo/query","dojo/domReady!"], function(query) {
-                updateFiles();            
+                updateFiles();
                 dojo.connect(query("#imageForm")[0],"onsubmit",function(event) {
-                    dojo.stop(event);
+                    dojo.stopEvent(event);
                     dojo.io.iframe.send({
                         form: "imageForm",
                         handleAs: "json"
@@ -51,7 +54,7 @@
                 });
             });
         </script>
-        </sec:authorize>
+
     </head>
     <body>
         <section>

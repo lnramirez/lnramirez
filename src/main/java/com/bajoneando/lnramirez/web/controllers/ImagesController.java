@@ -30,8 +30,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/images")
 public class ImagesController {
     
-    @RequestMapping("/startupload")
-    public ModelAndView startupload() {
+    @RequestMapping(method = RequestMethod.GET)
+    public ModelAndView get() {
         ModelAndView modelAndView = new ModelAndView("/images/upload");
         modelAndView.addObject("mongoStoredFile", new MongoStoredFile());
         return modelAndView;

@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <c:url value="/" var="home" />
 <c:url value="/blog/" var="blogUrl" />
-<c:url value="/images/startupload" var="images" />
+<c:url value="/images/" var="images" />
 <c:url value="/visit/statistics" var="visits" />
 <c:url value="/about/" var="about" />
 <c:url value="/spring_security_login" var="login" />
