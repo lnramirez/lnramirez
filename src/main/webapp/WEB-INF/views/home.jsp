@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Official Web Site</title>
+        <title>Bajoneando</title>
         <link href="${prettifycss}" rel="stylesheet" type="text/css">
         <script src="${prettifyjs}"></script>
         <script src="${blogcustomizedjs}"></script>

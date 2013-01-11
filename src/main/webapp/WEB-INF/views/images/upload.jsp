@@ -9,6 +9,7 @@
 <c:url value="/images/upload" var="imagesUpload" />
 <html lang="en">
     <head>
+        <title>Images</title>
         <script>
             dojo.require("dojo.io.iframe");
             function updateFiles() {
