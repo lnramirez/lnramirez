@@ -1,6 +1,7 @@
 package com.bajoneando.lnramirez.files.services;
 
 import com.bajoneando.lnramirez.files.MongoStoredFile;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.gridfs.GridFS;
@@ -14,6 +15,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.web.PageableDefaults;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,10 +34,14 @@ public class FileService {
         return inputFile.getId().toString();
     }
     
-    public List<MongoStoredFile> getFiles(Pageable pageable) {
-        List<MongoStoredFile> files = new ArrayList<MongoStoredFile>(pageable.getPageSize());
+    public List<MongoStoredFile> getFiles(@PageableDefaults(pageNumber=0, value=5) Pageable pageable) {
+        try {
+        List<MongoStoredFile> files = new ArrayList<>(pageable.getPageSize());
         GridFS gridFS = new GridFS(mongoTemplate.getDb(),"images");
+        DBObject sortCriteria = new BasicDBObject("uploadDate",-1);
         DBCursor dBCursor = gridFS.getFileList();
+        dBCursor.sort(sortCriteria);
+        dBCursor.skip(pageable.getOffset()).limit(pageable.getOffset() + pageable.getPageSize());
         while (dBCursor.hasNext()) {
             DBObject dbObject = dBCursor.next();
             ObjectId objectId = (ObjectId) dbObject.get("_id");
@@ -46,6 +52,10 @@ public class FileService {
             files.add(mongoStoredFile);
         }
         return files;
+        } catch (Throwable e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
     
     public MongoStoredFile getFile(String objectId) throws IOException  {

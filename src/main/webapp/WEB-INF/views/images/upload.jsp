@@ -14,7 +14,7 @@
             dojo.require("dojo.io.iframe");
             function updateFiles() {
                 var xhrArgs = {
-                    url: "${pageContext.request.contextPath}/images/list/1",
+                    url: "${pageContext.request.contextPath}/images/list/0",
                     handleAs: "json",
                     load: function(data) {return data;},
                     error: function(error) {return error;}
