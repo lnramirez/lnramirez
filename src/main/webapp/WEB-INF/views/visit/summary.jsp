@@ -9,8 +9,29 @@
         <script src="http://open.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js"></script>
         <script src="${yadateutil}"></script>
         <script>
+            var cur;
+            function drawMap(map,lastVisit,hits) {
+                var fadeArgs = {node: "updating",duration:1000};
+                require(["dojo/_base/fx", "dojo/fx", "dojo/dom","dojo/query", "dojo/dom-style"], function(baseFx, fx, dom, query, style) {
+                    style.set("updating","opacity","0");
+                    query(".updating").attr("innerHTML","Updating...");
+                    var anim = fx.chain([
+                        baseFx.fadeIn(fadeArgs),
+                        baseFx.fadeOut(fadeArgs)
+                    ]);
+                    anim.play();
+                    query(".hits").attr("innerHTML",hits);
+                });
+                var lastVisitPOI = new MQA.Poi({lat:lastVisit.latitude, lng:lastVisit.longitude});
+                var infoContent = 'Date (UTC): ' + toUTCAndFormatted(lastVisit.date,'dd-MMM-yyyy HH:mm')
+                lastVisitPOI.setRolloverContent(infoContent);
+                lastVisitPOI.setInfoContentHTML(infoContent);
+                map.removeAllShapes();
+                map.addShape(lastVisitPOI);
+                map.bestFit();
+                map.setZoomLevel(13);
+            }
             function updateLatestVisit(map) {
-                var fadeArgs = {node: "updating",duration:1000};                
                 var xhrArgs = {
                     url: "${pageContext.request.contextPath}/visit/update",
                     handleAs: "json",
@@ -18,29 +39,31 @@
                     error: function(error) {return error;}
                 }
                 var deferred = dojo.xhrGet(xhrArgs);
-                deferred.then (function(summary) {
-                    var lastVisit = summary.lastVisit;
-                    require(["dojo/_base/fx", "dojo/fx", "dojo/dom","dojo/query", "dojo/dom-style"], function(baseFx, fx, dom, query, style) {
-                        style.set("updating","opacity","0");
-                        query(".updating").attr("innerHTML","Updating...");
-                        var anim = fx.chain([                            
-                            baseFx.fadeIn(fadeArgs),
-                            baseFx.fadeOut(fadeArgs)
-                        ]);
-                        anim.play();
-                        query(".hits").attr("innerHTML",summary.hits);
-                    });
-                    var lastVisitPOI = new MQA.Poi({lat:lastVisit.latitude, lng:lastVisit.longitude});
-                    var infoContent = 'Date (UTC): ' + toUTCAndFormatted(lastVisit.date,'dd-MMM-yyyy HH:mm')
-                    lastVisitPOI.setRolloverContent(infoContent);
-                    lastVisitPOI.setInfoContentHTML(infoContent);
-                    map.removeAllShapes();
-                    map.addShape(lastVisitPOI);
-                    map.bestFit();
-                    map.setZoomLevel(13);
+                deferred.then (function(_summary) {
+                    var lastVisit = _summary.lastVisit;
+                    cur = lastVisit;
+                    drawMap(map,lastVisit,_summary.hits);
+                    dojo.hitch(lastVisit,drawMap);
+                    dojo.hitch(_summary.hits,drawMap);
                 });
             }
-            
+            function previousVisit(map) {
+                 var xhrArgs = {
+                     url: "${pageContext.request.contextPath}/visit/previous/" + cur.date,
+                     headers: { "Content-Type": "application/json"},
+                     handleAs: "json",
+                     load: function(data) {return data;},
+                     error: function(error) {return error;}
+                 }
+                 var deferred = dojo.xhrGet(xhrArgs);
+                 deferred.then (function(summary) {
+                    var lastVisit = summary.lastVisit;
+                    cur = lastVisit;
+                    drawMap(map,lastVisit,summary.hits);
+                    dojo.hitch(lastVisit,drawMap);
+                    dojo.hitch(summary.hits,drawMap);
+                 });
+            }
             require(["dojo/query","dojo/domReady!"], function(query){
                 /*Create an object for options*/ 
                 var options={
@@ -71,6 +94,12 @@
                         updateLatestVisit(map);
                     });
                 });
+                query("a.previousanchor").forEach(function(node) {
+                    dojo.connect(node,"onclick",function(event) {
+                        dojo.stopEvent(event);
+                        previousVisit(map);
+                    });
+                });
             }); 
         </script>
     </head>
@@ -85,7 +114,11 @@
         <section>
             <h2>Last Visit</h2>
             <p>
-                <a href="#" class="updateanchor">Update Last Visit</a> <span id="updating" class="updating"></span>
+                <a href="#" class="updateanchor">Update Last Visit</a>
+                <span id="updating" class="updating"></span>
+                <a href="#" class="previousanchor">Previous Visit</a>
+                <span id="previous" class="previous"></span>
+                <span id="fetching" class="fetching"></span>
             </p>
             <div id="map" style="width:800px; height:300px;"></div>
         </section>

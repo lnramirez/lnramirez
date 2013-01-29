@@ -5,8 +5,13 @@ import com.bajoneando.lnramirez.visits.Visit;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceOptions;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
+import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Order;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,6 +42,12 @@ public class VisitService {
         } else {
             throw new RuntimeException("No entries for visit");
         }
+    }
+
+    public Visit getPreviousVisit(Date date) {
+        mongoTemplate.indexOps(Visit.class).ensureIndex(new Index().on("date", Order.DESCENDING));
+        final Query query = Query.query(Criteria.where("date").lt(date));
+        return mongoTemplate.findOne(query,Visit.class);
     }
     
     @Autowired

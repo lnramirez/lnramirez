@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Date;
+
 /**
  *
  * @author lrmonterosa
@@ -41,6 +43,15 @@ public class VisitController {
     @ResponseBody
     public Visit getLastVisit() {
         return visitService.getLastVisit();
+    }
+
+    @RequestMapping(value="/previous/{date}", method = RequestMethod.GET, headers = "Accept=application/json")
+    @ResponseBody
+    public VisitSummary getPreviousVisit(@PathVariable("date") Long date) {
+        VisitSummary visitSummary = new VisitSummary();
+        visitSummary.setHits(visitService.hits());
+        visitSummary.setLastVisit(visitService.getPreviousVisit(new Date(date)));
+        return visitSummary;
     }
     
     @Autowired
