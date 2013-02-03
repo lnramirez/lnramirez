@@ -13,15 +13,15 @@
             function drawMap(map,lastVisit,hits) {
                 var fadeArgs = {node: "updating",duration:1000};
                 require(["dojo/dom-prop"],function(domProp) {
-                require(["dojo/_base/fx", "dojo/dom","dojo/query", "dojo/dom-style"], function(baseFx, dom, query, style) {
-                    //style.set("updating","opacity","0");
+                require(["dojo/_base/fx", "dojo/fx","dojo/dom","dojo/query", "dojo/dom-style"], function(baseFx, fx, dom, query, style) {
+                    style.set("updating","opacity","0");
                     domProp.set("updating","innerHTML","Updating...");
                     domProp.set("hits","innerHTML",hits);
-                    /*var anim = fx.chain([
+                    var anim = fx.chain([
                         baseFx.fadeIn(fadeArgs),
                         baseFx.fadeOut(fadeArgs)
                     ]);
-                    anim.play();*/
+                    anim.play();
 
                 });
                 });
@@ -51,7 +51,6 @@
             }
             function previousVisit(map) {
                  var xhrArgs = {
-                     headers: { "Content-Type": "application/json"},
                      handleAs: "json",
                      load: function(data) {return data;},
                      error: function(error) {return error;}
@@ -96,7 +95,7 @@
                     });
                 });
                 query("a.previousanchor").forEach(function(node) {
-                    on(node,"onclick",function(_event) {
+                    on(node,"click",function(_event) {
                         event.stop(_event);
                         previousVisit(map);
                     });
