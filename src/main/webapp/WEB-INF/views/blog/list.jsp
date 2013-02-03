@@ -20,7 +20,6 @@
         <script src="${blogcustomizedjs}"></script>
         <script src="${yadateutil}"></script>
         <script>
-            dojo.require("dojo.window");
             function updateArticle(_id) {
                 var xhrArgs = {
                         url: "${pageContext.request.contextPath}/blog/single/" + _id,
@@ -75,7 +74,9 @@
                         node_.parentNode.removeChild(node_);
                     });
                     if (someid) {
-                        dojo.window.scrollIntoView(someid);
+                        require(["dojo/window"], function(win){
+                            win.scrollIntoView(someid);
+                        });
                     }
                 });
             }
@@ -124,14 +125,18 @@
                                 def.then(function(res) {
                                     cleanAndMoveForm();
                                     updateArticle(blogEntry.id);
-                                    dojo.window.scrollIntoView(blogEntry.id);
+                                    require(["dojo/window"], function(win){
+                                        win.scrollIntoView(blogEntry.id);
+                                    });
                                     dojo.disconnect(handle);
                                 },function (error_) {
                                     console.error(error_);
                                 });
                             });
                             domConstruct.place(floatingDiv, nodeArticle);
-                            dojo.window.scrollIntoView("_floatingForm");
+                            require(["dojo/window"], function(win){
+                                win.scrollIntoView("_floatingForm");
+                            });
                     });
                     },
                     function (error) {
@@ -157,7 +162,7 @@
                     });
                 }
             }
-            dojo.ready(function () {
+            require(["dojo/dom", "dojo/domReady!"], function(dom){
                 prettifyCode(prettyPrint);
                 openAnchorsInTab();
                 dojo.query("article.blogcontent").forEach(function(blogEntry) {

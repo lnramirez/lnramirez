@@ -16,7 +16,7 @@
         <script src="${prettifyjs}"></script>
         <script src="${blogcustomizedjs}"></script>        
         <script>
-            dojo.ready(function () {
+            require(["dojo/dom", "dojo/domReady!"], function(dom){
                 prettifyCode(prettyPrint);
                 openAnchorsInTab();
             }); 

@@ -1,0 +1,3 @@
+//>>built
+define("dojox/app/Controller",["dojo/_base/lang","dojo/_base/declare","dojo/on"],function(e,f,g){return f("dojox.app.Controller",null,{constructor:function(b,c){this.events=this.events||c;this._boundEvents=[];this.app=b;if(this.events)for(var a in this.events)"_"!==a.charAt(0)&&this.bind(this.app.domNode,a,e.hitch(this,this.events[a]))},bind:function(b,c,a){a=g(b,c,a);this._boundEvents.push({event:c,evented:b,signal:a})},unbind:function(b,c){for(var a=this._boundEvents.length,d=0;d<a;d++)if(this._boundEvents[d].event==
+c&&this._boundEvents[d].evented==b){this._boundEvents[d].signal.remove();this._boundEvents.splice(d,1);break}}})});

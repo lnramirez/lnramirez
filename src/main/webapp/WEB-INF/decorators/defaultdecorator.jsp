@@ -14,33 +14,34 @@
 <c:url value="/j_spring_security_logout" var="logout" />
 <spring:url value="/resources/icons/favicon.ico" var="favicon" />
 <spring:url value="/resources/css/lnramirez.css" var="css" />
-<spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
+<spring:url value="/resources/js/dojo-1.8.3/dojo/dojo.js" var="dojo" />
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <title>lnramirez - <decorator:title /></title>
         <link href="${css}" rel="stylesheet" type="text/css">
         <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
-        <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
+        <script src="${dojo}" data-dojo-config="async: true, parseOnLoad: true, isDebug: true"></script>
         <script>
             function addVisit(position) {
-                var payload = dojo.toJson({'latitude': position.coords.latitude, 'longitude':  position.coords.longitude});
-                var xhrArgs = {
-                    url: "${pageContext.request.contextPath}/visit/add",
-                    headers: { "Content-Type": "application/json"},
-                    postData: payload
-                }
-                var deferred = dojo.xhrPost(xhrArgs);
-                deferred.then (function(success) {
-                    
-                }, function(error) {
-                    
+                require(["dojo/json","dojo/request/xhr"],function(json,xhr) {
+                    var payload = json.stringify({'latitude': position.coords.latitude, 'longitude':  position.coords.longitude});
+                    var xhrArgs = {
+                        headers: { "Content-Type": "application/json"},
+                        data: payload
+                    }
+                    var deferred = xhr.post("${pageContext.request.contextPath}/visit/add",xhrArgs);
+                    deferred.then (function(success) {
+
+                    }, function(error) {
+
+                    });
                 });
             }
             function noGeoLocation() {
                 
             }
-            dojo.ready(function() {
+            require(["dojo/dom", "dojo/domReady!"], function(dom){
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(addVisit, noGeoLocation);
                 } 

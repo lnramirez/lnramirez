@@ -14,14 +14,14 @@
 <c:url value="/j_spring_security_logout" var="logout" />
 <spring:url value="/resources/icons/favicon.ico" var="favicon" />
 <spring:url value="/resources/css/lnramirez.css" var="css" />
-<spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
+<spring:url value="/resources/js/dojo-1.8.3/dojo/dojo.js" var="dojo" />
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <title>lnramirez - <decorator:title /></title>
         <link href="${css}" rel="stylesheet" type="text/css">
         <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
-        <script src="${dojo}" data-dojo-config="parseOnLoad: true, isDebug: true"></script>
+        <script src="${dojo}" data-dojo-config="async: true, parseOnLoad: true, isDebug: true"></script>
         <decorator:head />
     </head>
     <body>
