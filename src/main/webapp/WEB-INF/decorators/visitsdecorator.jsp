@@ -21,7 +21,7 @@
         <title>lnramirez - <decorator:title /></title>
         <link href="${css}" rel="stylesheet" type="text/css">
         <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
-        <script src="${dojo}" data-dojo-config="async: true, parseOnLoad: true, isDebug: true"></script>
+        <script src="${dojo}" data-dojo-config="async: true, parseOnLoad: true, isDebug: true, locale: 'en'"></script>
         <decorator:head />
     </head>
     <body>

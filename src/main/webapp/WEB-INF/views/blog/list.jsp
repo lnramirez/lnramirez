@@ -90,17 +90,18 @@
                 var deferred = dojo.xhrGet(xhrArgs);
                 deferred.then (
                     function (blogEntry) {
-                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/dom-attr","dojo/date/locale"], 
+                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate",
+                                 "dojo/dom-attr","dojo/date/locale"],
                         function(query,domConstruct,domAttr,locale){
                             var nodeArticle = query("article#" + blogEntry.id)[0];
                             var floatingDiv = query("div#_floatingForm")[0];
                             var floatingForm = query("#blogEntryForm")[0];
                             query("h2",floatingDiv).attr("innerHTML","Update '" + blogEntry.subject + "' entry");
-                            dojo.attr("subject","value",blogEntry.subject);
-                            dojo.attr("article","value",blogEntry.article);
+                            domAttr.set("subject","value",blogEntry.subject);
+                            domAttr.set("article","value",blogEntry.article);
                             var formattedPubDate = toUTCAndFormatted(blogEntry.publishDate);
-                            dojo.attr("publishDate","value",formattedPubDate);
-                            dojo.attr("formButton","value","Update entry");
+                            domAttr.set("publishDate","value",formattedPubDate);
+                            domAttr.set("formButton","value","Update entry");
                             query("#id",floatingForm).forEach(function(node_){
                                 node_.parentNode.removeChild(node_);
                             });
@@ -162,18 +163,18 @@
                     });
                 }
             }
-            require(["dojo/dom", "dojo/domReady!"], function(dom){
+            require(["dojo/dom", "dojo/domReady!","dojo/query","dojo/on"], function(dom,ready,query,on){
                 prettifyCode(prettyPrint);
                 openAnchorsInTab();
-                dojo.query("article.blogcontent").forEach(function(blogEntry) {
-                    dojo.query("a.editanchor",blogEntry).forEach(function(node) {
-                        dojo.connect(node,"onclick",function(event) {
+                query("article.blogcontent").forEach(function(blogEntry) {
+                    query("a.editanchor",blogEntry).forEach(function(node) {
+                        on(node,"click",function(event) {
                             dojo.stopEvent(event);
                             loadEntry(blogEntry.id);
                         });
                     });
-                    dojo.query("a.deleteanchor",blogEntry).forEach(function(node) {
-                        dojo.connect(node,"onclick",function(event) {
+                    query("a.deleteanchor",blogEntry).forEach(function(node) {
+                        on(node,"click",function(event) {
                             dojo.stopEvent(event);
                             deleteEntry(blogEntry.id);
                         });

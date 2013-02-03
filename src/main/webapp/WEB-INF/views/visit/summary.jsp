@@ -12,15 +12,18 @@
             var cur;
             function drawMap(map,lastVisit,hits) {
                 var fadeArgs = {node: "updating",duration:1000};
-                require(["dojo/_base/fx", "dojo/dom","dojo/query", "dojo/dom-style","dojo/dom-prop"], function(baseFx, dom, query, style,domProp) {
-                    style.set("updating","opacity","0");
-                    prop.set(".updating","innerHTML","Updating...");
+                require(["dojo/dom-prop"],function(domProp) {
+                require(["dojo/_base/fx", "dojo/dom","dojo/query", "dojo/dom-style"], function(baseFx, dom, query, style) {
+                    //style.set("updating","opacity","0");
+                    domProp.set("updating","innerHTML","Updating...");
+                    domProp.set("hits","innerHTML",hits);
                     /*var anim = fx.chain([
                         baseFx.fadeIn(fadeArgs),
                         baseFx.fadeOut(fadeArgs)
                     ]);
-                    anim.play();  */
-                    prop.set(".hits","innerHTML",hits);
+                    anim.play();*/
+
+                });
                 });
                 var lastVisitPOI = new MQA.Poi({lat:lastVisit.latitude, lng:lastVisit.longitude});
                 var infoContent = 'Date (UTC): ' + toUTCAndFormatted(lastVisit.date,'dd-MMM-yyyy HH:mm')
