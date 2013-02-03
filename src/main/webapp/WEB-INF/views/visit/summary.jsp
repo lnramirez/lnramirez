@@ -12,27 +12,27 @@
             var cur;
             function drawMap(map,lastVisit,hits) {
                 var fadeArgs = {node: "updating",duration:1000};
-                require(["dojo/dom-prop"],function(domProp) {
-                require(["dojo/_base/fx", "dojo/fx","dojo/dom","dojo/query", "dojo/dom-style"], function(baseFx, fx, dom, query, style) {
-                    style.set("updating","opacity","0");
-                    domProp.set("updating","innerHTML","Updating...");
-                    domProp.set("hits","innerHTML",hits);
-                    var anim = fx.chain([
-                        baseFx.fadeIn(fadeArgs),
-                        baseFx.fadeOut(fadeArgs)
-                    ]);
-                    anim.play();
+                require(["dojo/dom-prop","dojo/date/locale"],function(domProp,locale) {
+                    require(["dojo/_base/fx", "dojo/fx","dojo/dom","dojo/query", "dojo/dom-style"], function(baseFx, fx, dom, query, style) {
+                        style.set("updating","opacity","0");
+                        domProp.set("updating","innerHTML","Updating...");
+                        domProp.set("hits","innerHTML",hits);
+                        var anim = fx.chain([
+                            baseFx.fadeIn(fadeArgs),
+                            baseFx.fadeOut(fadeArgs)
+                        ]);
+                        anim.play();
 
+                    });
+                    var lastVisitPOI = new MQA.Poi({lat:lastVisit.latitude, lng:lastVisit.longitude});
+                    var infoContent = 'Date (UTC): ' + toUTCAndFormatted(lastVisit.date,locale,'dd-MMM-yyyy HH:mm')
+                    lastVisitPOI.setRolloverContent(infoContent);
+                    lastVisitPOI.setInfoContentHTML(infoContent);
+                    map.removeAllShapes();
+                    map.addShape(lastVisitPOI);
+                    map.bestFit();
+                    map.setZoomLevel(13);
                 });
-                });
-                var lastVisitPOI = new MQA.Poi({lat:lastVisit.latitude, lng:lastVisit.longitude});
-                var infoContent = 'Date (UTC): ' + toUTCAndFormatted(lastVisit.date,'dd-MMM-yyyy HH:mm')
-                lastVisitPOI.setRolloverContent(infoContent);
-                lastVisitPOI.setInfoContentHTML(infoContent);
-                map.removeAllShapes();
-                map.addShape(lastVisitPOI);
-                map.bestFit();
-                map.setZoomLevel(13);
             }
             function updateLatestVisit(map) {
                 var xhrArgs = {

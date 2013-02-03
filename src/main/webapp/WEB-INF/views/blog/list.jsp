@@ -43,7 +43,7 @@
                             var nodeLastUpdate = query("time.lastUpdateDate",nodeArticle);
                             nodeLastUpdate.attr("datetime",fLastDate);
                             nodeLastUpdate.attr("innerHTML",fLastDate + " ");
-                            var fPubDate = toUTCAndFormatted(blogEntry.publishDate,"dd-MMM-yyyy");
+                            var fPubDate = toUTCAndFormatted(blogEntry.publishDate,locale,"dd-MMM-yyyy");
                             var nodePublishDate = query("time.publishDate",nodeArticle);
                             nodePublishDate.attr("datetime",fPubDate);
                             nodePublishDate.attr("innerHTML",fPubDate + " ");
@@ -99,7 +99,7 @@
                             query("h2",floatingDiv).attr("innerHTML","Update '" + blogEntry.subject + "' entry");
                             domAttr.set("subject","value",blogEntry.subject);
                             domAttr.set("article","value",blogEntry.article);
-                            var formattedPubDate = toUTCAndFormatted(blogEntry.publishDate);
+                            var formattedPubDate = toUTCAndFormatted(blogEntry.publishDate,locale);
                             domAttr.set("publishDate","value",formattedPubDate);
                             domAttr.set("formButton","value","Update entry");
                             query("#id",floatingForm).forEach(function(node_){
