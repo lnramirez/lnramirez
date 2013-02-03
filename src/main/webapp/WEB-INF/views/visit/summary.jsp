@@ -12,15 +12,15 @@
             var cur;
             function drawMap(map,lastVisit,hits) {
                 var fadeArgs = {node: "updating",duration:1000};
-                require(["dojo/_base/fx", "dojo/fx", "dojo/dom","dojo/query", "dojo/dom-style"], function(baseFx, fx, dom, query, style) {
+                require(["dojo/_base/fx", "dojo/dom","dojo/query", "dojo/dom-style","dojo/dom-prop"], function(baseFx, dom, query, style,domProp) {
                     style.set("updating","opacity","0");
-                    query(".updating").attr("innerHTML","Updating...");
-                    var anim = fx.chain([
+                    prop.set(".updating","innerHTML","Updating...");
+                    /*var anim = fx.chain([
                         baseFx.fadeIn(fadeArgs),
                         baseFx.fadeOut(fadeArgs)
                     ]);
-                    anim.play();
-                    query(".hits").attr("innerHTML",hits);
+                    anim.play();  */
+                    prop.set(".hits","innerHTML",hits);
                 });
                 var lastVisitPOI = new MQA.Poi({lat:lastVisit.latitude, lng:lastVisit.longitude});
                 var infoContent = 'Date (UTC): ' + toUTCAndFormatted(lastVisit.date,'dd-MMM-yyyy HH:mm')
@@ -33,38 +33,36 @@
             }
             function updateLatestVisit(map) {
                 var xhrArgs = {
-                    url: "${pageContext.request.contextPath}/visit/update",
                     handleAs: "json",
                     load: function(data) {return data;},
                     error: function(error) {return error;}
                 }
-                var deferred = dojo.xhrGet(xhrArgs);
-                deferred.then (function(_summary) {
-                    var lastVisit = _summary.lastVisit;
-                    cur = lastVisit;
-                    drawMap(map,lastVisit,_summary.hits);
-                    dojo.hitch(lastVisit,drawMap);
-                    dojo.hitch(_summary.hits,drawMap);
+                require(["dojo/request/xhr"],function(xhr) {
+                    var deferred = xhr.get("${pageContext.request.contextPath}/visit/update",xhrArgs);
+                    deferred.then (function(_summary) {
+                        var lastVisit = _summary.lastVisit;
+                        cur = lastVisit;
+                        drawMap(map,lastVisit,_summary.hits);
+                    });
                 });
             }
             function previousVisit(map) {
                  var xhrArgs = {
-                     url: "${pageContext.request.contextPath}/visit/previous/" + cur.date,
                      headers: { "Content-Type": "application/json"},
                      handleAs: "json",
                      load: function(data) {return data;},
                      error: function(error) {return error;}
                  }
-                 var deferred = dojo.xhrGet(xhrArgs);
-                 deferred.then (function(summary) {
-                    var lastVisit = summary.lastVisit;
-                    cur = lastVisit;
-                    drawMap(map,lastVisit,summary.hits);
-                    dojo.hitch(lastVisit,drawMap);
-                    dojo.hitch(summary.hits,drawMap);
+                 require(["dojo/request/xhr"],function(xhr) {
+                    var deferred = xhr.get("${pageContext.request.contextPath}/visit/previous/" + cur.date,xhrArgs);
+                    deferred.then (function(summary) {
+                        var lastVisit = summary.lastVisit;
+                        cur = lastVisit;
+                        drawMap(map,lastVisit,summary.hits);
+                     });
                  });
             }
-            require(["dojo/query","dojo/domReady!"], function(query){
+            require(["dojo/query","dojo/domReady!","dojo/on","dojo/_base/event"], function(query,ready,on,event){
                 /*Create an object for options*/ 
                 var options={
                     elt:document.getElementById('map'),       /*ID of element on the page where you want the map added*/ 
@@ -89,14 +87,14 @@
                 });
                 updateLatestVisit(map);
                 query("a.updateanchor").forEach(function(node) {
-                    dojo.connect(node,"onclick",function(event) {
-                        dojo.stopEvent(event);
+                    on(node,"click",function(_event) {
+                        event.stop(_event);
                         updateLatestVisit(map);
                     });
                 });
                 query("a.previousanchor").forEach(function(node) {
-                    dojo.connect(node,"onclick",function(event) {
-                        dojo.stopEvent(event);
+                    on(node,"onclick",function(_event) {
+                        event.stop(_event);
                         previousVisit(map);
                     });
                 });
