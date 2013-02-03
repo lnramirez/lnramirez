@@ -1,4 +1,4 @@
-Build started: Sat Feb 02 2013 19:31:47 GMT-0500 (EST)
+Build started: Sun Feb 03 2013 01:02:04 GMT-0500 (EST)
 Build application version: 1.7.0dev (23930)
 Messages:
 info(100) Assumed module uses legacy loader API.
@@ -3838,6 +3838,7 @@ warn(216) dojo/has plugin resource could not be resolved during build-time.
 	plugin resource id: dojo-parser?:dojo/_base/window; reference module id: dojox/mvc/parserExtension
 	plugin resource id: dojo-mobile-parser?:dojo/parser; reference module id: dojox/mvc/parserExtension
 	plugin resource id: dojo-parser?:dojox/mobile/parser; reference module id: dojox/mvc/parserExtension
+	plugin resource id: dojo-firebug?./_firebug/firebug; reference module id: dojo/main
 	plugin resource id: dom-addeventlistener?:./aspect; reference module id: dojo/on
 	plugin resource id: host-browser?dom-addeventlistener?:../on:; reference module id: dojo/request/watch
 warn(224) A plugin dependency was encountered but there was no build-time plugin resolver.
@@ -3856,6 +3857,7 @@ Layer Contents:
 dojo/dojo:
 	dojo/_base/fx
 	dojo/dom-form
+	dojo/promise/tracer
 	dojo/errors/RequestError
 	dojo/_base/html
 	dojo/_base/kernel
@@ -3864,6 +3866,7 @@ dojo/dojo:
 	dojo/NodeList-dom
 	dojo/query
 	dojo/has
+	dojo/_base/loader
 	dojo/json
 	dojo/_base/declare
 	dojo/dom
@@ -3884,11 +3887,12 @@ dojo/dojo:
 	dojo/mouse
 	dojo/topic
 	dojo/_base/xhr
-	dojo/_base/unload
 	dojo/dojo
+	dojo/_base/unload
 	dojo/Deferred
 	dojo/_base/NodeList
 	dojo/_base/Color
+	dojo/promise/instrumentation
 	dojo/selector/_loader
 	dojo/promise/Promise
 	dojo/request/watch
@@ -3914,5 +3918,5 @@ dojo/dojo:
 
 Process finished normally
 	errors: 0
-	warnings: 17
-	build time: 124.458 seconds
+	warnings: 18
+	build time: 184.921 seconds

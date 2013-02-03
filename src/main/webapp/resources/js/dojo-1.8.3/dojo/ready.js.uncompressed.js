@@ -117,7 +117,7 @@ define("dojo/ready", ["./_base/kernel", "./has", "require", "./domReady", "./_ba
 		}
 	}
 
-	if( 0  && dojo.config.parseOnLoad && !dojo.isAsync){
+	if( 1  && dojo.config.parseOnLoad && !dojo.isAsync){
 		ready(99, function(){
 			if(!dojo.parser){
 				dojo.deprecated("Add explicit require(['dojo/parser']);", "", "2.0");

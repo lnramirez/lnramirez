@@ -296,7 +296,7 @@ define("dojo/i18n", ["./_base/kernel", "require", "./has", "./_base/array", "./_
 			},
 
 			isXd = function(mid, contextRequire){
-				return ( 0  &&  1 ) ?
+				return ( 1  &&  1 ) ?
 					contextRequire.isXdUrl(require.toUrl(mid + ".js")) :
 					true;
 			},

@@ -12,16 +12,16 @@ define("dojo/main", [
 	"./_base/Deferred",
 	"./_base/json",
 	"./_base/Color",
-	"require",
+	"./has!dojo-firebug?./_firebug/firebug",
 	"./_base/browser",
-	"require"
+	"./_base/loader"
 ], function(kernel, has, require, sniff, lang, array, config, ready){
 	// module:
 	//		dojo/main
 	// summary:
 	//		This is the package main module for the dojo package; it loads dojo base appropriate for the execution environment.
 
-	// the preferred way to load the dojo firebug console is by setting  0  true in dojoConfig
+	// the preferred way to load the dojo firebug console is by setting has("dojo-firebug") true in dojoConfig
 	// the isDebug config switch is for backcompat and will work fine in sync loading mode; it works in
 	// async mode too, but there's no guarantee when the module is loaded; therefore, if you need a firebug
 	// console guaranteed at a particular spot in an app, either set config.has["dojo-firebug"] true before
@@ -31,8 +31,8 @@ define("dojo/main", [
 	}
 
 	// dojoConfig.require is deprecated; use the loader configuration property deps
-	 0 && has.add("dojo-config-require", 1);
-	if( 0 ){
+	 1 || has.add("dojo-config-require", 1);
+	if( 1 ){
 		var deps= config.require;
 		if(deps){
 			// config.require may be dot notation

@@ -92,7 +92,7 @@ define("dojo/has", ["require", "module"], function(require, module){
 		 1 || has.add("host-browser", isBrowser);
 		 1 || has.add("dom", isBrowser);
 		 1 || has.add("dojo-dom-ready-api", 1);
-		 0 && has.add("dojo-sniff", 1);
+		 1 || has.add("dojo-sniff", 1);
 	}
 
 	if( 1 ){
