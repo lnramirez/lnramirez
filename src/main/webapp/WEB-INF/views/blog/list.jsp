@@ -6,7 +6,6 @@
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib prefix="bajoneando"    uri="http://www.bajoneando.com/tags"%>
-<spring:url value="/resources/js/dojo-1.7.2/dojo/dojo.js" var="dojo" />
 <spring:url value="/resources/js/prettify.js" var="prettifyjs" />
 <spring:url value="/resources/js/blogcustomized.js" var="blogcustomizedjs" />
 <spring:url value="/resources/js/yadateutil.js" var="yadateutil" />
@@ -130,10 +129,10 @@
                 if (confirm("Are you sure you want to delete this entry?")) {
                     require(["dojo/json","dojo/request/xhr","dojo/query","dojo/dom-construct"],
                             function(json,xhr,query,domConstruct) {
-                        var deferred = xhr.del("${pageContext.request.contextPath}/blog/delete/" + _id,{handleAs: "json"});
+                        var deferred = xhr.del("${pageContext.request.contextPath}/blog/delete/" + _id,{headers: {"Content-Type": "application/json"}});
                         deferred.then (function(response){
                             query("article#" + _id).forEach(function(node_) {
-                                node_.orphan();
+                                node_.parentNode.removeChild(node_);
                             });
                         }, function (error_) {
                             console.error(error_);
