@@ -20,51 +20,46 @@
         <script src="${blogcustomizedjs}"></script>
         <script src="${yadateutil}"></script>
         <script>
-            function updateArticle(_id) {
-                var xhrArgs = {
-                        url: "${pageContext.request.contextPath}/blog/single/" + _id,
-                        handleAs: "json",
-                        load: function(data) {return data;},
-                        error: function(error) {return error;}
-                }
-                var deferred = dojo.xhrGet(xhrArgs);
-                deferred.then (
-                    function (blogEntry) {
-                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate",
-                            "dojo/dom-attr", "dojo/dom","dojo/date/locale"], 
-                        function(query,domConstruct,domAttr,locale){
+            function updateArticle(_id) {require(["dojo/json","dojo/request/xhr","dojo/query", "dojo/dom-construct",
+                         "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/dom-attr",
+                         "dojo/dom","dojo/date/locale"],function(json,xhr,query,domConstruct,traverse,manipulate,domAttr,dom,locale) {
+                    var deferred = xhr.get("${pageContext.request.contextPath}/blog/single/" + _id,{handleAs: "json"})
+                    deferred.then (
+                        function (blogEntry) {
                             var nodeArticle = query("article#" + blogEntry.id)[0];
                             query("h1",nodeArticle).attr("innerHTML",blogEntry.subject);
                             var articleNodeList = query("div",nodeArticle);
                             articleNodeList.attr("innerHTML",blogEntry.printableHtml);
                             var lastDate = new Date();
                             lastDate.setTime(blogEntry.lastUpdateDate);
-                            var fLastDate = dojo.date.locale.format(lastDate, {selector:'date', datePattern:'dd-MMM-yyyy HH:mm'}); 
+                            var fLastDate = locale.format(lastDate, {selector:'date', datePattern:'dd-MMM-yyyy HH:mm'});
                             var nodeLastUpdate = query("time.lastUpdateDate",nodeArticle);
-                            nodeLastUpdate.attr("datetime",fLastDate);
-                            nodeLastUpdate.attr("innerHTML",fLastDate + " ");
+                            domAttr.set(nodeLastUpdate,"datetime",fLastDate);
+                            domAttr.set(nodeLastUpdate,"innerHTML",fLastDate + " ");
                             var fPubDate = toUTCAndFormatted(blogEntry.publishDate,locale,"dd-MMM-yyyy");
                             var nodePublishDate = query("time.publishDate",nodeArticle);
                             nodePublishDate.attr("datetime",fPubDate);
                             nodePublishDate.attr("innerHTML",fPubDate + " ");
                             prettifyCode(prettyPrint);
                             openAnchorsInTab();
-                        });
-                    },
-                    function (error_) {
-                        console.error(error_);
-                    }
-                );
+                        },
+                        function (error_) {
+                            console.error(error_);
+                        }
+                    );
+                });
             }
             function cleanAndMoveForm(/*optional move to id after deleting*/someid) {
-                require(["dojo/query","dojo/dom-construct"],function(query,domConstruct) {
+                require(["dojo/query","dojo/dom-construct","dojo/dom-attr","dojo/window"],function(query,domConstruct,domAttr,win) {
                     var floatingDiv = query("div#_floatingForm")[0];
                     var navPagination = query("nav.pagination")[0];
-                    dojo.attr("subject","value","");
-                    dojo.attr("article","value","");
-                    dojo.attr("publishDate","value","");
-                    dojo.attr("formButton","value","Add new entry");
-                    query("h2",floatingDiv).attr("innerHTML","Add a new entry");
+                    domAttr.set("subject","value","");
+                    domAttr.set("article","value","");
+                    domAttr.set("publishDate","value","");
+                    domAttr.set("formButton","value","Add new entry");
+                    query("h2",floatingDiv).forEach(function(node_) {
+                        domAttr.set(node_,"innerHTML","Add a new entry");
+                    });
                     var floatingForm = query("#blogEntryForm")[0];
                     query("#id",floatingForm).forEach(function(node_){
                         node_.parentNode.removeChild(node_);
@@ -74,108 +69,91 @@
                         node_.parentNode.removeChild(node_);
                     });
                     if (someid) {
-                        require(["dojo/window"], function(win){
-                            win.scrollIntoView(someid);
-                        });
+                        win.scrollIntoView(someid);
                     }
                 });
             }
             function loadEntry(_id) {
-                var xhrArgs = {
-                    url: "${pageContext.request.contextPath}/blog/single/" + _id,
-                    handleAs: "json",
-                    load: function(data) {return data;},
-                    error: function(error) {return error;}
-                }
-                var deferred = dojo.xhrGet(xhrArgs);
-                deferred.then (
-                    function (blogEntry) {
-                        require(["dojo/query", "dojo/dom-construct", "dojo/NodeList-traverse", "dojo/NodeList-manipulate",
-                                 "dojo/dom-attr","dojo/date/locale"],
-                        function(query,domConstruct,domAttr,locale){
-                            var nodeArticle = query("article#" + blogEntry.id)[0];
-                            var floatingDiv = query("div#_floatingForm")[0];
-                            var floatingForm = query("#blogEntryForm")[0];
-                            query("h2",floatingDiv).attr("innerHTML","Update '" + blogEntry.subject + "' entry");
-                            domAttr.set("subject","value",blogEntry.subject);
-                            domAttr.set("article","value",blogEntry.article);
-                            var formattedPubDate = toUTCAndFormatted(blogEntry.publishDate,locale);
-                            domAttr.set("publishDate","value",formattedPubDate);
-                            domAttr.set("formButton","value","Update entry");
-                            query("#id",floatingForm).forEach(function(node_){
-                                node_.parentNode.removeChild(node_);
+                require(["dojo/json","dojo/request/xhr","dojo/dom-form","dojo/query", "dojo/dom-construct",
+                         "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/dom-attr","dojo/date/locale",
+                         "dojo/on","dojo/_base/event","dojo/window"],
+                         function(json,xhr,form,query,domConstruct,traverse,manipulate,domAttr,locale,on,event,win) {
+                    var deferred = xhr.get("${pageContext.request.contextPath}/blog/single/" + _id,{handleAs: "json"});
+                    deferred.then (function (blogEntry) {
+                        var nodeArticle = query("article#" + blogEntry.id)[0];
+                        var floatingDiv = query("div#_floatingForm")[0];
+                        var floatingForm = query("#blogEntryForm")[0];
+                        query("h2",floatingDiv).attr("innerHTML","Update '" + blogEntry.subject + "' entry");
+                        domAttr.set("subject","value",blogEntry.subject);
+                        domAttr.set("article","value",blogEntry.article);
+                        var formattedPubDate = toUTCAndFormatted(blogEntry.publishDate,locale);
+                        domAttr.set("publishDate","value",formattedPubDate);
+                        domAttr.set("formButton","value","Update entry");
+                        query("#id",floatingForm).forEach(function(node_){
+                            node_.parentNode.removeChild(node_);
+                        });
+                        query("#cancelBtn").forEach(function(node_){
+                            node_.parentNode.removeChild(node_);
+                        });
+                        var idNode = domConstruct.create("input",{"type":"hidden","value":blogEntry.id,"id":"id","name":"id"});
+                        domConstruct.place(idNode,"blogEntryForm");
+                        var cancelNode = domConstruct.create("input",
+                            {"type":"reset","value":"Cancel",
+                             "id":"cancelBtn","name":"cancelBtn",
+                             "onclick":function(e) {cleanAndMoveForm(blogEntry.id)}});
+                        domConstruct.place(cancelNode,"formButton","after");
+                        var handle = on(floatingForm,"submit",function(event_) {
+                            event.stop(event_);
+                            var xhrUpdateArgs = {
+                                headers: {"Content-Type": "application/json"},
+                                data: form.toJson(floatingForm)
+                            }
+                            var def = xhr.put("${pageContext.request.contextPath}/blog/update",xhrUpdateArgs);
+                            def.then(function(res) {
+                                cleanAndMoveForm();
+                                updateArticle(blogEntry.id);
+                                win.scrollIntoView(blogEntry.id);
+                                handle.remove();
+                            },function (error_) {
+                                console.error(error_);
                             });
-                            query("#cancelBtn").forEach(function(node_){
-                                node_.parentNode.removeChild(node_);
-                            });
-                            var idNode = dojo.create("input",{"type":"hidden","value":blogEntry.id,"id":"id","name":"id"});
-                            domConstruct.place(idNode,"blogEntryForm");
-                            var cancelNode = dojo.create("input",
-                                {"type":"reset","value":"Cancel",
-                                 "id":"cancelBtn","name":"cancelBtn",
-                                 "onclick":function(e) {cleanAndMoveForm(blogEntry.id)}});
-                            domConstruct.place(cancelNode,"formButton","after");
-                            var handle = dojo.connect(floatingForm,"onsubmit",function(event) {
-                                dojo.stopEvent(event);
-                                var xhrUpdateArgs = {
-                                    url: "${pageContext.request.contextPath}/blog/update",
-                                    headers: { "Content-Type": "application/json"},
-                                    putData: dojo.formToJson(floatingForm)
-                                }
-                                var def = dojo.xhrPut(xhrUpdateArgs);
-                                def.then(function(res) {
-                                    cleanAndMoveForm();
-                                    updateArticle(blogEntry.id);
-                                    require(["dojo/window"], function(win){
-                                        win.scrollIntoView(blogEntry.id);
-                                    });
-                                    dojo.disconnect(handle);
-                                },function (error_) {
-                                    console.error(error_);
-                                });
-                            });
-                            domConstruct.place(floatingDiv, nodeArticle);
-                            require(["dojo/window"], function(win){
-                                win.scrollIntoView("_floatingForm");
-                            });
-                    });
+                        });
+                        domConstruct.place(floatingDiv, nodeArticle);
+                        win.scrollIntoView("_floatingForm");
                     },
                     function (error) {
                         console.error(error);
-                    }
-                );
+                    });
+                });
             }
             function deleteEntry(_id) {
-                var xhrArgs = {
-                    url: "${pageContext.request.contextPath}/blog/delete/" + _id,
-                    handleAs: "json",
-                    load: function(data) {return data;},
-                    error: function(error) {return error;}
-                }
                 if (confirm("Are you sure you want to delete this entry?")) {
-                    var deferred = dojo.xhrDelete(xhrArgs);
-                    deferred.then (function(response){
-                        require(["dojo/query","dojo/dom-construct"], function(query,domConstruct) {
-                            query("article#" + _id).orphan();
+                    require(["dojo/json","dojo/request/xhr","dojo/query","dojo/dom-construct"],
+                            function(json,xhr,query,domConstruct) {
+                        var deferred = xhr.del("${pageContext.request.contextPath}/blog/delete/" + _id,{handleAs: "json"});
+                        deferred.then (function(response){
+                            query("article#" + _id).forEach(function(node_) {
+                                node_.orphan();
+                            });
+                        }, function (error_) {
+                            console.error(error_);
                         });
-                    }, function (error_) {
-                        console.error(error_);
                     });
                 }
             }
-            require(["dojo/dom", "dojo/domReady!","dojo/query","dojo/on"], function(dom,ready,query,on){
+            require(["dojo/dom", "dojo/domReady!","dojo/query","dojo/on","dojo/_base/event"], function(dom,ready,query,on,event){
                 prettifyCode(prettyPrint);
                 openAnchorsInTab();
                 query("article.blogcontent").forEach(function(blogEntry) {
                     query("a.editanchor",blogEntry).forEach(function(node) {
-                        on(node,"click",function(event) {
-                            dojo.stopEvent(event);
+                        on(node,"click",function(event_) {
+                            event.stop(event_);
                             loadEntry(blogEntry.id);
                         });
                     });
                     query("a.deleteanchor",blogEntry).forEach(function(node) {
-                        on(node,"click",function(event) {
-                            dojo.stopEvent(event);
+                        on(node,"click",function(event_) {
+                            event.stop(event_);
                             deleteEntry(blogEntry.id);
                         });
                     });
