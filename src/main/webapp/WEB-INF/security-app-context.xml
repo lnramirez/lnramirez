@@ -10,10 +10,8 @@
     <global-method-security pre-post-annotations="enabled"/>
     
     <http auto-config="true" use-expressions="true">
-        <intercept-url pattern="/images/**" access="permitAll" />
-        <intercept-url pattern="/images/upload/**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/images/list/**" access="permitAll" />
         <intercept-url pattern="/images/download/**" access="permitAll" />
+        <intercept-url pattern="/images/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/resources/**" access="permitAll" />
         <logout logout-success-url="/" />
     </http>
