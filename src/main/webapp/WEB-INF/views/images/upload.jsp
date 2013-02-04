@@ -11,19 +11,13 @@
     <head>
         <title>Images</title>
         <script>
-            dojo.require("dojo.io.iframe");
             function updateFiles() {
-                var xhrArgs = {
-                    url: "${pageContext.request.contextPath}/images/list/0",
-                    handleAs: "json",
-                    load: function(data) {return data;},
-                    error: function(error) {return error;}
-                }
-                dojo.xhrGet(xhrArgs).then(function(files) {
-                    require(["dojo/query", "dojo/dom-construct","dojo/_base/array"], function (query,domConstruct,array) {
-                        array.forEach(files,function(file) {
+                require(["dojo/query", "dojo/dom-construct","dojo/_base/array","dojo/request/xhr","dojo/dom","dojo/dom-attr","dojo/json","dojo/dom-construct"],
+                        function (query,domConstruct,array,xhr,dom,domAttr,json,construct) {
+                    xhr.get("${pageContext.request.contextPath}/images/list/0",{headers: {"Content-Type": "application/json"}}).then(function(files) {
+                        array.forEach(json.parse(files),function(file) {
                             var url_ = '${pageContext.request.contextPath}/images/download/' + file.id;
-                            var idNode = dojo.create("div",{
+                            var idNode = construct.create("div",{
                                 "id": file.id,
                                 "class": '_image',
                                 "innerHTML":
@@ -31,12 +25,10 @@
                                     "<img src='" + url_ + "' alt='" + file.name + "'>" +
                                     "</p>"
                             });
-                            dojo.byId("fileslist").appendChild(idNode);
+                            dom.byId("fileslist").appendChild(idNode);
                         });
-                    });
-                }, function (error) {
-                    require(["dojo/query"], function(query) {
-                       query("#fileslist").attr("innerHTML","Ooops... " + error);
+                    }, function (error) {
+                       domAttr.set(query("#fileslist"),"innerHTML","Ooops... " + error);
                     });
                 });
             }
@@ -44,12 +36,11 @@
 
         <script>
 
-            require(["dojo/query","dojo/domReady!"], function(query) {
+            require(["dojo/query","dojo/domReady!","dojo/on","dojo/_base/event","dojo/request/iframe"], function(query,ready,on,event,iframe) {
                 updateFiles();
-                dojo.connect(query("#imageForm")[0],"onsubmit",function(event) {
-                    dojo.stopEvent(event);
-                    dojo.io.iframe.send({
-                        form: "imageForm",
+                on(query("#imageForm")[0],"submit",function(event_) {
+                    event.stop(event_);
+                    iframe("${imagesUpload}",{form: "imageForm",
                         handleAs: "json"
                     });
                 });

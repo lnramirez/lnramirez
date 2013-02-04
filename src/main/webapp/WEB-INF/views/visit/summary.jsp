@@ -12,18 +12,16 @@
             var cur;
             function drawMap(map,lastVisit,hits) {
                 var fadeArgs = {node: "updating",duration:1000};
-                require(["dojo/dom-prop","dojo/date/locale"],function(domProp,locale) {
-                    require(["dojo/_base/fx", "dojo/fx","dojo/dom","dojo/query", "dojo/dom-style"], function(baseFx, fx, dom, query, style) {
-                        style.set("updating","opacity","0");
-                        domProp.set("updating","innerHTML","Updating...");
-                        domProp.set("hits","innerHTML",hits);
-                        var anim = fx.chain([
-                            baseFx.fadeIn(fadeArgs),
-                            baseFx.fadeOut(fadeArgs)
-                        ]);
-                        anim.play();
-
-                    });
+                require(["dojo/dom-prop","dojo/date/locale","dojo/_base/fx", "dojo/fx","dojo/dom","dojo/query", "dojo/dom-style"],
+                        function(domProp,locale,baseFx, fx, dom, query, style) {
+                    style.set("updating","opacity","0");
+                    domProp.set("updating","innerHTML","Updating...");
+                    domProp.set("hits","innerHTML",hits);
+                    var anim = fx.chain([
+                        baseFx.fadeIn(fadeArgs),
+                        baseFx.fadeOut(fadeArgs)
+                    ]);
+                    anim.play();
                     var lastVisitPOI = new MQA.Poi({lat:lastVisit.latitude, lng:lastVisit.longitude});
                     var infoContent = 'Date (UTC): ' + toUTCAndFormatted(lastVisit.date,locale,'dd-MMM-yyyy HH:mm')
                     lastVisitPOI.setRolloverContent(infoContent);
@@ -35,13 +33,8 @@
                 });
             }
             function updateLatestVisit(map) {
-                var xhrArgs = {
-                    handleAs: "json",
-                    load: function(data) {return data;},
-                    error: function(error) {return error;}
-                }
                 require(["dojo/request/xhr"],function(xhr) {
-                    var deferred = xhr.get("${pageContext.request.contextPath}/visit/update",xhrArgs);
+                    var deferred = xhr.get("${pageContext.request.contextPath}/visit/update",{handleAs: "json"});
                     deferred.then (function(_summary) {
                         var lastVisit = _summary.lastVisit;
                         cur = lastVisit;
@@ -50,13 +43,8 @@
                 });
             }
             function previousVisit(map) {
-                 var xhrArgs = {
-                     handleAs: "json",
-                     load: function(data) {return data;},
-                     error: function(error) {return error;}
-                 }
                  require(["dojo/request/xhr"],function(xhr) {
-                    var deferred = xhr.get("${pageContext.request.contextPath}/visit/previous/" + cur.date,xhrArgs);
+                    var deferred = xhr.get("${pageContext.request.contextPath}/visit/previous/" + cur.date,{handleAs: "json"});
                     deferred.then (function(summary) {
                         var lastVisit = summary.lastVisit;
                         cur = lastVisit;
