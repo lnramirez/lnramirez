@@ -49,6 +49,12 @@ public class ImagesController {
         image.setData(multipartFile.getBytes());
         fileService.save(image);
     }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, headers="Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteImage(@PathVariable("id") String id) {
+        fileService.delete(id);
+    }
     
     @RequestMapping(value="/download/{objectId}", method=RequestMethod.GET)
     public void download(final HttpServletResponse response, 

@@ -33,6 +33,11 @@ public class FileService {
         inputFile.save();
         return inputFile.getId().toString();
     }
+
+    public void delete(String id) {
+        GridFS gridFS = new GridFS(mongoTemplate.getDb(),"images");
+        gridFS.remove(new ObjectId(id));
+    }
     
     public List<MongoStoredFile> getFiles(@PageableDefaults(pageNumber=0, value=5) Pageable pageable) {
         try {
