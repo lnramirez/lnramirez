@@ -22,30 +22,27 @@
             function updateArticle(_id) {require(["dojo/json","dojo/request/xhr","dojo/query", "dojo/dom-construct",
                          "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/dom-attr",
                          "dojo/dom","dojo/date/locale"],function(json,xhr,query,domConstruct,traverse,manipulate,domAttr,dom,locale) {
-                    var deferred = xhr.get("${pageContext.request.contextPath}/blog/single/" + _id,{handleAs: "json"})
-                    deferred.then (
-                        function (blogEntry) {
-                            var nodeArticle = query("article#" + blogEntry.id)[0];
-                            query("h1",nodeArticle).attr("innerHTML",blogEntry.subject);
-                            var articleNodeList = query("div",nodeArticle);
-                            articleNodeList.attr("innerHTML",blogEntry.printableHtml);
-                            var lastDate = new Date();
-                            lastDate.setTime(blogEntry.lastUpdateDate);
-                            var fLastDate = locale.format(lastDate, {selector:'date', datePattern:'dd-MMM-yyyy HH:mm'});
-                            var nodeLastUpdate = query("time.lastUpdateDate",nodeArticle);
-                            domAttr.set(nodeLastUpdate,"datetime",fLastDate);
-                            domAttr.set(nodeLastUpdate,"innerHTML",fLastDate + " ");
-                            var fPubDate = toUTCAndFormatted(blogEntry.publishDate,locale,"dd-MMM-yyyy");
-                            var nodePublishDate = query("time.publishDate",nodeArticle);
-                            nodePublishDate.attr("datetime",fPubDate);
-                            nodePublishDate.attr("innerHTML",fPubDate + " ");
-                            prettifyCode(prettyPrint);
-                            openAnchorsInTab();
-                        },
-                        function (error_) {
-                            console.error(error_);
-                        }
-                    );
+                    xhr.get("${pageContext.request.contextPath}/blog/single/" + _id,{handleAs: "json"}).then (function (blogEntry) {
+                        var nodeArticle = query("article#" + blogEntry.id)[0];
+                        query("h1",nodeArticle).attr("innerHTML",blogEntry.subject);
+                        var articleNodeList = query("div",nodeArticle)[0];
+                        domAttr.set(articleNodeList,"innerHTML",blogEntry.printableHtml);
+                        var lastDate = new Date();
+                        lastDate.setTime(blogEntry.lastUpdateDate);
+                        var fLastDate = locale.format(lastDate, {selector:'date', datePattern:'dd-MMM-yyyy HH:mm'});
+                        var nodeLastUpdate = query("time.lastUpdateDate",nodeArticle)[0];
+                        domAttr.set(nodeLastUpdate,"datetime",fLastDate);
+                        domAttr.set(nodeLastUpdate,"innerHTML",fLastDate + " ");
+                        var fPubDate = toUTCAndFormatted(blogEntry.publishDate,locale,"dd-MMM-yyyy");
+                        var nodePublishDate = query("time.publishDate",nodeArticle)[0];
+                        domAttr.set(nodePublishDate,"datetime",fPubDate);
+                        domAttr.set(nodePublishDate,"innerHTML",fPubDate + " ");
+                        prettifyCode(prettyPrint);
+                        openAnchorsInTab();
+                    },
+                    function (error_) {
+                        console.error(error_);
+                    });
                 });
             }
             function cleanAndMoveForm(/*optional move to id after deleting*/someid) {

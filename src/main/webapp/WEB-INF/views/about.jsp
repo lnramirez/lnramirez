@@ -8,16 +8,17 @@
         <link href="${socialflaircss}" rel="stylesheet" type="text/css">
         <script>
             function truncateName(a){return a.length>28?a.substring(0,28)+"...":a}
-            dojo.require("dojo.io.script");
-            require(["dojo/query","dojo/domReady!"], function(query) {
-                dojo.io.script.get({
-                    url : 'https://api.github.com/users/lnramirez',
-                    callbackParamName: "callback"
+            var some;
+            require(["dojo/query","dojo/domReady!","dojo/io/script","dojo/json","dojo/dom-attr"], function(query,ready,script,json,domAttr) {
+                script.get({
+                    url: "https://api.github.com/users/lnramirez",
+                    jsonp: "callback"
                 }).then(function(data_) {
                     var data = data_.data;
                     var followers = data.followers;
                     var public_repos = data.public_repos;
-                    query("#githubFlair").attr("innerHTML","<a class='sfLink' href='" + data.html_url +"'><div class='sfTable sfGithub'><div class='sfRow'>"
+                    domAttr.set(query("#githubFlair")[0],"innerHTML",
+                         "<a class='sfLink' href='" + data.html_url +"'><div class='sfTable sfGithub'><div class='sfRow'>"
                         +" <div class='sfCell1'>"
                         +"  <img class='sfProfilePic' src='" + data.avatar_url + "' width='48px' height='48px' />"
                         +" </div>"
@@ -30,19 +31,22 @@
                         +"  </div>"
                         +"</div>"
                         +"</div></div>​</a>");
+                }, function(err_) {
+                    console.error(err_);
                 });
-                dojo.io.script.get({
+                script.get({
                     url: 'http://api.twitter.com/1/followers/ids.json?screen_name=luisnramirez&cursor=-1',
                     callbackParamName: "callback"
                 }).then(function(_data) {
                     var followers = _data.ids.length;
-                    dojo.io.script.get({
+                    script.get({
                         url: 'http://api.twitter.com/1/friends/ids.json?screen_name=luisnramirez&cursor=-1',
                         callbackParamName: "callback"
                     }).then(function(data) {
                         var following = data.ids.length;
                         var handler = 'luisnramirez';
-                        query('#twitterFlair').attr("innerHTML","<a class='sfLink' href='http://twitter.com/#!/" + handler +"'><div class='sfTable sfTwitter'><div class='sfRow'>"
+                        domAttr.set(query('#twitterFlair')[0],"innerHTML",
+                             "<a class='sfLink' href='http://twitter.com/#!/" + handler +"'><div class='sfTable sfTwitter'><div class='sfRow'>"
                             +" <div class='sfCell1'>"
                             +"  <img class='sfProfilePic' src='https://api.twitter.com/1/users/profile_image?screen_name=" + handler + "&size=normal' width='48px' height='48px' />"
                             +" </div>"
@@ -56,8 +60,9 @@
                             +"</div></div>​</a>"
                         );
                     }).then(function() {
-                        var _q = query("a.sfLink");
-                        query("a.sfLink").attr("target","_BLANK");
+                        query("a.sfLink").forEach(function(node_) {
+                            domAttr.set(node_,"target","_BLANK");
+                        });
                     })
                 });
             });
