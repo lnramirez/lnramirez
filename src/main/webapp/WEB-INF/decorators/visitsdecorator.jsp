@@ -26,11 +26,10 @@
     </head>
     <body>
         <header>
-            <h1>lnramirez website</h1>
-        </header>
-        <nav>
+
+        <nav class="_top_content">
             <ul>
-                <li><a href="${home}">Home</a></li>
+                <li><a href="${home}">Bajoneando</a></li>
                 <li><a href="${blogUrl}" >Blog</a></li>    
                 <li><a href="${visits}" >Visits</a></li> 
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -45,6 +44,8 @@
                 </sec:authorize>
             </ul>
         </nav>
+
+        </header>
         <div id="rounded_box">
             <decorator:body />
         </div>
