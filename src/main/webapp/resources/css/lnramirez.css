@@ -143,8 +143,12 @@ nav.pagination a.previous {
     padding: 44px;  
     background: #fff repeat-x;  
     background-size: 100%;
-    //-moz-border-radius: 22px;
-    //border-radius: 22px;
+    -webkit-border-bottom-right-radius: 20px;
+    -webkit-border-bottom-left-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -moz-border-radius-bottomleft: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
 }  
 
 .container {  
