@@ -37,8 +37,10 @@
                     var deferred = xhr.get("${pageContext.request.contextPath}/visit/update",{handleAs: "json"});
                     deferred.then (function(_summary) {
                         var lastVisit = _summary.lastVisit;
-                        cur = lastVisit;
-                        drawMap(map,lastVisit,_summary.hits);
+                        if (lastVisit != null) {
+                            cur = lastVisit;
+                            drawMap(map,lastVisit,_summary.hits);
+                        }
                     });
                 });
             }
@@ -47,8 +49,10 @@
                     var deferred = xhr.get("${pageContext.request.contextPath}/visit/previous/" + cur.date,{handleAs: "json"});
                     deferred.then (function(summary) {
                         var lastVisit = summary.lastVisit;
-                        cur = lastVisit;
-                        drawMap(map,lastVisit,summary.hits);
+                        if (lastVisit != null) {
+                            cur = lastVisit;
+                            drawMap(map,lastVisit,summary.hits);
+                        }
                      });
                  });
             }
