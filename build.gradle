@@ -13,7 +13,7 @@ jettyRun.stopPort=8081
 jettyRun.stopKey='s'
 //project
 group='com.bajoneando.lnramirez'
-version='0.1.6'
+version='0.1.7-SNAPSHOT'
 description='Official lnramirez site'
 //repositories
 repositories {
