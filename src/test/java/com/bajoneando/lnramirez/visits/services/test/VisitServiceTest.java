@@ -31,7 +31,7 @@ public class VisitServiceTest {
         mappedEntry.setValue(lastVisit);
         mappedEntryList.add(mappedEntry);
         when(mapReduceResults.iterator()).thenReturn(mappedEntryList.iterator());
-        when(mongoTemplate.mapReduce("visit", "classpath:mongo/mapallvisits.js" , 
+        when(mongoTemplate.mapReduce("visit", "classpath:mongo/mapalltrackablevisits.js" ,
                 "classpath:mongo/reducelatestvisit.js",MappedEntry.class)).thenReturn(mapReduceResults);
         ReflectionTestUtils.setField(visitService,"mongoTemplate",mongoTemplate);
         when(visitService.getLastVisit()).thenCallRealMethod();

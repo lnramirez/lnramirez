@@ -11,9 +11,27 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Visit {
     
     private String id;
+    private Boolean locationPermit;
+    private String sessionHash;
     private Float latitude;
     private Float longitude;
     private Date date;
+
+    public String getSessionHash() {
+        return sessionHash;
+    }
+
+    public void setSessionHash(String sessionHash) {
+        this.sessionHash = sessionHash;
+    }
+
+    public Boolean getLocationPermit() {
+        return locationPermit;
+    }
+
+    public void setLocationPermit(Boolean locationPermit) {
+        this.locationPermit = locationPermit;
+    }
 
     public String getId() {
         return id;

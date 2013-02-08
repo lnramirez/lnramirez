@@ -25,21 +25,31 @@
         <script>
             function addVisit(position) {
                 require(["dojo/json","dojo/request/xhr"],function(json,xhr) {
-                    var payload = json.stringify({'latitude': position.coords.latitude, 'longitude':  position.coords.longitude});
-                    var xhrArgs = {
-                        headers: { "Content-Type": "application/json"},
-                        data: payload
-                    }
-                    var deferred = xhr.post("${pageContext.request.contextPath}/visit/add",xhrArgs);
-                    deferred.then (function(success) {
-
-                    }, function(error) {
-
+                    xhr.post("${pageContext.request.contextPath}/visit/add",{
+                        headers: { "Content-Type": "application/json" },
+                        data: json.stringify({
+                            'latitude': position.coords.latitude,
+                            'longitude':  position.coords.longitude,
+                            'sessionHash': '${pageContext.session.id}',
+                            'locationPermit': true
+                        })
                     });
                 });
             }
             function noGeoLocation() {
-                
+                require(["dojo/json","dojo/request/xhr"],function(json,xhr) {
+                    xhr.post("${pageContext.request.contextPath}/visit/add", {
+                        headers: {"Content-Type": "application/json"},
+                        data: json.stringify({
+                                'sessionHash': '${pageContext.session.id}',
+                                'locationPermit': false
+                            })
+                    }).then(function(response) {
+                        //nothing in successful response
+                    },function(error) {
+                        console.log(error);
+                    });
+                });
             }
             require(["dojo/dom", "dojo/domReady!"], function(dom){
                 if (navigator.geolocation) {

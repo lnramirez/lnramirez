@@ -35,7 +35,7 @@ public class VisitService {
     public Visit getLastVisit() {
         MapReduceOptions options = new MapReduceOptions();
         MapReduceResults<MappedEntry> mapReduceResults = mongoTemplate.
-                mapReduce("visit", "classpath:mongo/mapallvisits.js" , 
+                mapReduce("visit", "classpath:mongo/mapalltrackablevisits.js" ,
                 "classpath:mongo/reducelatestvisit.js",MappedEntry.class);
         if (mapReduceResults.iterator().hasNext()) {
             return (Visit) mapReduceResults.iterator().next().getValue();
@@ -46,7 +46,7 @@ public class VisitService {
 
     public Visit getPreviousVisit(Date date) {
         mongoTemplate.indexOps(Visit.class).ensureIndex(new Index().on("date", Order.DESCENDING));
-        final Query query = Query.query(Criteria.where("date").lt(date));
+        final Query query = Query.query(Criteria.where("date").lt(date).and("locationPermit").nin(Boolean.FALSE));
         return mongoTemplate.findOne(query,Visit.class);
     }
     
