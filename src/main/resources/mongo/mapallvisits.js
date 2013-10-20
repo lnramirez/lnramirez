@@ -1,0 +1,4 @@
+function() {
+    emit("visit",this);
+}
+

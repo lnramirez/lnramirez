@@ -1,0 +1,63 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'jetty'
+apply plugin: 'idea'
+//java
+sourceCompatibility=1.7
+//war
+war.baseName='lnramirez'
+//jetty
+jettyRun.scanIntervalSeconds=1
+jettyRun.httpPort=8282
+jettyStop.stopPort=8081
+jettyStop.stopKey='s'
+//project
+group='com.bajoneando.lnramirez'
+version='0.1.8-SNAPSHOT'
+description='lnramirez site'
+//repositories
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+//dependencies
+dependencies {
+    
+    compile "org.springframework:spring-core:$springVersion"
+    compile ("org.springframework.data:spring-data-mongodb:$springMongoVersion") {
+        exclude group: "org.springframework"
+    }
+    compile "org.springframework:spring-web:$springVersion"
+    compile "org.springframework:spring-webmvc:$springVersion"
+    compile "org.springframework:spring-oxm:$springVersion"
+    compile "org.springframework.security:spring-security-core:$springSecurityVersion"
+    compile "org.springframework.security:spring-security-web:$springSecurityVersion"
+    compile "org.springframework.security:spring-security-config:$springSecurityVersion"
+    compile "org.springframework.security:spring-security-taglibs:$springSecurityVersion"
+    //compile "org.springframework.security:spring-security-openid:$springSecurityVersion"
+    compile "com.thoughtworks.xstream:xstream:$xstreamVersion"
+    compile "org.codehaus.jackson:jackson-jaxrs:$jacksonVersion"
+    compile "jstl:jstl:$jstlVersion"
+    compile "taglibs:standard:$standardVersion"
+    compile "org.markdownj:markdownj:$markdownjVersion"
+    compile "com.bajoneando:bajoneandotags:$bajoneandoTagsVersion"
+    
+    providedCompile "javax.servlet:servlet-api:$servletapiVersion"
+    providedCompile "javax.servlet.jsp:jsp-api:$jspapiVersion"
+
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.springframework:spring-test:$springVersion"
+    testCompile "org.mockito:mockito-core:$mockitoCoreVersion"
+
+    runtime "org.tuckey:urlrewritefilter:$urlrewritefilterVersion"
+    runtime "opensymphony:sitemesh:$sitemeshVersion"
+    runtime "xerces:xercesImpl:$xercesVersion"
+    runtime "commons-fileupload:commons-fileupload:$commonsfileuploadVersion"
+    runtime "commons-io:commons-io:$commonsioVersion"   
+    //logging
+    providedCompile "commons-logging:commons-logging:$commonsloggingVersion"
+    compile "org.slf4j:slf4j-api:$slf4japiVersion"
+    runtime "org.slf4j:jcl-over-slf4j:$jcloverslf4jVersion"
+    runtime "org.slf4j:slf4j-log4j12:$slf4jlog4j12Version"
+    runtime "log4j:log4j:$log4jVersion"
+}

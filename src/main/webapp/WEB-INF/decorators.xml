@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<decorators>
+    <decorator name="visits" page="/WEB-INF/decorators/visitsdecorator.jsp">
+        <pattern>/visit/*</pattern>
+    </decorator>
+    <decorator name="mydecorator" page="/WEB-INF/decorators/defaultdecorator.jsp">        
+        <pattern>/*</pattern>
+    </decorator>
+</decorators>

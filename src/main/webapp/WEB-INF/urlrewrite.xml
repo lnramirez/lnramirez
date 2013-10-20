@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite
+    PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN"
+    "http://tuckey.org/res/dtds/urlrewrite3.0.dtd">
+<urlrewrite default-match-type="wildcard">
+    <rule>
+        <from>/resources/**</from>
+        <to>/resources/$1</to>
+    </rule>
+    <rule>
+        <from>/spring_security_login</from>
+        <to last="true">/spring_security_login</to>
+    </rule>
+    <rule>
+        <from>/j_spring_security_check**</from>
+        <to last="true">/j_spring_security_check/$1</to>
+    </rule>
+    <rule>
+        <from>/j_spring_security_logout**</from>
+        <to last="true">/j_spring_security_logout/$1</to>
+    </rule>
+    <rule>
+        <from>/**</from>
+        <to>/app/$1</to>
+    </rule>
+    
+    <outbound-rule>
+        <from>/app/**</from>
+        <to>/$1</to>
+    </outbound-rule>  
+</urlrewrite>

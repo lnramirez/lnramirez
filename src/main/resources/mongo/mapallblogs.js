@@ -1,0 +1,3 @@
+function () {
+    emit("blogEntry", this);
+}
