@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'jetty'
-apply plugin: 'maven'
+apply plugin: 'idea'
 //java
 sourceCompatibility=1.7
 //war
@@ -9,19 +9,16 @@ war.baseName='lnramirez'
 //jetty
 jettyRun.scanIntervalSeconds=1
 jettyRun.httpPort=8282
-jettyRun.stopPort=8081
-jettyRun.stopKey='s'
+jettyStop.stopPort=8081
+jettyStop.stopKey='s'
 //project
 group='com.bajoneando.lnramirez'
-version='0.1.7-SNAPSHOT'
-description='Official lnramirez site'
+version='0.1.8-SNAPSHOT'
+description='lnramirez site'
 //repositories
 repositories {
     mavenCentral()
     mavenLocal()
-    mavenRepo urls: [
-        "http://repo.springsource.org/libs-release",
-        "http://scala-tools.org/repo-releases"]
 }
 //dependencies
 dependencies {
@@ -64,107 +61,3 @@ dependencies {
     runtime "org.slf4j:slf4j-log4j12:$slf4jlog4j12Version"
     runtime "log4j:log4j:$log4jVersion"
 }
-
-//tasks
-task createDirSources << {
-    sourceSets.all {
-        (java.srcDirs + resources.srcDirs + webAppDir).each { _srcDir ->
-            if (!_srcDir.exists()) {
-                println("mkdirs ${_srcDir.canonicalPath}")
-                _srcDir.mkdirs()
-            }
-        }
-    }   
-}
-
-//maven 
-task copyPomFiles (dependsOn: 'install') << {
-    println "copying build/poms/pom-default.xml to pom.xml"
-    ant.copy(file: "build/poms/pom-default.xml", tofile: "pom.xml")
-    println "copied"
-}
-
-optionalDeps = []
-providedDeps = []
-
-optional = { optionalDeps << it }
-provided = { providedDeps << it }
-
-install {
-    repositories.mavenInstaller {
-        customizePom(pom, project)
-    }
-}
-
-def customizePom(pom, gradleProject) {
-    pom.whenConfigured { generatedPom ->
-        // respect 'optional' and 'provided' dependencies
-        gradleProject.optionalDeps.each { dep ->
-            generatedPom.dependencies.find { it.artifactId == dep.name }?.optional = true
-        }
-        gradleProject.providedDeps.each { dep ->
-            generatedPom.dependencies.find { it.artifactId == dep.name }?.scope = 'provided'
-        }
-        // add all items necessary for maven central publication
-        generatedPom.project {
-            name = gradleProject.description
-            description = gradleProject.description
-            organization {
-                name = 'bajoneando'
-            }
-            build {
-                plugins {
-                    plugin {
-                        groupId = 'org.apache.maven.plugins'
-                        artifactId = 'maven-compiler-plugin'
-                        configuration {
-                            source = '1.6'
-                            target = '1.6'
-                        }
-                    }
-                    plugin {
-                        groupId = 'org.apache.maven.plugins'
-                        artifactId = 'maven-surefire-plugin'
-                        configuration {
-                            includes {
-                                include = '**/*Tests.java'
-                            }
-                            excludes {
-                                exclude = '**/*Abstract*.java'
-                            }
-                        }
-                    }
-                }
-                resources {
-                    resource {
-                        directory = 'src/main/java'
-                        includes = ['**/*']
-                        excludes = ['**/*.java']
-                    }
-                    resource {
-                        directory = 'src/main/resources'
-                        includes = ['**/*']
-                    }
-                }
-                testResources {
-                    testResource {
-                        directory = 'src/test/java'
-                        includes = ['**/*']
-                        excludes = ['**/*.java']
-                    }
-                    testResource {
-                        directory = 'src/test/resources'
-                        includes = ['**/*']
-                    }
-                }
-            }
-            developers {
-                developer {
-                    id = 'lnramirez'
-                    name = 'Luis Ramirez Monterosa'
-                    email = 'lnramirez@gmail.com'
-                }
-            }
-        }
-    }
-}    

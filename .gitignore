@@ -17,6 +17,7 @@ build/
 #ignore idea generated files
 .idea/
 *.iml
+atlassian-ide-plugin.xml
 
 #mac files
 .DS_Store
