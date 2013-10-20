@@ -18,6 +18,8 @@ build/
 .idea/
 *.iml
 atlassian-ide-plugin.xml
+*.ipr
+*.iws
 
 #mac files
 .DS_Store
