@@ -20,6 +20,9 @@ description='lnramirez site'
 repositories {
     mavenCentral()
     mavenLocal()
+    maven {
+      url "https://github.com/lnramirez/lnramirez-mvn-repo/raw/master/"
+    }
 }
 //dependencies
 dependencies {
