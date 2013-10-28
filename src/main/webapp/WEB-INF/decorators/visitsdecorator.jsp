@@ -15,7 +15,7 @@
 <spring:url value="/resources/icons/favicon.ico" var="favicon"/>
 <spring:url value="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" var="bootcss"/>
 <spring:url value="/resources/css/lnramirez.css" var="css"/>
-<spring:url value="/resources/js/dojo-1.8.3/dojo/dojo.js" var="dojo"/>
+<spring:url value="http://ajax.googleapis.com/ajax/libs/dojo/1.9.1/dojo/dojo.js" var="dojo"/>
 <html lang="en">
 <head>
     <meta charset="utf-8">
