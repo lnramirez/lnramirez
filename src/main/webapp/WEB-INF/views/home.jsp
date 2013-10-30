@@ -44,7 +44,7 @@
                             <bajoneando:htmlencode value="${blogEntry.subject}"/>
                         </c:set>
                         <h1><a href="<c:url value="/blog/${blogEntry.id}/${subject}" />">${blogEntry.subject}</a></h1>
-                        <p>
+                        <p class="text-muted">
                             Published on 
                             <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
                                 <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy" timeZone="GMT"/>
@@ -53,13 +53,12 @@
                     </header>
                     <div class="printableHtml">${blogEntry.printableHtml}</div>
                     <c:if test="${not empty blogEntry.lastUpdateDate}">
-                        <p>
-                            <small>
-                                Last update 
-                                <time class="lastUpdateDate" datetime="<fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="yyyy-MM-dd"/>">
-                                    <fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="dd-MMM-yyyy HH:mm"/>
-                                </time>
-                            </small>
+                        <p class="text-muted">
+                            Last update
+                            <time class="lastUpdateDate"
+                                  datetime="<fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="yyyy-MM-dd"/>">
+                                <fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="dd-MMM-yyyy HH:mm"/>
+                            </time>
                         </p>
                     </c:if>
                 </article>
