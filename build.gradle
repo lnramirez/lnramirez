@@ -10,8 +10,8 @@ war.baseName='lnramirez'
 jettyRun.scanIntervalSeconds=1
 jettyRun.httpPort=8282
 jettyRunWar.contextPath = ''
-jettyStop.stopPort=8081
-jettyStop.stopKey='s'
+[jettyRun, jettyRunWar, jettyStop]*.stopPort = 8081
+[jettyRun, jettyRunWar, jettyStop]*.stopKey = 's'
 //project
 group='com.bajoneando.lnramirez'
 version='0.1.8-SNAPSHOT'

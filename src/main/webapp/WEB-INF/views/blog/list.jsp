@@ -158,6 +158,8 @@
         </script>
     </head>
     <body>
+        <div class="row">
+            <div class="col-md-12">
             <header>
                 <h2>Latest entries</h2>
             </header>
@@ -168,7 +170,7 @@
                             <bajoneando:htmlencode value="${blogEntry.subject}"/>
                         </c:set>
                         <h1><a href="<c:url value="/blog/${blogEntry.id}/${subject}" />">${blogEntry.subject}</a></h1>
-                        <p>
+                        <p class="text-muted">
                             Published on 
                             <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
                                 <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy" timeZone="GMT"/>
@@ -182,31 +184,33 @@
                     </header>
                     <div class="printableHtml">${blogEntry.printableHtml}</div>
                     <c:if test="${not empty blogEntry.lastUpdateDate}">
-                        <p>
-                            <small>
-                                Last update 
-                                <time class="lastUpdateDate" datetime="<fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="yyyy-MM-dd"/>">
-                                    <fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="dd-MMM-yyyy HH:mm"/>
-                                </time>
-                            </small>
+                        <p class="text-muted">
+                            Last update
+                            <time class="lastUpdateDate" datetime="<fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="yyyy-MM-dd"/>">
+                                <fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="dd-MMM-yyyy HH:mm"/>
+                            </time>
                         </p>
                     </c:if>
                 </article>
             </c:forEach>
-            <nav class="pagination">
-                <c:if test="${not blogEntryPage.firstPage}">
-                    <spring:url value="/blog" var="newer">
-                        <spring:param name="page.page" value="${blogEntryPage.number}" />
-                    </spring:url>
-                    <a href="${newer}" class="later">Later Entries</a>
-                </c:if>
-                <c:if test="${not blogEntryPage.lastPage}">
-                    <spring:url value="/blog" var="older">
-                        <spring:param name="page.page" value="${blogEntryPage.number + 2}" />
-                    </spring:url>
-                    <a href="${older}" class="previous">Previous Entries</a>
-                </c:if>
-            </nav>
+                <ul class="pager">
+                    <c:if test="${not blogEntryPage.lastPage}">
+                        <spring:url value="/blog" var="older">
+                            <spring:param name="page.page" value="${blogEntryPage.number + 2}" />
+                        </spring:url>
+                        <li class="previous">
+                        <a href="${older}" class="previous">Previous Entries</a>
+                        </li>
+                    </c:if>
+                    <c:if test="${not blogEntryPage.firstPage}">
+                        <spring:url value="/blog" var="newer">
+                            <spring:param name="page.page" value="${blogEntryPage.number}" />
+                        </spring:url>
+                        <li class="next">
+                            <a href="${newer}" class="later">Later Entries</a>
+                        </li>
+                    </c:if>
+                </ul>
             <sec:authorize access="hasRole('ROLE_ADMIN')">
                 <div id="_floatingForm">
                 <article>
@@ -238,5 +242,7 @@
                 </article>
                 </div>
             </sec:authorize>
+            </div>
+            </div>
     </body>
 </html>

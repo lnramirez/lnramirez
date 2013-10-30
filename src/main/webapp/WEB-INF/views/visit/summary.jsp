@@ -80,7 +80,7 @@
                     map.enableMouseWheelZoom();
                 });
                 updateLatestVisit(map);
-                query("a.updateanchor").forEach(function(node) {
+                query(".updateanchor").forEach(function(node) {
                     on(node,"click",function(_event) {
                         event.stop(_event);
                         updateLatestVisit(map);
@@ -96,23 +96,42 @@
         </script>
     </head>
     <body>
-        <h1>Visits Statistics</h1>
-        
-        <section>
-            <h2>Summary</h2>
-            Hits: <span id="hits" class="hits"></span>
-        </section>
-        
-        <section>
-            <h2>Last Visit</h2>
-            <p>
-                <a href="#" class="updateanchor">Update Last Visit</a>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Visits Statistics</h1>
+        </div>
+    </div>
+    <section>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Summary</h2>
+                Hits: <span id="hits" class="hits"></span>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Last Visit</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <ul class="pager">
+                    <li class="previous"><a href="#" class="previousanchor">Previous</a></li>
+                    <li class="next disabled">
+                        <a href="#">Next</a>
+                    </li>
+                </ul>
+                <a class="updateanchor glyphicon glyphicon-refresh" href="#"></a>
                 <span id="updating" class="updating"></span>
-                <a href="#" class="previousanchor">Previous Visit</a>
-                <span id="previous" class="previous"></span>
-                <span id="fetching" class="fetching"></span>
-            </p>
-            <div id="map" style="width:800px; height:300px;"></div>
-        </section>
+
+                <div id="map" style="width:750px; height:300px;"></div>
+            </div>
+        </div>
+
+    </section>
     </body>
 </html>
