@@ -10,10 +10,10 @@
     <global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
     
     <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/visit/add/**" method="POST" access="permitAll" />
         <intercept-url pattern="/**" method="POST" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/**" method="PUT" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/**" method="DELETE" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/visit/**" method="POST" access="permitAll" />
         <intercept-url pattern="/images/download/**" access="permitAll" />
         <intercept-url pattern="/images/**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/resources/**" access="permitAll" />
