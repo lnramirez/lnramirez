@@ -18,7 +18,11 @@
    :post "POST"
    :delete "DELETE"})
 
-(def app-state (atom {:github {} :twitter {}}))
+(def app-state (atom {:github {:html_url ""
+                               :avatar_url ""
+                               :name ""
+                               :public_repos ""
+                               :followers ""} :twitter {}}))
 
 (def ^:private flair-urls
   {:github "https://api.github.com/users/lnramirez"})
@@ -37,17 +41,26 @@
     ((count s) > 28) (str (take 28 s) "...")
     :else s))
 
-(defn flairs [app-state owner]
+;(defn update-github [res]
+;  (om/update! app [:github] (.-data res)))
+
+(defn flair-rend [app owner]
   (reify
     om/IDidMount
     (did-mount [_]
       (js-xhr {:method :get
                :url (:github flair-urls)
-               :on-complete #(om/update! app :github (fn [data] (.-data data)))}))
-    ))
+               :on-complete (fn [res] (println "server response: " res))}))
+    om/IRenderState
+    (render-state [this state]
+      (let [github (:github app)]
+        (html [:div#githubflair
+               [:a {:class "sfLink" :href (.-html_url github)}
+                [:div {:class "sfTable sfGithub"}
+                 [:div {:class "sfRow"} "blah3"]]]])))))
 
 (om/root
-  flairs
+  flair-rend
   app-state
   {:target (. js/document (getElementById "flairs"))})
 
