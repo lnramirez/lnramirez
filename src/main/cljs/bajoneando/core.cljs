@@ -7,10 +7,12 @@
 
 (def app-state (atom {:text "Hello orochi!"}))
 
+(defn hello [app owner]
+  (reify om/IRender
+    (render [_]
+      (dom/h1 nil (:text app)))))
+
 (om/root
-  (fn [app owner]
-    (reify om/IRender
-      (render [_]
-        (dom/h1 nil (:text app)))))
+  hello
   app-state
   {:target (. js/document (getElementById "app"))})

@@ -2,7 +2,7 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [goog.events :as events]
-            [cognitect.transit :as t]
+            [cognitect.transit :as transit]
             [sablono.core :as html :refer-macros [html]])
   (:import [goog.net XhrIo]
            goog.net.EventType
@@ -10,7 +10,7 @@
 
 (enable-console-print!)
 
-(def r (t/reader :json))
+(def reader (transit/reader :json))
 
 (def ^:private meths
   {:get "GET"
@@ -18,7 +18,7 @@
    :post "POST"
    :delete "DELETE"})
 
-(def app-state (atom {:github {:html_url ""
+(def app-state (atom {:github {:html_url "http://github.com/lnramirez2"
                                :avatar_url ""
                                :name ""
                                :public_repos ""
@@ -31,10 +31,14 @@
   (let [xhr (XhrIo.)]
     (events/listen xhr goog.net.EventType.COMPLETE
       (fn [e]
-        (on-complete (t/read r (.getResponseText xhr)))))
+        (let [ raw (.getResponseText xhr)
+               resp (transit/read reader (.getResponseText xhr))]
+          (do
+            (println "raw:" raw "transit" resp)
+            (on-complete resp)))))
     (. xhr
       (send url (meths method) (when data (pr-str data))
-      #js {"Content-Type" "application/json"}))))
+      #js {"Accept" "application/json"}))))
 
 (defn truncate-str [s]
   (cond
@@ -50,14 +54,24 @@
     (did-mount [_]
       (js-xhr {:method :get
                :url (:github flair-urls)
-               :on-complete (fn [res] (println "server response: " res))}))
+               ;:on-complete (fn [res]
+               ;               (om/update! app [:github] (:data res)))}))
+               :on-complete (fn [res]
+                              (do
+
+                                ;(println "really : " (get res "followers"))
+                                (om/update! app [:github] res)))}))
     om/IRenderState
     (render-state [this state]
-      (let [github (:github app)]
-        (html [:div#githubflair
-               [:a {:class "sfLink" :href (.-html_url github)}
-                [:div {:class "sfTable sfGithub"}
-                 [:div {:class "sfRow"} "blah3"]]]])))))
+      (html [:div (get (:github app) "html_url")]))))
+      ;(let [github (:github app)]
+        ;(html [:div#githubflair
+        ;       [:a {:class "sfLink"
+        ;            :href (cond
+        ;                   (github) (.-html_url github)
+        ;                    :else "")}
+        ;        [:div {:class "sfTable sfGithub"}
+        ;         [:div {:class "sfRow"} "blah3"]]]])))))
 
 (om/root
   flair-rend
