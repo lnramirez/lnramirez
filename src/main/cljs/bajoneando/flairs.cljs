@@ -34,7 +34,6 @@
         (let [ raw (.getResponseText xhr)
                resp (transit/read reader (.getResponseText xhr))]
           (do
-            (println "raw:" raw "transit" resp)
             (on-complete resp)))))
     (. xhr
       (send url (meths method) (when data (pr-str data))
@@ -45,33 +44,39 @@
     ((count s) > 28) (str (take 28 s) "...")
     :else s))
 
-;(defn update-github [res]
-;  (om/update! app [:github] (.-data res)))
-
 (defn flair-rend [app owner]
   (reify
     om/IDidMount
     (did-mount [_]
       (js-xhr {:method :get
                :url (:github flair-urls)
-               ;:on-complete (fn [res]
-               ;               (om/update! app [:github] (:data res)))}))
                :on-complete (fn [res]
                               (do
-
-                                ;(println "really : " (get res "followers"))
                                 (om/update! app [:github] res)))}))
     om/IRenderState
-    (render-state [this state]
-      (html [:div (get (:github app) "html_url")]))))
-      ;(let [github (:github app)]
-        ;(html [:div#githubflair
-        ;       [:a {:class "sfLink"
-        ;            :href (cond
-        ;                   (github) (.-html_url github)
-        ;                    :else "")}
-        ;        [:div {:class "sfTable sfGithub"}
-        ;         [:div {:class "sfRow"} "blah3"]]]])))))
+    (render-state
+      [this state]
+      (let [github (:github app)]
+           (html [:div#githubflair
+                  [:a
+                   {:class "sfLink" :href (get github "html_url")}
+                   [:div.sfTable.sfGithub
+                    [:div.sfRow
+                     [:div.sfCell1
+                      [:img.sfProfilePic {:src (get github "avatar_url")
+                                          :width "48px"
+                                          :height "48px"}]]
+                     [:div.sfCell2
+                      [:div.sfHandle
+                       (get github "name")]
+                      [:div.sfFans
+                       [:span.public_repos {:alt "Public Repositories"
+                                            :title "Public Repositories"}
+                        (get github "public_repos")]
+                       [:span.followers {:alt "Followers"
+                                        :title "Followers"}
+                        (get github "followers")]]]
+                     ]]]])))))
 
 (om/root
   flair-rend
