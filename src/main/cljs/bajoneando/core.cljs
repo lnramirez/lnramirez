@@ -30,4 +30,4 @@
            (. xhr
               (send url (meths method) (when data data)
                     #js {"Accept" "application/json"
-                         "Content-Type" "appication/json"}))))
+                         "Content-Type" "application/json"}))))

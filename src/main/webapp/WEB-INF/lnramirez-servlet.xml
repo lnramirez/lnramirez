@@ -26,7 +26,7 @@
     
     <bean class="com.petebevin.markdown.MarkdownProcessor" />
 
-    <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+    <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
     </bean>
     
     <mvc:annotation-driven>
@@ -34,7 +34,7 @@
             <bean class="org.springframework.data.web.PageableArgumentResolver" />
         </mvc:argument-resolvers>
         <mvc:message-converters>
-            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
