@@ -16,14 +16,14 @@
                           :data   (transit/write writer {
                                             "latitude"    latitude
                                             "longitude"   longitude
-                                            "localPermit" locationPermit
+                                            "locationPermit" locationPermit
                                             })
                           })))
 
 (defn no-location []
       (bcore/js-xhr {:method :post
                      :url "/visit/add"
-                     :data (transit/write writer {"localPermit" false})}))
+                     :data (transit/write writer {"locationPermit" false})}))
 
 (do
   (if-let [locator (.-geolocation js/navigator)]

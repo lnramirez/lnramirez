@@ -5,6 +5,7 @@ import com.bajoneando.lnramirez.visits.services.VisitService;
 import com.bajoneando.lnramirez.web.VisitSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,7 +20,9 @@ import java.util.Date;
 @RequestMapping("/visit")
 public class VisitController {
     
-    @RequestMapping(value="/add", method= RequestMethod.POST, headers="Accept=application/json")
+    @RequestMapping(value="/add", method= RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void addVisit(@RequestBody Visit visit) {
         visitService.addVisit(visit);
