@@ -2,21 +2,11 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [goog.events :as events]
-            [cognitect.transit :as transit]
-            [sablono.core :as html :refer-macros [html]])
-  (:import [goog.net XhrIo]
-           goog.net.EventType
-           [goog.events EventType]))
+            [sablono.core :as html :refer-macros [html]]
+            [bajoneando.core :as bcore])
+  )
 
 (enable-console-print!)
-
-(def reader (transit/reader :json))
-
-(def ^:private meths
-  {:get "GET"
-   :put "PUT"
-   :post "POST"
-   :delete "DELETE"})
 
 (def app-state (atom {:github {:html_url "http://github.com/lnramirez2"
                                :avatar_url ""
@@ -27,18 +17,6 @@
 (def ^:private flair-urls
   {:github "https://api.github.com/users/lnramirez"})
 
-(defn js-xhr [{:keys [method url data on-complete]}]
-  (let [xhr (XhrIo.)]
-    (events/listen xhr goog.net.EventType.COMPLETE
-      (fn [e]
-        (let [ raw (.getResponseText xhr)
-               resp (transit/read reader (.getResponseText xhr))]
-          (do
-            (on-complete resp)))))
-    (. xhr
-      (send url (meths method) (when data (pr-str data))
-      #js {"Accept" "application/json"}))))
-
 (defn truncate-str [s]
   (cond
     ((count s) > 28) (str (take 28 s) "...")
@@ -48,7 +26,7 @@
   (reify
     om/IDidMount
     (did-mount [_]
-      (js-xhr {:method :get
+      (bcore/js-xhr {:method :get
                :url (:github flair-urls)
                :on-complete (fn [res]
                               (do
@@ -81,6 +59,6 @@
 (om/root
   flair-rend
   app-state
-  {:target (. js/document (getElementById "flairs"))})
+  {:target (. js/document (getElementById "githubFlair"))})
 
 

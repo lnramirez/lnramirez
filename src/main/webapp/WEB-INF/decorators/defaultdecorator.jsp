@@ -12,10 +12,10 @@
 <c:url value="/about/" var="about"/>
 <c:url value="/spring_security_login" var="login"/>
 <c:url value="/j_spring_security_logout" var="logout"/>
+<spring:url value="/resources" var="res" />
 <spring:url value="/resources/icons/favicon.ico" var="favicon"/>
 <spring:url value="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" var="bootcss"/>
 <spring:url value="/resources/css/lnramirez.css" var="css"/>
-<spring:url value="http://ajax.googleapis.com/ajax/libs/dojo/1.9.1/dojo/dojo.js" var="dojo"/>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -23,42 +23,6 @@
     <link href="${bootcss}" rel="stylesheet" type="text/css">
     <link href="${css}" rel="stylesheet" type="text/css">
     <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
-    <script src="${dojo}" data-dojo-config="async: true, parseOnLoad: true, isDebug: true, locale: 'en'"></script>
-    <script>
-        function addVisit(position) {
-            require(["dojo/json", "dojo/request/xhr"], function (json, xhr) {
-                xhr.post("${pageContext.request.contextPath}/visit/add", {
-                    headers: { "Content-Type": "application/json" },
-                    data: json.stringify({
-                        'latitude': position.coords.latitude,
-                        'longitude': position.coords.longitude,
-                        'sessionHash': '${pageContext.session.id}',
-                        'locationPermit': true
-                    })
-                });
-            });
-        }
-        function noGeoLocation() {
-            require(["dojo/json", "dojo/request/xhr"], function (json, xhr) {
-                xhr.post("${pageContext.request.contextPath}/visit/add", {
-                    headers: {"Content-Type": "application/json"},
-                    data: json.stringify({
-                        'sessionHash': '${pageContext.session.id}',
-                        'locationPermit': false
-                    })
-                }).then(function (response) {
-                            //nothing in successful response
-                        }, function (error) {
-                            console.log(error);
-                        });
-            });
-        }
-        require(["dojo/dom", "dojo/domReady!"], function (dom) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(addVisit, noGeoLocation);
-            }
-        });
-    </script>
     <decorator:head/>
 </head>
 <body>
@@ -96,6 +60,9 @@
 
         <div id="rounded_box">
             <decorator:body/>
+            <script src="${res}/js/out/goog/base.js" type="text/javascript"></script>
+            <script src="${res}/js/bajoneando.js" type="text/javascript"></script>
+            <script type="text/javascript">goog.require("bajoneando.visits");</script>
         </div>
     </div>
 </div>

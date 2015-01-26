@@ -2,38 +2,16 @@
          pageEncoding="UTF-8"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <spring:url value="/resources/css/socialflair.css" var="socialflaircss" />
+<spring:url value="/resources" var="res" />
 <html lang="en">
     <head>
         <title>About</title>
         <link href="${socialflaircss}" rel="stylesheet" type="text/css">
-        <script>
+        <script src="http://fb.me/react-0.8.0.js"></script>
+        <%--<script>
             function truncateName(a){return a.length>28?a.substring(0,28)+"...":a}
             var some;
             require(["dojo/query","dojo/domReady!","dojo/io/script","dojo/json","dojo/dom-attr"], function(query,ready,script,json,domAttr) {
-                script.get({
-                    url: "https://api.github.com/users/lnramirez",
-                    jsonp: "callback"
-                }).then(function(data_) {
-                    var data = data_.data;
-                    var followers = data.followers;
-                    var public_repos = data.public_repos;
-                    domAttr.set(query("#githubFlair")[0],"innerHTML",
-                         "<a class='sfLink' href='" + data.html_url +"'><div class='sfTable sfGithub'><div class='sfRow'>"
-                        +" <div class='sfCell1'>"
-                        +"  <img class='sfProfilePic' src='" + data.avatar_url + "' width='48px' height='48px' />"
-                        +" </div>"
-                        +" <div class='sfCell2'>"
-                        +"  <div class='sfHandle'>" + truncateName(data.name) + "</div>"
-                        +"  <div class='sfFans'>"
-                        +"	 <span class='public_repos' alt='Public Repositories' title='Public Repositories'>" + public_repos + "</span>"
-                        +" 	 <span class='followers' alt='Followers' title='Followers'>" + followers + "</span>"
-                        + ( data.hireable === true ? "<span class='hireable'>Hire Me!</span>" : '' ) 
-                        +"  </div>"
-                        +"</div>"
-                        +"</div></div>​</a>");
-                }, function(err_) {
-                    console.error(err_);
-                });
                 script.get({
                     url: 'http://api.twitter.com/1/followers/ids.json?screen_name=luisnramirez&cursor=-1',
                     callbackParamName: "callback"
@@ -66,7 +44,7 @@
                     })
                 });
             });
-        </script>
+        </script>--%>
     </head>
     <body>
         <section>            
@@ -97,5 +75,8 @@
                 </p>
             </article>
         </section>
+        <script src="${res}/js/out/goog/base.js" type="text/javascript"></script>
+        <script src="${res}/js/bajoneando.js" type="text/javascript"></script>
+        <script type="text/javascript">goog.require("bajoneando.flairs");</script>
     </body>
 </html>

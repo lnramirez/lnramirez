@@ -5,21 +5,11 @@
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="bajoneando"    uri="http://www.bajoneando.com/tags"%>
 <spring:url value="/resources/js/prettify.js" var="prettifyjs" />
-<spring:url value="/resources/js/blogcustomized.js" var="blogcustomizedjs" />
 <spring:url value="/resources/css/prettify.css" var="prettifycss" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Bajoneando</title>
-        <link href="${prettifycss}" rel="stylesheet" type="text/css">
-        <script src="${prettifyjs}"></script>
-        <script src="${blogcustomizedjs}"></script>
-        <script>
-            require(["dojo/dom", "dojo/domReady!"], function(dom){
-                prettifyCode(prettyPrint);
-                openAnchorsInTab();
-            }); 
-        </script>
     </head>
     <body>
         <section>

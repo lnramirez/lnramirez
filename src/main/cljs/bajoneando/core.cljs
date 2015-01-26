@@ -1,18 +1,33 @@
 (ns bajoneando.core
-  (:require [om.core :as om :include-macros true]
-            [om.dom :as dom :include-macros true])
-  (:import  [goog.net XhrIo]))
+  (:require [cognitect.transit :as transit]
+            [goog.events :as events])
+  (:import [goog.net XhrIo]
+     goog.net.EventType
+     [goog.events EventType]))
 
 (enable-console-print!)
 
-(def app-state (atom {:text "Hello orochi!"}))
+(def reader (transit/reader :json))
 
-(defn hello [app owner]
-  (reify om/IRender
-    (render [_]
-      (dom/h1 nil (:text app)))))
+(def ^:private meths
+  {:get "GET"
+   :put "PUT"
+   :post "POST"
+   :delete "DELETE"})
 
-(om/root
-  hello
-  app-state
-  {:target (. js/document (getElementById "app"))})
+(defn js-xhr [{:keys [method url data on-complete]}]
+      (do
+        (println "tada:" data))
+      (let [xhr (XhrIo.)]
+           (if on-complete
+             (events/listen xhr goog.net.EventType.COMPLETE
+                            (fn [e]
+                                (let [ raw (.getResponseText xhr)
+                                      resp (transit/read reader (.getResponseText xhr))]
+                                     (do
+                                       (on-complete resp)))))
+             (println url " invoked succesfully"))
+           (. xhr
+              (send url (meths method) (when data data)
+                    #js {"Accept" "application/json"
+                         "Content-Type" "appication/json"}))))

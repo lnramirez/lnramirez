@@ -11,16 +11,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>${blogEntry.subject}</title>    
-        <link href="${prettifycss}" rel="stylesheet" type="text/css">
-        <script src="${prettifyjs}"></script>
-        <script src="${blogcustomizedjs}"></script>        
-        <script>
-            require(["dojo/dom", "dojo/domReady!"], function(dom){
-                prettifyCode(prettyPrint);
-                openAnchorsInTab();
-            }); 
-        </script>
+        <title>${blogEntry.subject}</title>
     </head>
     <body>
         <article id="${blogEntry.id}" class="blogcontent">

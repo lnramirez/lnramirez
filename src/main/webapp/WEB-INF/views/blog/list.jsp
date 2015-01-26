@@ -37,8 +37,6 @@
                         var nodePublishDate = query("time.publishDate",nodeArticle)[0];
                         domAttr.set(nodePublishDate,"datetime",fPubDate);
                         domAttr.set(nodePublishDate,"innerHTML",fPubDate + " ");
-                        prettifyCode(prettyPrint);
-                        openAnchorsInTab();
                     },
                     function (error_) {
                         console.error(error_);
@@ -138,8 +136,6 @@
                 }
             }
             require(["dojo/dom", "dojo/domReady!","dojo/query","dojo/on","dojo/_base/event"], function(dom,ready,query,on,event){
-                prettifyCode(prettyPrint);
-                openAnchorsInTab();
                 query("article.blogcontent").forEach(function(blogEntry) {
                     query("a.editanchor",blogEntry).forEach(function(node) {
                         on(node,"click",function(event_) {

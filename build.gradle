@@ -9,7 +9,7 @@ war.baseName='lnramirez'
 //jetty
 jettyRun.scanIntervalSeconds=1
 jettyRun.httpPort=8282
-jettyRunWar.contextPath = ''
+jettyRun.contextPath = '/'
 [jettyRun, jettyRunWar, jettyStop]*.stopPort = 8081
 [jettyRun, jettyRunWar, jettyStop]*.stopKey = 's'
 //project
