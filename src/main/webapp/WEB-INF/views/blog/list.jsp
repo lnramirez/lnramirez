@@ -10,6 +10,7 @@
 <spring:url value="/resources/js/blogcustomized.js" var="blogcustomizedjs" />
 <spring:url value="/resources/js/yadateutil.js" var="yadateutil" />
 <spring:url value="/resources/css/prettify.css" var="prettifycss" />
+<spring:url value="/resources" var="res" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -18,7 +19,7 @@
         <script src="${prettifyjs}"></script>
         <script src="${blogcustomizedjs}"></script>
         <script src="${yadateutil}"></script>
-        <script>
+        <%--<script>
             function updateArticle(_id) {require(["dojo/json","dojo/request/xhr","dojo/query", "dojo/dom-construct",
                          "dojo/NodeList-traverse", "dojo/NodeList-manipulate","dojo/dom-attr",
                          "dojo/dom","dojo/date/locale"],function(json,xhr,query,domConstruct,traverse,manipulate,domAttr,dom,locale) {
@@ -151,15 +152,20 @@
                     });
                 });
             }); 
-        </script>
+        </script>--%>
     </head>
     <body>
         <div class="row">
             <div class="col-md-12">
-            <header>
-                <h2>Latest entries</h2>
-            </header>
-            <c:forEach items="${blogEntryPage.content}" var="blogEntry">
+                <header>
+                    <h2>Latest entries</h2>
+                </header>
+                <div id="articles"></div>
+                <script src="http://fb.me/react-0.8.0.js"></script>
+                <script src="${res}/js/out/goog/base.js" type="text/javascript"></script>
+                <script src="${res}/js/bajoneando.js" type="text/javascript"></script>
+                <script type="text/javascript">goog.require("bajoneando.editor");</script>
+            <%--<c:forEach items="${blogEntryPage.content}" var="blogEntry">
                 <article id="${blogEntry.id}" class="blogcontent">
                     <header>
                         <c:set var="subject">
@@ -188,7 +194,7 @@
                         </p>
                     </c:if>
                 </article>
-            </c:forEach>
+            </c:forEach>--%>
                 <ul class="pager">
                     <c:if test="${not blogEntryPage.lastPage}">
                         <spring:url value="/blog" var="older">
@@ -239,6 +245,6 @@
                 </div>
             </sec:authorize>
             </div>
-            </div>
+        </div>
     </body>
 </html>

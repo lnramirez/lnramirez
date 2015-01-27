@@ -7,7 +7,6 @@
     <head>
         <title>About</title>
         <link href="${socialflaircss}" rel="stylesheet" type="text/css">
-        <script src="http://fb.me/react-0.8.0.js"></script>
         <%--<script>
             function truncateName(a){return a.length>28?a.substring(0,28)+"...":a}
             var some;
@@ -75,6 +74,7 @@
                 </p>
             </article>
         </section>
+        <script src="http://fb.me/react-0.8.0.js"></script>
         <script src="${res}/js/out/goog/base.js" type="text/javascript"></script>
         <script src="${res}/js/bajoneando.js" type="text/javascript"></script>
         <script type="text/javascript">goog.require("bajoneando.flairs");</script>
