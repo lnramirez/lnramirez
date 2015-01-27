@@ -34,13 +34,14 @@
                               [:a {:href (str "/blog/" (get entry "id") "/" (get entry "subject"))}
                                (get entry "subject")]]
                              [:p.text-muted
-                              (str "Published on")
+                              (str "Published on: ")
                               [:time.publishDate
-                               {:datetime (get entry "publishDate")
+                               {:dateTime (get entry "publishDate")
                                 :format "yyyy-mm-dd"}
                                (get entry "publishDate")]]]
                             [:div.printableHtml
-                             (get entry "printableHtml")]])
+                             {:dangerouslySetInnerHTML #js {:__html (get entry "printableHtml")}}
+                             ]])
                       ])
                ))))
 
