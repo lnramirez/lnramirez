@@ -16,8 +16,6 @@
    :delete "DELETE"})
 
 (defn js-xhr [{:keys [method url data on-complete]}]
-      (do
-        (println "tada:" data))
       (let [xhr (XhrIo.)]
            (if on-complete
              (events/listen xhr goog.net.EventType.COMPLETE

@@ -1,15 +1,22 @@
 (ns bajoneando.editor
-  (:require [om.core :as om :include-macros true]
+  (:require [cognitect.transit :as transit]
+            [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [goog.events :as events]
             [sablono.core :as html :refer-macros [html]]
             [bajoneando.core :as bcore]))
 
-(def app-state (atom {:entries [{:id "some id"
-                                  :subject "my subject"
-                                  :printableHtml "<p>Bajonear is a salvadorean-spanish verb</p>"
-                                  :publishDate "2015-01-18"
-                                  :lastUpdate nil}]}))
+(def writer (transit/writer :json-verbose))
+(def reader (transit/reader :json))
+
+(def initial-state (transit/read reader (transit/write writer {
+                                                               "id"  "some id"
+                                                               "subject" "my subject"
+                                                               "printableHtml" "<p>Bajonear is a salvadorean-spanish verb</p>"
+                                                               "publishDate" "2015-01-18"
+                                                               })))
+
+(def app-state (atom {:entries [initial-state]}))
 
 (defn articles-render [app owner]
       (reify
@@ -17,28 +24,25 @@
         (render-state
           [this state]
           (let [entries (:entries app)]
-               (doseq [entry entries]
-                      (html [:article
-                             {:id (get entry "id")
-                              :class "blogcontent"}
-                             [:header
-                              [:h1
-                               [:a {:href (str "/blog/" (get entry "id") "/" (get entry "subject"))}
-                                (get entry "subject")]]
-                              [:p.text-muted
-                               (str "Published on")
-                               [:time.publishDate
-                                {:datetime (get entry "publishDate")
-                                 :format "yyyy-mm-dd"}
-                                (get entry "publishDate")]]]
-                             [:div.printableHtml
-                              (get entry "printableHtml")]
-                             (when (get entry "lastUpdate")
-                                   [:p.text-muted
-                                    [:time.lastUpdateDate
-                                     {:datetime (get entry "lastUpdate")
-                                      :format "yyyy-mm-dd"}
-                                     (get entry "lastUpdate")]])]))))))
+               (html [:div
+                      (for [entry entries]
+                           [:article
+                            {:id (get entry "subject")
+                             :class "blogcontent"}
+                            [:header
+                             [:h1
+                              [:a {:href (str "/blog/" (get entry "id") "/" (get entry "subject"))}
+                               (get entry "subject")]]
+                             [:p.text-muted
+                              (str "Published on")
+                              [:time.publishDate
+                               {:datetime (get entry "publishDate")
+                                :format "yyyy-mm-dd"}
+                               (get entry "publishDate")]]]
+                            [:div.printableHtml
+                             (get entry "printableHtml")]])
+                      ])
+               ))))
 
 (om/root
   articles-render
