@@ -27,3 +27,6 @@ atlassian-ide-plugin.xml
 
 #maven
 pom.xml
+
+#leinegen
+.lein-repl-history

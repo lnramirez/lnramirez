@@ -165,37 +165,7 @@
                 <script src="${res}/js/out/goog/base.js" type="text/javascript"></script>
                 <script src="${res}/js/bajoneando.js" type="text/javascript"></script>
                 <script type="text/javascript">goog.require("bajoneando.editor");</script>
-            <%--<c:forEach items="${blogEntryPage.content}" var="blogEntry">
-                <article id="${blogEntry.id}" class="blogcontent">
-                    <header>
-                        <c:set var="subject">
-                            <bajoneando:htmlencode value="${blogEntry.subject}"/>
-                        </c:set>
-                        <h1><a href="<c:url value="/blog/${blogEntry.id}/${subject}" />">${blogEntry.subject}</a></h1>
-                        <p class="text-muted">
-                            Published on 
-                            <time class="publishDate" datetime="<fmt:formatDate value="${blogEntry.publishDate}" pattern="yyyy-MM-dd"/>">
-                                <fmt:formatDate value="${blogEntry.publishDate}" pattern="dd-MMM-yyyy" timeZone="GMT"/>
-                            </time> 
-                            <sec:authorize access="hasRole('ROLE_ADMIN')">
-                            :
-                            <a href="#blogEntryForm" class="editanchor">Edit</a>
-                            <a href="#blogEntryForm" class="deleteanchor">Delete</a>
-                            </sec:authorize>
-                        </p>
-                    </header>
-                    <div class="printableHtml">${blogEntry.printableHtml}</div>
-                    <c:if test="${not empty blogEntry.lastUpdateDate}">
-                        <p class="text-muted">
-                            Last update
-                            <time class="lastUpdateDate" datetime="<fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="yyyy-MM-dd"/>">
-                                <fmt:formatDate value="${blogEntry.lastUpdateDate}" pattern="dd-MMM-yyyy HH:mm"/>
-                            </time>
-                        </p>
-                    </c:if>
-                </article>
-            </c:forEach>--%>
-                <ul class="pager">
+                <%--<ul class="pager">
                     <c:if test="${not blogEntryPage.lastPage}">
                         <spring:url value="/blog" var="older">
                             <spring:param name="page.page" value="${blogEntryPage.number + 2}" />
@@ -212,7 +182,7 @@
                             <a href="${newer}" class="later">Later Entries</a>
                         </li>
                     </c:if>
-                </ul>
+                </ul>--%>
             <sec:authorize access="hasRole('ROLE_ADMIN')">
                 <div id="_floatingForm">
                 <article>

@@ -16,14 +16,24 @@
                                                                "publishDate" "2015-01-18"
                                                                })))
 
-(def app-state (atom {:entries [initial-state]}))
+(def app-state (atom {:entries []
+                      :page 1}))
 
 (defn articles-render [app owner]
       (reify
+        om/IDidMount
+        (did-mount
+          [_]
+          (bcore/js-xhr {:method :get
+                         :url (str "/blog/entries?page.page=" (:page app))
+                         :on-complete (fn [res]
+                                          (do
+                                            (om/update! app [:entries] (get res "content"))))}))
         om/IRenderState
         (render-state
           [this state]
-          (let [entries (:entries app)]
+          (let [entries (:entries app)
+                page (:page app)]
                (html [:div
                       (for [entry entries]
                            [:article
@@ -42,6 +52,16 @@
                             [:div.printableHtml
                              {:dangerouslySetInnerHTML #js {:__html (get entry "printableHtml")}}
                              ]])
+                      [:ul.pager
+                       [:li.previous
+                        [:a.previous
+                         ;{:on-click }
+                         "Previous Entries"]
+                        ]
+                       [:li.next
+                        [:a.later
+                         ;{:on-click }
+                         "Later Entries"]]]
                       ])
                ))))
 

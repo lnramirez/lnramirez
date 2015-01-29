@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefaults;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -42,6 +43,16 @@ public class BlogController {
         modelAndView.addObject("blogEntryPage", blogEntriesPage);
         modelAndView.addObject("blogEntry", new BlogEntry());
         return modelAndView;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE, value = "/entries")
+    @ResponseBody
+    public Page<BlogEntry> blogEntriesPage(@PageableDefaults(pageNumber=0, value=5) Pageable pageableRequest)
+    {
+        Pageable pageable = new PageRequest(pageableRequest.getPageNumber(), pageableRequest.getPageSize(), Sort.Direction.DESC, "publishDate");
+        Page<BlogEntry> blogEntriesPage = blogEntryRepository.findAll(pageable);
+        return blogEntriesPage;
     }
     
     @RequestMapping(value="/{id}/{subject}", method= RequestMethod.GET)
