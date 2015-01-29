@@ -1,5 +1,7 @@
 (ns bajoneando.editor
-  (:require [cognitect.transit :as transit]
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require [cljs.core.async :refer [put! <! chan]]
+            [cognitect.transit :as transit]
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [goog.events :as events]
@@ -21,19 +23,29 @@
 
 (defn articles-render [app owner]
       (reify
-        om/IDidMount
-        (did-mount
+        om/IInitState
+        (init-state
           [_]
-          (bcore/js-xhr {:method :get
-                         :url (str "/blog/entries?page.page=" (:page app))
-                         :on-complete (fn [res]
-                                          (do
-                                            (om/update! app [:entries] (get res "content"))))}))
+          {:entries []
+           :entries-chan  (chan)
+           :page 1})
+        om/IWillMount
+        (will-mount
+          [_]
+          (let [entries (om/get-state owner [:entries-chan])]
+               (go (while true
+                          (let [last-entries (<! entries)]
+                               (om/set-state! owner :entries last-entries)
+                               )))
+               (bcore/js-xhr {:method :get
+                              :url (str "/blog/entries?page.page=" (:page app))
+                              :on-complete (fn [res]
+                                               (put! entries (get res "content")))})))
         om/IRenderState
         (render-state
           [this state]
-          (let [entries (:entries app)
-                page (:page app)]
+          (let [entries (:entries state)
+                page (:page state)]
                (html [:div
                       (for [entry entries]
                            [:article
