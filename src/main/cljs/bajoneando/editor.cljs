@@ -18,8 +18,17 @@
                                                                "publishDate" "2015-01-18"
                                                                })))
 
-(def app-state (atom {:entries []
-                      :page 1}))
+(def app-state (atom {:page 1}))
+
+(defn earlier-pages [app owner]
+      (let [entries (om/get-state owner [:entries-chan])
+            page (inc (:page @app))]
+           (bcore/js-xhr {:method :get
+                          :url (str "/blog/entries?page.page=" page)
+                          :on-complete (fn [res]
+                                           (do
+                                             (put! entries res)
+                                             (om/update! app :page page)))})))
 
 (defn articles-render [app owner]
       (reify
@@ -34,13 +43,13 @@
           [_]
           (let [entries (om/get-state owner [:entries-chan])]
                (go (while true
-                          (let [last-entries (<! entries)]
-                               (om/set-state! owner :entries last-entries)
+                          (let [res (<! entries)]
+                               (om/set-state! owner :entries (get res "content"))
                                )))
                (bcore/js-xhr {:method :get
                               :url (str "/blog/entries?page.page=" (:page app))
                               :on-complete (fn [res]
-                                               (put! entries (get res "content")))})))
+                                               (put! entries res))})))
         om/IRenderState
         (render-state
           [this state]
@@ -67,7 +76,7 @@
                       [:ul.pager
                        [:li.previous
                         [:a.previous
-                         ;{:on-click }
+                         {:on-click #(earlier-pages app owner)}
                          "Previous Entries"]
                         ]
                        [:li.next
