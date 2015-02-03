@@ -165,24 +165,6 @@
                 <script src="${res}/js/out/goog/base.js" type="text/javascript"></script>
                 <script src="${res}/js/bajoneando.js" type="text/javascript"></script>
                 <script type="text/javascript">goog.require("bajoneando.editor");</script>
-                <%--<ul class="pager">
-                    <c:if test="${not blogEntryPage.lastPage}">
-                        <spring:url value="/blog" var="older">
-                            <spring:param name="page.page" value="${blogEntryPage.number + 2}" />
-                        </spring:url>
-                        <li class="previous">
-                        <a href="${older}" class="previous">Previous Entries</a>
-                        </li>
-                    </c:if>
-                    <c:if test="${not blogEntryPage.firstPage}">
-                        <spring:url value="/blog" var="newer">
-                            <spring:param name="page.page" value="${blogEntryPage.number}" />
-                        </spring:url>
-                        <li class="next">
-                            <a href="${newer}" class="later">Later Entries</a>
-                        </li>
-                    </c:if>
-                </ul>--%>
             <sec:authorize access="hasRole('ROLE_ADMIN')">
                 <div id="_floatingForm">
                 <article>

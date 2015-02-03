@@ -8,13 +8,13 @@ sourceCompatibility=1.7
 war.baseName='lnramirez'
 //jetty
 jettyRun.scanIntervalSeconds=1
-jettyRun.httpPort=8282
-jettyRun.contextPath = '/'
+jettyRun.httpPort=8283
+jettyRun.contextPath = ''
 [jettyRun, jettyRunWar, jettyStop]*.stopPort = 8081
 [jettyRun, jettyRunWar, jettyStop]*.stopKey = 's'
 //project
 group='com.bajoneando.lnramirez'
-version='0.1.8-SNAPSHOT'
+version='0.2.0-SNAPSHOT'
 description='lnramirez site'
 //repositories
 repositories {

@@ -20,9 +20,9 @@
 
 (def app-state (atom {:page 1}))
 
-(defn earlier-pages [app owner]
+(defn nav-pages [app owner op]
       (let [entries (om/get-state owner [:entries-chan])
-            page (inc (:page @app))]
+            page (op (:page @app))]
            (bcore/js-xhr {:method :get
                           :url (str "/blog/entries?page.page=" page)
                           :on-complete (fn [res]
@@ -75,13 +75,13 @@
                              ]])
                       [:ul.pager
                        [:li.previous
-                        [:a.previous
-                         {:on-click #(earlier-pages app owner)}
+                        [:a
+                         {:on-click #(nav-pages app owner inc)}
                          "Previous Entries"]
                         ]
                        [:li.next
-                        [:a.later
-                         ;{:on-click }
+                        [:a
+                         {:on-click #(nav-pages app owner dec)}
                          "Later Entries"]]]
                       ])
                ))))
