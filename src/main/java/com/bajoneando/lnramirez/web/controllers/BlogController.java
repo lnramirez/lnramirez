@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.xml.ws.Response;
+
 /**
  *
  * @author lrmonterosa
@@ -54,7 +56,14 @@ public class BlogController {
         Page<BlogEntry> blogEntriesPage = blogEntryRepository.findAll(pageable);
         return blogEntriesPage;
     }
-    
+
+    @RequestMapping(method = RequestMethod.GET, value = "/can-edit")
+    @ResponseStatus(HttpStatus.OK)
+    public void canEdit()
+    {
+
+    }
+
     @RequestMapping(value="/{id}/{subject}", method= RequestMethod.GET)
     public ModelAndView blogpost(@PathVariable("id") String id,@PathVariable("subject") String subject) {
         BlogEntry blogEntry = blogEntryRepository.findOne(id);

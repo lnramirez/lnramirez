@@ -165,37 +165,6 @@
                 <script src="${res}/js/out/goog/base.js" type="text/javascript"></script>
                 <script src="${res}/js/bajoneando.js" type="text/javascript"></script>
                 <script type="text/javascript">goog.require("bajoneando.editor");</script>
-            <sec:authorize access="hasRole('ROLE_ADMIN')">
-                <div id="_floatingForm">
-                <article>
-                    <header>
-                        <h2>Add a new entry</h2>
-                    </header>
-                    <form:form commandName="blogEntry" action="${blogUrl}" id="blogEntryForm" name="blogEntryForm">
-                        <fieldset>
-                            <p>
-                                <label for="subject">Subject:</label>
-                                <form:input path="subject" type="text" id="subject" 
-                                            placeholder="Subject" required="required" />
-                            </p>
-                            <p>
-                                <label for="publishDate">Publish Date (UTC):</label>
-                                <form:input path="publishDate" type="text" id="publishDate" 
-                                            placeholder="Publish Date" required="required" />
-                            </p>
-                            <p>
-                                <label for="article">Article:</label>
-                                <form:textarea path="article" id="article" cols="100" rows="10"  
-                                            placeholder="Main content of article" required="required" />
-                            </p>
-                            <p>
-                                <input type="submit" id="formButton" value="Add new entry" >
-                            </p>
-                        </fieldset>
-                    </form:form>
-                </article>
-                </div>
-            </sec:authorize>
             </div>
         </div>
     </body>
