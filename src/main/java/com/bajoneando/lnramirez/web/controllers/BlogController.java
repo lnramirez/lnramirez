@@ -58,10 +58,10 @@ public class BlogController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/can-edit")
-    @ResponseStatus(HttpStatus.OK)
-    public void canEdit()
+    @ResponseBody
+    public String canEdit()
     {
-
+        return "Editable";
     }
 
     @RequestMapping(value="/{id}/{subject}", method= RequestMethod.GET)

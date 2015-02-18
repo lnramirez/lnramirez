@@ -31,18 +31,6 @@
                                              (put! entries res)
                                              (om/update! app :page page)))})))
 
-(defn can-edit [{:keys [method url on-complete]}]
-      (let [xhr (XhrIo.)]
-           (if on-complete
-             (events/listen xhr goog.net.EventType.COMPLETE
-                            (fn [e]
-                                (let [status (.getStatus xhr)]
-                                     (if (= status 200)
-                                       (do
-                                         (on-complete)))))))
-           (. xhr
-              (send url (bcore/meths method)))))
-
 (defn article-view [entry owner]
       (reify
         om/IRenderState
@@ -105,10 +93,10 @@
                (go (while true
                           (let [edit (<! editable)]
                                (om/set-state! owner :editable true))))
-               (can-edit {:method :get
-                          :url "/blog/can-edit"
-                          :on-complete (fn []
-                                           (do
+               (bcore/js-xhr  {:method :get
+                               :url "/blog/can-edit"
+                               :on-complete (fn [res]
+                                            (if (= res "Editable")
                                              (put! editable true)))})))
         om/IRenderState
         (render-state
