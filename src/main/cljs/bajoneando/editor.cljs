@@ -7,7 +7,6 @@
   (:require [cljs.core.async :refer [put! <! chan]]
             [cognitect.transit :as transit]
             [om.core :as om :include-macros true]
-            [om.dom :as dom :include-macros true]
             [goog.events :as events]
             [sablono.core :as html :refer-macros [html]]
             [bajoneando.core :as bcore]))
@@ -62,15 +61,9 @@
                                      in-publish-date (.format in-date-formatter in-date)]
                                     [:time.publishDate
                                      {:dateTime in-publish-date}
-                                     publish-date])
-                               (if (:editable state)
-                                 (html [:a
-                                        {:href "#"}
-                                        "Edit"]
-                                       [:a
-                                        {:href "#"}
-                                        "Delete"]))
-                               ]]
+                                     publish-date])]
+                              (if (om/get-state owner :editable)
+                                (html [:button.btn.btn-danger "Edit"]))]
                              [:div.printableHtml
                               {:dangerouslySetInnerHTML #js {:__html (get entry "printableHtml")}}]
                              (let [in-date (js/Date. (get entry "lastUpdateDate"))
