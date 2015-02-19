@@ -42,7 +42,9 @@
         om/IRenderState
         (render-state
           [this state]
-          (let [article (:article entry)]
+          (let [article (:article entry)
+                mode (:mode entry)]
+               (println entry)
                (html [:div
                       [:form.form-horizontal
                        [:div.form-group
@@ -74,12 +76,12 @@
                                             :placeholder "Main content of article"})]]
                        [:div.form-group
                         [:div.col-sm-offset-2.col-sm-10
-                         (if (= nil (om/get-state owner :mode))
+                         (if (= :new mode)
                            (html
                              [:button.btn.btn-primary
                               "Add new entry"])
                            (do
-                             (println (om/get-state owner :mode))
+                             (println mode)
                              (html
                                [:button.btn.btn-primary
                                 {:on-click (fn [e]
@@ -92,10 +94,7 @@
                                                )}
                                 "Cancel"]
                                [:div
-                                (om/get-state owner :article)]))
-                           )
-                         ]]]]))
-          )))
+                                (om/get-state owner :article)])))]]]])))))
 
 (defn article-view [entry owner]
       (reify
@@ -108,6 +107,13 @@
                             target (str "art" entry-id)
                             printable-html (get entry "printableHtml")
                             md-article (get entry "article")]
+                           (def edit-map {:mode :edit
+                                          :article {:subject subject
+                                                    :publish-date raw-publish-date
+                                                    :md-article md-article
+                                                    :id-article entry-id}})
+                           (def editing-init-state
+                             (atom edit-map))
                            (html [:article
                                   {:id    entry-id
                                    :class "blogcontent"}
@@ -123,16 +129,15 @@
                                          [:time.publishDate
                                           {:dateTime in-publish-date}
                                           publish-date])]
+                                   (if (= :editing (om/get-state owner :mode))
+                                     (om/build new-article edit-map))
                                    (if (om/get-state owner :editable)
                                      (html [:div
                                             {:id target}
                                             [:button.btn.btn-danger
-                                             {:on-click #(om/build new-article {:mode :edit
-                                                                                :article {:subject subject
-                                                                                          :publish-date raw-publish-date
-                                                                                          :md-article md-article
-                                                                                          :id-article entry-id}}
-                                                                   )}
+                                             {:on-click (fn [e]
+                                                            (.preventDefault e)
+                                                            (om/set-state! owner :mode :editing))}
                                              "Edit"]]))]
                                   [:div.printableHtml
                                    {:dangerouslySetInnerHTML #js {:__html printable-html}}]
@@ -216,8 +221,8 @@
                            "→"]]
                          ]]]
                       (if editable
-                        (om/build new-article {:init-state {:article {}
-                                                            :mode :new}}))
+                        (om/build new-article {:article {}
+                                               :mode :new}))
                       ])))))
 
 (om/root
