@@ -7,6 +7,7 @@
   (:require [cljs.core.async :refer [put! <! chan]]
             [cognitect.transit :as transit]
             [om.core :as om :include-macros true]
+            [om.dom :as dom]
             [goog.events :as events]
             [sablono.core :as html :refer-macros [html]]
             [bajoneando.core :as bcore]))
@@ -14,7 +15,12 @@
 (def writer (transit/writer :json-verbose))
 (def reader (transit/reader :json))
 
-(def app-state (atom {:page 1}))
+(def app-state (atom {:page 1
+                      :mode :new
+                      :article {:subject "hello world"
+                                :publish-date nil
+                                :md-article nil
+                                :id-article nil}}))
 
 (def date-formatter (DateTimeFormat. "dd-MMM-yyyy"))
 (def in-date-formatter (DateTimeFormat. "yyyy-MM-dd"))
@@ -31,37 +37,114 @@
                                              (put! entries res)
                                              (om/update! app :page page)))})))
 
+(defn new-article [entry owner]
+      (reify
+        om/IRenderState
+        (render-state
+          [this state]
+          (let [article (:article entry)]
+               (html [:div
+                      [:form.form-horizontal
+                       [:div.form-group
+                        [:label.col-sm-2.control-label {:for "subject"}
+                         "Subject:"]
+                        [:div.col-sm-10
+                         (dom/input #js {:class "form-control"
+                                         :type "text"
+                                         :name "subject"
+                                         :value (:subject article)})
+                         ]]
+                       [:div.form-group
+                        [:label.col-sm-2.control-label {:for "publishDate"}
+                         "Publish Date:"]
+                        [:div.col-sm-10
+                         (dom/input #js {:class "form-control"
+                                         :type "text"
+                                         :name "publishDate"
+                                         :value (:publish-date article)})]]
+                       [:div.form-group
+                        [:label.col-sm-2.control-label {:for "article"}
+                         "Article:"]
+                        [:div.col-sm-10
+                         (dom/textarea #js {:class "form-control"
+                                            :type "text"
+                                            :name "article"
+                                            :rows "5"
+                                            :value (:md-article article)
+                                            :placeholder "Main content of article"})]]
+                       [:div.form-group
+                        [:div.col-sm-offset-2.col-sm-10
+                         (if (= nil (om/get-state owner :mode))
+                           (html
+                             [:button.btn.btn-primary
+                              "Add new entry"])
+                           (do
+                             (println (om/get-state owner :mode))
+                             (html
+                               [:button.btn.btn-primary
+                                {:on-click (fn [e]
+                                               (.preventDefault e)
+                                               )}
+                                "Update art" ]
+                               [:button.btn.btn-default
+                                {:on-click (fn [e]
+                                               (.preventDefault e)
+                                               )}
+                                "Cancel"]
+                               [:div
+                                (om/get-state owner :article)]))
+                           )
+                         ]]]]))
+          )))
+
 (defn article-view [entry owner]
       (reify
         om/IRenderState
         (render-state [this state]
-                      (html [:article
-                             {:id (get entry "subject")
-                              :class "blogcontent"}
-                             [:header
-                              [:h1
-                               [:a {:href (str "/blog/" (get entry "id") "/" (get entry "subject"))}
-                                (get entry "subject")]]
-                              [:p.text-muted
-                               (str "Published on: ")
-                               (let [in-date (js/Date. (get entry "publishDate"))
-                                     publish-date (.format date-formatter in-date)
-                                     in-publish-date (.format in-date-formatter in-date)]
-                                    [:time.publishDate
-                                     {:dateTime in-publish-date}
-                                     publish-date])]
-                              (if (om/get-state owner :editable)
-                                (html [:button.btn.btn-danger "Edit"]))]
-                             [:div.printableHtml
-                              {:dangerouslySetInnerHTML #js {:__html (get entry "printableHtml")}}]
-                             (let [in-date (js/Date. (get entry "lastUpdateDate"))
-                                   last-updated (.format date-time-formatter in-date)
-                                   in-last-updated (.format in-date-time-formatter in-date)]
-                                  [:p.text-muted
-                                   "Last update: "
-                                   [:time
-                                    {:dateTime in-last-updated}
-                                    last-updated]])]))))
+                      (let [subject (get entry "subject")
+                            entry-id (get entry "id")
+                            raw-publish-date (get entry "publishDate")
+                            raw-last-updated-date (get entry "lastUpdateDate")
+                            target (str "art" entry-id)
+                            printable-html (get entry "printableHtml")
+                            md-article (get entry "article")]
+                           (html [:article
+                                  {:id    entry-id
+                                   :class "blogcontent"}
+                                  [:header
+                                   [:h1
+                                    [:a {:href (str "/blog/" entry-id "/" subject)}
+                                     subject]]
+                                   [:p.text-muted
+                                    (str "Published on: ")
+                                    (let [in-date (js/Date. raw-publish-date)
+                                          publish-date (.format date-formatter in-date)
+                                          in-publish-date (.format in-date-formatter in-date)]
+                                         [:time.publishDate
+                                          {:dateTime in-publish-date}
+                                          publish-date])]
+                                   (if (om/get-state owner :editable)
+                                     (html [:div
+                                            {:id target}
+                                            [:button.btn.btn-danger
+                                             {:on-click #(om/build new-article {:mode :edit
+                                                                                :article {:subject subject
+                                                                                          :publish-date raw-publish-date
+                                                                                          :md-article md-article
+                                                                                          :id-article entry-id}}
+                                                                   )}
+                                             "Edit"]]))]
+                                  [:div.printableHtml
+                                   {:dangerouslySetInnerHTML #js {:__html printable-html}}]
+                                  (let [in-date (js/Date. raw-last-updated-date)
+                                        last-updated (.format date-time-formatter in-date)
+                                        in-last-updated (.format in-date-time-formatter in-date)]
+                                       [:p.text-muted
+                                        "Last update: "
+                                        [:time
+                                         {:dateTime in-last-updated}
+                                         last-updated]])]))
+                      )))
 
 (defn articles-view [app owner]
       (reify
@@ -74,7 +157,8 @@
            :first-page true
            :last-page false
            :page 1
-           :editable false})
+           :editable false
+           })
         om/IWillMount
         (will-mount
           [_]
@@ -131,7 +215,9 @@
                            {:aria-hidden true}
                            "→"]]
                          ]]]
-
+                      (if editable
+                        (om/build new-article {:init-state {:article {}
+                                                            :mode :new}}))
                       ])))))
 
 (om/root
