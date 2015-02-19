@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<spring:url value="/resources/js/yadateutil.js" var="yadateutil" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -23,7 +22,7 @@
                     ]);
                     anim.play();
                     var lastVisitPOI = new MQA.Poi({lat:lastVisit.latitude, lng:lastVisit.longitude});
-                    var infoContent = 'Date (UTC): ' + toUTCAndFormatted(lastVisit.date,locale,'dd-MMM-yyyy HH:mm')
+                    var infoContent = 'Date: ' + lastVisit.date;
                     lastVisitPOI.setRolloverContent(infoContent);
                     lastVisitPOI.setInfoContentHTML(infoContent);
                     map.removeAllShapes();

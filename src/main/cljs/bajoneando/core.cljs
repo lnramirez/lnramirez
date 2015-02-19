@@ -5,8 +5,6 @@
      goog.net.EventType
      [goog.events EventType]))
 
-(enable-console-print!)
-
 (def reader (transit/reader :json))
 
 (def ^:private meths

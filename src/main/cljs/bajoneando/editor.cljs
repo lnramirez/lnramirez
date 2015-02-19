@@ -24,14 +24,14 @@
 
 (def date-formatter (DateTimeFormat. "dd-MMM-yyyy"))
 (def in-date-formatter (DateTimeFormat. "yyyy-MM-dd"))
+(def date-time-formatter (DateTimeFormat. "dd-MMM-yyyy HH:mm"))
+(def in-date-time-formatter (DateTimeFormat. "yyyy-MM-dd HH:mm"))
+
 (defn format-date [raw-date formatter]
       (if (nil? raw-date)
         ""
         (.format formatter (js/Date. raw-date))
         ))
-
-(def date-time-formatter (DateTimeFormat. "dd-MMM-yyyy HH:mm"))
-(def in-date-time-formatter (DateTimeFormat. "yyyy-MM-dd HH:mm"))
 
 (defn nav-pages [app owner op]
       (let [entries (om/get-state owner [:entries-chan])
@@ -50,23 +50,25 @@
           [this state]
           (let [article (:article entry)
                 mode (:mode entry)]
-               (println entry)
                (html [:div
                       [:form.form-horizontal
                        [:div.form-group
                         [:label.col-sm-2.control-label {:for "subject"}
                          "Subject:"]
                         [:div.col-sm-10
-                         (dom/input #js {:class "form-control"
-                                         :type "text"
-                                         :name "subject"
-                                         :value (:subject article)})
+                         (let [ref "subject"]
+                              (dom/input #js {:class-name "form-control"
+                                              :type "text"
+                                              :name "subject"
+                                              :value (:subject article)
+                                              }))
+
                          ]]
                        [:div.form-group
                         [:label.col-sm-2.control-label {:for "publishDate"}
                          "Publish Date:"]
                         [:div.col-sm-10
-                         (dom/input #js {:class "form-control"
+                         (dom/input #js {:class-name "form-control"
                                          :type "text"
                                          :name "publishDate"
                                          :value (format-date (:publish-date article) in-date-formatter)})]]
@@ -74,7 +76,7 @@
                         [:label.col-sm-2.control-label {:for "article"}
                          "Article:"]
                         [:div.col-sm-10
-                         (dom/textarea #js {:class "form-control"
+                         (dom/textarea #js {:class-name "form-control"
                                             :type "text"
                                             :name "article"
                                             :rows "5"
@@ -87,17 +89,26 @@
                              [:button.btn.btn-primary
                               "Add new entry"])
                            (do
-                             (println mode)
                              (html
                                [:button.btn.btn-primary
                                 {:on-click (fn [e]
                                                (.preventDefault e)
+                                               (bcore/js-xhr {:method :put
+                                                              :url    (str "/blog/" (:id-article article))
+                                                              :data   (transit/writer
+                                                                        writer
+                                                                        {"id" (:id-article article)
+                                                                         "subject" (:subject article)
+                                                                         "article" (:article article)
+                                                                         "publishDate" (:publishDate article)})
+                                                              :on-complete (fn [res]
+                                                                               (println res))
+                                                              })
                                                )}
                                 "Update art" ]
                                [:button.btn.btn-default
                                 {:on-click (fn [e]
                                                (.preventDefault e)
-
                                                )}
                                 "Cancel"]
                                [:div
@@ -123,7 +134,7 @@
                              (atom edit-map))
                            (html [:article
                                   {:id    entry-id
-                                   :class "blogcontent"}
+                                   :class-name "blogcontent"}
                                   [:header
                                    [:h1
                                     [:a {:href (str "/blog/" entry-id "/" subject)}
@@ -205,7 +216,7 @@
                       [:nav
                        [:ul.pager
                         [:li.previous
-                         {:class (if last-page
+                         {:class-name (if last-page
                                    "disabled")}
                          [:a
                           {:href "#"
@@ -215,7 +226,7 @@
                            "←"]
                           "Older"]]
                         [:li.next
-                         {:class (if first-page
+                         {:class-name (if first-page
                                    "disabled")}
                          [:a
                           {:href "#"
