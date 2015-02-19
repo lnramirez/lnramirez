@@ -24,6 +24,12 @@
 
 (def date-formatter (DateTimeFormat. "dd-MMM-yyyy"))
 (def in-date-formatter (DateTimeFormat. "yyyy-MM-dd"))
+(defn format-date [raw-date formatter]
+      (if (nil? raw-date)
+        ""
+        (.format formatter (js/Date. raw-date))
+        ))
+
 (def date-time-formatter (DateTimeFormat. "dd-MMM-yyyy HH:mm"))
 (def in-date-time-formatter (DateTimeFormat. "yyyy-MM-dd HH:mm"))
 
@@ -63,7 +69,7 @@
                          (dom/input #js {:class "form-control"
                                          :type "text"
                                          :name "publishDate"
-                                         :value (:publish-date article)})]]
+                                         :value (format-date (:publish-date article) in-date-formatter)})]]
                        [:div.form-group
                         [:label.col-sm-2.control-label {:for "article"}
                          "Article:"]
@@ -91,6 +97,7 @@
                                [:button.btn.btn-default
                                 {:on-click (fn [e]
                                                (.preventDefault e)
+
                                                )}
                                 "Cancel"]
                                [:div
@@ -123,9 +130,8 @@
                                      subject]]
                                    [:p.text-muted
                                     (str "Published on: ")
-                                    (let [in-date (js/Date. raw-publish-date)
-                                          publish-date (.format date-formatter in-date)
-                                          in-publish-date (.format in-date-formatter in-date)]
+                                    (let [publish-date (format-date raw-publish-date date-formatter)
+                                          in-publish-date (format-date raw-publish-date in-date-formatter)]
                                          [:time.publishDate
                                           {:dateTime in-publish-date}
                                           publish-date])]
@@ -141,9 +147,8 @@
                                              "Edit"]]))]
                                   [:div.printableHtml
                                    {:dangerouslySetInnerHTML #js {:__html printable-html}}]
-                                  (let [in-date (js/Date. raw-last-updated-date)
-                                        last-updated (.format date-time-formatter in-date)
-                                        in-last-updated (.format in-date-time-formatter in-date)]
+                                  (let [last-updated (format-date raw-last-updated-date date-time-formatter)
+                                        in-last-updated (format-date raw-last-updated-date in-date-time-formatter)]
                                        [:p.text-muted
                                         "Last update: "
                                         [:time
