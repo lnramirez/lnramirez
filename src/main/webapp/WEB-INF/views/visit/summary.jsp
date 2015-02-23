@@ -6,7 +6,6 @@
     <head>
         <title>Visits Statistics</title>
         <script src="http://open.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Fmjtd%7Cluur216znd%2C8x%3Do5-90tn9f"></script>
-        <script src="${yadateutil}"></script>
         <script>
             var cur;
             function drawMap(map,lastVisit,hits) {
