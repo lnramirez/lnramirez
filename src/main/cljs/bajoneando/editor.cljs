@@ -3,11 +3,15 @@
   (:import [goog.net XhrIo]
            goog.net.EventType
            [goog.events EventType]
-           [goog.i18n DateTimeFormat])
+           goog.date.DateTime
+           [goog.i18n DateTimeFormat]
+           [goog.i18n DateTimeParse]
+           )
   (:require [cljs.core.async :refer [put! <! chan]]
             [cognitect.transit :as transit]
             [om.core :as om :include-macros true]
-            [om.dom :as dom]
+            [om-tools.dom :as dom :include-macros true]
+            [om-tools.core :refer-macros [defcomponent]]
             [goog.events :as events]
             [sablono.core :as html :refer-macros [html]]
             [bajoneando.core :as bcore]))
@@ -24,6 +28,7 @@
 
 (def date-formatter (DateTimeFormat. "dd-MMM-yyyy"))
 (def in-date-formatter (DateTimeFormat. "yyyy-MM-dd"))
+(def in-date-parser (DateTimeParse. "yyyy-MM-dd"))
 (def date-time-formatter (DateTimeFormat. "dd-MMM-yyyy HH:mm"))
 (def in-date-time-formatter (DateTimeFormat. "yyyy-MM-dd HH:mm"))
 
@@ -32,6 +37,11 @@
         ""
         (.format formatter (js/Date. raw-date))
         ))
+
+(defn parse-date [txt parser]
+      (let [date (goog.date.DateTime.)]
+           (.parse parser txt date)
+           (.getTime date)))
 
 (defn nav-pages [app owner op]
       (let [entries (om/get-state owner [:entries-chan])
@@ -45,10 +55,18 @@
 
 (defn new-article [entry owner]
       (reify
+        om/IInitState
+        (init-state [_]
+                    {:id-article (:id-article (:article entry))
+                     :subject (:subject (:article entry))
+                     :md-article (:md-article (:article entry))
+                     :publish-date (:publish-date (:article entry))}))
+      (reify
         om/IRenderState
         (render-state
           [this state]
           (let [article (:article entry)
+                get-val (fn [ref] (-> (om/get-node owner ref) .-value))
                 mode (:mode entry)]
                (html [:div
                       [:form.form-horizontal
@@ -56,13 +74,12 @@
                         [:label.col-sm-2.control-label {:for "subject"}
                          "Subject:"]
                         [:div.col-sm-10
-                         (let [ref "subject"]
-                              (dom/input #js {:class-name "form-control"
-                                              :type "text"
-                                              :name "subject"
-                                              :value (:subject article)
-                                              }))
-
+                         (dom/input #js {:class-name "form-control"
+                                         :type "text"
+                                         :ref "subject"
+                                         :name "subject"
+                                         :defaultValue (:subject article)
+                                         })
                          ]]
                        [:div.form-group
                         [:label.col-sm-2.control-label {:for "publishDate"}
@@ -71,7 +88,8 @@
                          (dom/input #js {:class-name "form-control"
                                          :type "text"
                                          :name "publishDate"
-                                         :value (format-date (:publish-date article) in-date-formatter)})]]
+                                         :ref  "publishDate"
+                                         :defaultValue (format-date (:publish-date article) in-date-formatter)})]]
                        [:div.form-group
                         [:label.col-sm-2.control-label {:for "article"}
                          "Article:"]
@@ -79,40 +97,38 @@
                          (dom/textarea #js {:class-name "form-control"
                                             :type "text"
                                             :name "article"
+                                            :ref  "article"
                                             :rows "5"
-                                            :value (:md-article article)
+                                            :defaultValue (:md-article article)
                                             :placeholder "Main content of article"})]]
                        [:div.form-group
                         [:div.col-sm-offset-2.col-sm-10
-                         (if (= :new mode)
-                           (html
-                             [:button.btn.btn-primary
-                              "Add new entry"])
-                           (do
-                             (html
-                               [:button.btn.btn-primary
-                                {:on-click (fn [e]
-                                               (.preventDefault e)
-                                               (bcore/js-xhr {:method :put
-                                                              :url    (str "/blog/" (:id-article article))
-                                                              :data   (transit/writer
-                                                                        writer
-                                                                        {"id" (:id-article article)
-                                                                         "subject" (:subject article)
-                                                                         "article" (:article article)
-                                                                         "publishDate" (:publishDate article)})
-                                                              :on-complete (fn [res]
-                                                                               (println res))
-                                                              })
-                                               )}
-                                "Update art" ]
-                               [:button.btn.btn-default
-                                {:on-click (fn [e]
-                                               (.preventDefault e)
-                                               )}
-                                "Cancel"]
-                               [:div
-                                (om/get-state owner :article)])))]]]])))))
+                         (cond
+                           (= :new mode) (html
+                                           [:button.btn.btn-primary
+                                            "Add new entry"])
+                           (= :edit mode ) (html
+                                             [:button.btn.btn-primary
+                                              {:on-click (fn [e]
+                                                             (.preventDefault e)
+                                                             (bcore/js-xhr {:method :put
+                                                                            :url    (str "/blog/" (:id-article article))
+                                                                            :data   (transit/write
+                                                                                      writer
+                                                                                      {"id" (:id-article article)
+                                                                                       "subject" (get-val "subject")
+                                                                                       "article" (get-val "article")
+                                                                                       "publishDate" (parse-date (get-val "publishDate") in-date-parser)
+                                                                                       })
+                                                                            })
+                                                             )}
+                                              "Update"]
+                                             [:button.btn.btn-default
+                                              {:on-click (fn [e]
+                                                             (.preventDefault e)
+                                                             (om/update! entry :mode :cancel)
+                                                             )}
+                                              "Cancel"]))]]]])))))
 
 (defn article-view [entry owner]
       (reify
@@ -237,8 +253,8 @@
                            "→"]]
                          ]]]
                       (if editable
-                        (om/build new-article {:article {}
-                                               :mode :new}))
+                        (om/build new-article {:article (:article app)
+                                               :mode (:mode app)}))
                       ])))))
 
 (om/root

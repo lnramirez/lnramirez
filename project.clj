@@ -8,6 +8,7 @@
                  ;; Om components
                  [org.omcljs/om "0.8.8"]
                  [sablono "0.2.20"]
+                 [prismatic/om-tools "0.3.3"]
                  ;; Comm
                  [com.cognitect/transit-cljs "0.8.199"]]
 

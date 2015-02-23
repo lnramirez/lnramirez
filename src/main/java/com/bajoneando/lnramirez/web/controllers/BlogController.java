@@ -83,6 +83,7 @@ public class BlogController {
         BlogEntry entry = blogEntryRepository.findOne(blogId);
         entry.setArticle(blogEntry.getArticle());
         entry.setSubject(blogEntry.getSubject());
+        entry.setPublishDate(blogEntry.getPublishDate());
         entry.setLastUpdateDate(new Date());
         entry.setPrintableHtml(markdownProcessor.markdown(blogEntry.getArticle()));
         return blogEntryRepository.save(entry);
