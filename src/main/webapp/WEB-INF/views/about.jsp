@@ -7,43 +7,6 @@
     <head>
         <title>About</title>
         <link href="${socialflaircss}" rel="stylesheet" type="text/css">
-        <%--<script>
-            function truncateName(a){return a.length>28?a.substring(0,28)+"...":a}
-            var some;
-            require(["dojo/query","dojo/domReady!","dojo/io/script","dojo/json","dojo/dom-attr"], function(query,ready,script,json,domAttr) {
-                script.get({
-                    url: 'http://api.twitter.com/1/followers/ids.json?screen_name=luisnramirez&cursor=-1',
-                    callbackParamName: "callback"
-                }).then(function(_data) {
-                    var followers = _data.ids.length;
-                    script.get({
-                        url: 'http://api.twitter.com/1/friends/ids.json?screen_name=luisnramirez&cursor=-1',
-                        callbackParamName: "callback"
-                    }).then(function(data) {
-                        var following = data.ids.length;
-                        var handler = 'luisnramirez';
-                        domAttr.set(query('#twitterFlair')[0],"innerHTML",
-                             "<a class='sfLink' href='http://twitter.com/#!/" + handler +"'><div class='sfTable sfTwitter'><div class='sfRow'>"
-                            +" <div class='sfCell1'>"
-                            +"  <img class='sfProfilePic' src='https://api.twitter.com/1/users/profile_image?screen_name=" + handler + "&size=normal' width='48px' height='48px' />"
-                            +" </div>"
-                            +" <div class='sfCell2'>"
-                            +"  <div class='sfHandle'>" + truncateName(handler) + "</div>"
-                            +"  <div class='sfFans'>"
-                            +"	 <span class='following' alt='Following' title='Following'>" + following + "</span>"
-                            +" 	 <span class='followers' alt='Followers' title='Followers'>" + followers + "</span>"
-                            +"  </div>"
-                            +"</div>"
-                            +"</div></div>​</a>"
-                        );
-                    }).then(function() {
-                        query("a.sfLink").forEach(function(node_) {
-                            domAttr.set(node_,"target","_BLANK");
-                        });
-                    })
-                });
-            });
-        </script>--%>
     </head>
     <body>
         <section>            

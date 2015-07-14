@@ -16,5 +16,5 @@
             [sablono.core :as html :refer-macros [html]]
             [bajoneando.core :as bcore]))
 
-(def app-state (atom {:cur-date (.Date)}))
+;(def app-state (atom {:cur-date (.Date)}))
 

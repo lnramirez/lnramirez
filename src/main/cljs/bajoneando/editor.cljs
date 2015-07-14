@@ -107,6 +107,7 @@
                            (= :new mode) (html
                                            [:button.btn.btn-primary
                                             "Add new entry"])
+                           (= :cancel mode) (html [:span])
                            (= :edit mode ) (html
                                              [:button.btn.btn-primary
                                               {:on-click (fn [e]
