@@ -1,4 +1,4 @@
-(defproject bajoneando "0.1.0-SNAPSHOT"
+(defproject bajoneando "0.2.0-SNAPSHOT"
   :description "Bajoneando Website gimmicks"
   :url "http://www.bajoneando.com"
 
