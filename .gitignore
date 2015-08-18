@@ -30,3 +30,6 @@ pom.xml
 
 #leinegen
 .lein-repl-history
+
+#cljs auto-generated
+#src/main/webapp/resources/js/
