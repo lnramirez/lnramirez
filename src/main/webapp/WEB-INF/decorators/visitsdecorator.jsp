@@ -12,10 +12,10 @@
 <c:url value="/about/" var="about"/>
 <c:url value="/spring_security_login" var="login"/>
 <c:url value="/j_spring_security_logout" var="logout"/>
+<spring:url value="/resources" var="res" />
 <spring:url value="/resources/icons/favicon.ico" var="favicon"/>
 <spring:url value="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" var="bootcss"/>
 <spring:url value="/resources/css/lnramirez.css" var="css"/>
-<spring:url value="http://ajax.googleapis.com/ajax/libs/dojo/1.9.1/dojo/dojo.js" var="dojo"/>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -23,7 +23,6 @@
     <link href="${bootcss}" rel="stylesheet" type="text/css">
     <link href="${css}" rel="stylesheet" type="text/css">
     <link href="${favicon}" rel="icon" type="image/vnd.microsoft.icon">
-    <script src="${dojo}" data-dojo-config="async: true, parseOnLoad: true, isDebug: true, locale: 'en'"></script>
     <decorator:head/>
 </head>
 <body>

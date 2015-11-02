@@ -20,6 +20,8 @@
                                             })
                           })))
 
+
+
 (defn no-location []
       (bcore/js-xhr {:method :post
                      :url "/visit/add"

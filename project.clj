@@ -20,7 +20,9 @@
                :builds [{:id "dev"
                          :source-paths ["src/main/cljs"]
                          :compiler {
-                                     :output-to  "src/main/webapp/resources/js/bajoneando.js"
-                                     :output-dir "src/main/webapp/resources/js/out"
-                                     :optimizations :none
-                                     :source-map true}}]})
+                                    :output-to  "src/main/webapp/resources/js/bajoneando.js"
+                                    :output-dir "src/main/webapp/resources/js/out"
+                                    :optimizations :none
+                                    :source-map true
+                                    :foreign-libs [{:file "http://open.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Fmjtd%7Cluur216znd%2C8x%3Do5-90tn9f"
+                                                    :provides ["maq"]}]}}]})

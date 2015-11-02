@@ -30,6 +30,7 @@ goog.addDependency("../clojure/walk.js", ['clojure.walk'], ['cljs.core']);
 goog.addDependency("../sablono/util.js", ['sablono.util'], ['goog.Uri', 'cljs.core', 'clojure.set', 'clojure.string', 'clojure.walk']);
 goog.addDependency("../sablono/interpreter.js", ['sablono.interpreter'], ['sablono.util', 'cljs.core', 'clojure.string']);
 goog.addDependency("../om_tools/dom.js", ['om_tools.dom'], ['cljs.core', 'om.dom', 'clojure.string']);
+goog.addDependency("../mqa.toolkit.js", ['maq'], []);
 goog.addDependency("../om/core.js", ['om.core'], ['goog.dom', 'cljs.core', 'om.dom', 'cljsjs.react', 'goog.ui.IdGenerator']);
 goog.addDependency("../om_tools/core.js", ['om_tools.core'], ['plumbing.core', 'schema.core', 'cljs.core', 'om.core', 'plumbing.fnk.schema']);
 goog.addDependency("../cljs/core/async/impl/timers.js", ['cljs.core.async.impl.timers'], ['cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core', 'cljs.core.async.impl.protocols']);
@@ -38,4 +39,4 @@ goog.addDependency("../sablono/core.js", ['sablono.core'], ['goog.dom', 'sablono
 goog.addDependency("../bajoneando/editor.js", ['bajoneando.editor'], ['goog.net.XhrIo', 'om_tools.dom', 'om_tools.core', 'cljs.core', 'goog.i18n.DateTimeFormat', 'bajoneando.core', 'cljs.core.async', 'cognitect.transit', 'sablono.core', 'goog.events.EventType', 'om.core', 'goog.i18n.DateTimeParse', 'goog.date.DateTime', 'goog.events']);
 goog.addDependency("../bajoneando/sandbox.js", ['bajoneando.sandbox'], ['goog.net.XhrIo', 'om_tools.dom', 'om_tools.core', 'cljs.core', 'goog.i18n.DateTimeFormat', 'bajoneando.core', 'cljs.core.async', 'cognitect.transit', 'sablono.core', 'goog.events.EventType', 'om.core', 'goog.events']);
 goog.addDependency("../bajoneando/flairs.js", ['bajoneando.flairs'], ['cljs.core', 'om.dom', 'bajoneando.core', 'sablono.core', 'om.core', 'goog.events']);
-goog.addDependency("../bajoneando/summary.js", ['bajoneando.summary'], ['goog.net.XhrIo', 'om_tools.dom', 'om_tools.core', 'cljs.core', 'goog.i18n.DateTimeFormat', 'bajoneando.core', 'cljs.core.async', 'cognitect.transit', 'sablono.core', 'goog.events.EventType', 'om.core', 'goog.i18n.DateTimeParse', 'goog.date.DateTime', 'goog.events']);
+goog.addDependency("../bajoneando/summary.js", ['bajoneando.summary'], ['maq', 'goog.net.XhrIo', 'om_tools.dom', 'om_tools.core', 'cljs.core', 'goog.i18n.DateTimeFormat', 'bajoneando.core', 'cljs.core.async', 'cognitect.transit', 'sablono.core', 'goog.events.EventType', 'om.core', 'goog.i18n.DateTimeParse', 'goog.date.DateTime', 'goog.events']);
