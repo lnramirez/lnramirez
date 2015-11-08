@@ -23,7 +23,7 @@
 (defn draw-map [map visit]
   (let [shape (js-obj "lat" (get visit "latitude")
                       "lng" (get visit "longitude"))
-        info-content (str "Date: " (get visit "date"))
+        info-content (str "Date: " (.format date-time-formatter (js/Date. (get visit "date"))) " (UTC)")
         last-visit (new js/MQA.Poi shape)]
     (.setRolloverContent last-visit info-content)
     (.setInfoContentHTML last-visit info-content)
@@ -34,7 +34,7 @@
 
 (defn update-previous [state]
   (bcore/js-xhr {:method :get
-                 :url (str "/visit/previous/" (str "Date: " (.format date-time-formatter (js/Date. (get (:visit @state) "date")))))
+                 :url (str "/visit/previous/" (get (:visit state) "date"))
                  :on-complete (fn [upd-visit]
                                 (put! (:visit-chan state) upd-visit))}))
 
@@ -45,7 +45,7 @@
     om/IInitState
     (init-state [_]
       {:visit {}
-;       :hits 0
+       :hits 0
        :visit-chan (chan)})
     om/IWillMount
     (will-mount
@@ -65,7 +65,8 @@
         (go (while true
               (let [upd-visit (<! visit-chan)]
                 (do
-;                  (om/set-state! owner :visit (get upd "lastVisit"))
+                  (om/set-state! owner :visit (get upd-visit "lastVisit"))
+                  (om/set-state! owner :hits (get upd-visit "hits"))
                   (draw-map map (get upd-visit "lastVisit"))))))
         (bcore/js-xhr {:method :get
                        :url "/visit/update"
@@ -80,7 +81,7 @@
            [:div.row
             [:div.col-md-12
              [:h2 "Summary"]
-             (str "Hits: " )]]]
+             (str "Hits: " hits)]]]
           [:section
                   [:div.row
                    [:div.col-md-12
