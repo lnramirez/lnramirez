@@ -17,15 +17,13 @@
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-        
-    
-        <div id="map" style="width:750px; height:300px;"></div>
+            <div id="map" style="width:750px; height:300px;"></div>
         </div>
+        <div class="col-md-2"></div>
     </div>
-                <script src="http://fb.me/react-0.8.0.js"></script>
-                <script src="${res}/js/out/goog/base.js" type="text/javascript"></script>
-                <script src="${res}/js/bajoneando.js" type="text/javascript"></script>
-                <script type="text/javascript">goog.require("bajoneando.summary");</script>
-    
+    <script src="http://fb.me/react-0.8.0.js"></script>
+    <script src="${res}/js/out/goog/base.js" type="text/javascript"></script>
+    <script src="${res}/js/bajoneando.js" type="text/javascript"></script>
+    <script type="text/javascript">goog.require("bajoneando.summary");</script>
     </body>
 </html>

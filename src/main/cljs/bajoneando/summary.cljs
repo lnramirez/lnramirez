@@ -24,9 +24,14 @@
   (let [shape (js-obj "lat" (get visit "latitude")
                       "lng" (get visit "longitude"))
         info-content (str "Date: " (.format date-time-formatter (js/Date. (get visit "date"))) " (UTC)")
-        last-visit (new js/MQA.Poi shape)]
+        last-visit (new js/MQA.Poi shape)
+        cust-icon (new js/MQA.Icon
+                       "https://www.mapquestapi.com/staticmap/geticon?uri=poi-1.png"
+                       20
+                       29)]
     (.setRolloverContent last-visit info-content)
     (.setInfoContentHTML last-visit info-content)
+    (.setIcon last-visit cust-icon)
     (.removeAllShapes map)
     (.addShape map last-visit)
     (.bestFit map)
@@ -34,13 +39,13 @@
 
 (defn update-last [state]
   (bcore/js-xhr {:method :get
-                 :url (str "/visit/update")
+                 :url "/visit/update"
                  :on-complete (fn [upd-visit]
                                 (put! (:visit-chan state) upd-visit))}))
 
 (defn update-previous [state]
   (bcore/js-xhr {:method :get
-                 :uxrl (str "/visit/previous/" (get (:visit state) "date"))
+                 :url (str "/visit/previous/" (get (:visit state) "date"))
                  :on-complete (fn [upd-visit]
                                 (put! (:visit-chan state) upd-visit))}))
 
@@ -55,26 +60,32 @@
        :visit-chan (chan)})
     om/IWillMount
     (will-mount
-        [_]
-      (let [visit-chan (om/get-state owner [:visit-chan])
-            options (js-obj "elt" (. js/document (getElementById "map"))
-                            "zoom" 13
-                            "mtype" "osm"
-                            "bestFitMargin" 0
-                            "zoomOnDoubleClick" true)
-            TileMap (.-TileMap js/MQA)
-            SmallZoom (.-SmallZoom js/MQA)
-            MapCornerPlacement (.-MapCornerPlacement js/MQA)
-            MapCorner (.-MapCorner js/MQA)
-            Size (.-Size js/MQA)
-            map (TileMap. options)]
-        (go (while true
-              (let [upd-visit (<! visit-chan)]
-                (do
-                  (om/set-state! owner :visit (get upd-visit "lastVisit"))
-                  (om/set-state! owner :hits (get upd-visit "hits"))
-                  (draw-map map (get upd-visit "lastVisit"))))))
-        (update-last (om/get-state owner))))
+              [_]
+              (let [visit-chan (om/get-state owner [:visit-chan])
+                    options (js-obj "elt" (. js/document (getElementById "map"))
+                                    "zoom" 13
+                                    "mtype" "osm"
+                                    "bestFitMargin" 0
+                                    "zoomOnDoubleClick" true)
+                    Size (.-Size js/MQA)
+                    map (new js/MQA.TileMap options)]
+                (.withModule js/MQA "smallzoom" "mousewheel"
+                             (fn [_]
+                               (.addControl map
+                                            (new js/MQA.SmallZoom)
+                                            (new js/MQA.MapCornerPlacement
+                                                 (-> js/MQA (.-MapCorner) (.-TOP_LEFT))
+                                                 (new js/MQA.Size 5 5))
+                                            )
+                               (.enableMouseWheelZoom map))
+                             )
+                (go (while true
+                      (let [upd-visit (<! visit-chan)]
+                        (do
+                          (om/set-state! owner :visit (get upd-visit "lastVisit"))
+                          (om/set-state! owner :hits (get upd-visit "hits"))
+                          (draw-map map (get upd-visit "lastVisit"))))))
+                (update-last (om/get-state owner))))
     om/IRenderState
     (render-state [this state]
       (let [hits (:hits state)]

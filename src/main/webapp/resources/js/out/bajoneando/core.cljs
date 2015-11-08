@@ -13,7 +13,10 @@
    :post "POST"
    :delete "DELETE"})
 
+(enable-console-print!)
+
 (defn js-xhr [{:keys [method url data on-complete]}]
+  (println url)
       (let [xhr (XhrIo.)]
            (if on-complete
              (events/listen xhr goog.net.EventType.COMPLETE
