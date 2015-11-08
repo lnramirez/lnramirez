@@ -18,7 +18,7 @@
             [maq :as m]
             ))
 
-(enable-console-print!)
+(def date-time-formatter (DateTimeFormat. "dd-MMM-yyyy HH:mm"))
 
 (defn draw-map [map visit]
   (let [shape (js-obj "lat" (get visit "latitude")
@@ -34,7 +34,7 @@
 
 (defn update-previous [state]
   (bcore/js-xhr {:method :get
-                 :url (str "/visit/previous/" (get (:visit state) "date"))
+                 :url (str "/visit/previous/" (str "Date: " (.format date-time-formatter (js/Date. (get visit "date")))))
                  :on-complete (fn [upd-visit]
                                 (put! (:visit-chan state) upd-visit))}))
 
@@ -45,11 +45,12 @@
     om/IInitState
     (init-state [_]
       {:visit {}
+;       :hits 0
        :visit-chan (chan)})
     om/IWillMount
     (will-mount
         [_]
-      (let [visit (om/get-state owner [:visit-chan])
+      (let [visit-chan (om/get-state owner [:visit-chan])
             options (js-obj "elt" (. js/document (getElementById "map"))
                             "zoom" 13
                             "mtype" "osm"
@@ -62,19 +63,24 @@
             Size (.-Size js/MQA)
             map (TileMap. options)]
         (go (while true
-              (let [upd (<! visit)]
+              (let [upd-visit (<! visit-chan)]
                 (do
-                  (om/set-state! owner :visit (get upd "lastVisit"))
-                  ;(pr intln (get upd "lastVisit"))
-                  (draw-map map (get upd "lastVisit"))))))
+;                  (om/set-state! owner :visit (get upd "lastVisit"))
+                  (draw-map map (get upd-visit "lastVisit"))))))
         (bcore/js-xhr {:method :get
                        :url "/visit/update"
                        :on-complete (fn [upd-visit]
-                                      (put! visit upd-visit))})))
+                                      (put! visit-chan upd-visit))})))
     om/IRenderState
     (render-state [this state]
-      (let [visit (:visit state)]
-           (html [:section
+      (let [hits (:hits state)]
+        (html
+         (comment [:section
+                   [:div.row
+                    [:div.col-md-12
+                     [:h2 "Summary"]
+                     (str "Hits: ")]]])
+         [:section
                   [:div.row
                    [:div.col-md-12
                     [:h2 "Last Visit"]]]
