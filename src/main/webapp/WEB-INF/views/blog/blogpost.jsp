@@ -6,7 +6,6 @@
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="bajoneando"    uri="http://www.bajoneando.com/tags"%>
 <spring:url value="/resources/js/prettify.js" var="prettifyjs" />
-<spring:url value="/resources/js/blogcustomized.js" var="blogcustomizedjs" />
 <spring:url value="/resources/css/prettify.css" var="prettifycss" />
 <!DOCTYPE html>
 <html lang="en">

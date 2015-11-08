@@ -14,7 +14,7 @@
 <c:url value="/j_spring_security_logout" var="logout"/>
 <spring:url value="/resources" var="res" />
 <spring:url value="/resources/icons/favicon.ico" var="favicon"/>
-<spring:url value="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" var="bootcss"/>
+<spring:url value="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" var="bootcss"/>
 <spring:url value="/resources/css/lnramirez.css" var="css"/>
 <html lang="en">
 <head>
@@ -57,7 +57,7 @@
 
     </header>
 
-    <div class="container">
+    <div class="container visit">
 
         <div id="rounded_box">
             <decorator:body/>

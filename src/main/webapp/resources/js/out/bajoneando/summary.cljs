@@ -18,12 +18,12 @@
             [maq :as m]
             ))
 
-(enable-console-print!)
+(def date-time-formatter (DateTimeFormat. "dd-MMM-yyyy HH:mm"))
 
 (defn draw-map [map visit]
   (let [shape (js-obj "lat" (get visit "latitude")
                       "lng" (get visit "longitude"))
-        info-content (str "Date: " (get visit "date"))
+        info-content (str "Date: " (.format date-time-formatter (js/Date. (get visit "date"))) " (UTC)")
         last-visit (new js/MQA.Poi shape)]
     (.setRolloverContent last-visit info-content)
     (.setInfoContentHTML last-visit info-content)
@@ -32,9 +32,15 @@
     (.bestFit map)
     (.setZoomLevel map 13)))
 
+(defn update-last [state]
+  (bcore/js-xhr {:method :get
+                 :url (str "/visit/update")
+                 :on-complete (fn [upd-visit]
+                                (put! (:visit-chan state) upd-visit))}))
+
 (defn update-previous [state]
   (bcore/js-xhr {:method :get
-                 :url (str "/visit/previous/" (get (:visit state) "date"))
+                 :uxrl (str "/visit/previous/" (get (:visit state) "date"))
                  :on-complete (fn [upd-visit]
                                 (put! (:visit-chan state) upd-visit))}))
 
@@ -45,11 +51,12 @@
     om/IInitState
     (init-state [_]
       {:visit {}
+       :hits 0
        :visit-chan (chan)})
     om/IWillMount
     (will-mount
         [_]
-      (let [visit (om/get-state owner [:visit-chan])
+      (let [visit-chan (om/get-state owner [:visit-chan])
             options (js-obj "elt" (. js/document (getElementById "map"))
                             "zoom" 13
                             "mtype" "osm"
@@ -62,44 +69,53 @@
             Size (.-Size js/MQA)
             map (TileMap. options)]
         (go (while true
-              (let [upd (<! visit)]
+              (let [upd-visit (<! visit-chan)]
                 (do
-                  (om/set-state! owner :visit (get upd "lastVisit"))
-                  ;(pr intln (get upd "lastVisit"))
-                  (draw-map map (get upd "lastVisit"))))))
-        (bcore/js-xhr {:method :get
-                       :url "/visit/update"
-                       :on-complete (fn [upd-visit]
-                                      (put! visit upd-visit))})))
+                  (om/set-state! owner :visit (get upd-visit "lastVisit"))
+                  (om/set-state! owner :hits (get upd-visit "hits"))
+                  (draw-map map (get upd-visit "lastVisit"))))))
+        (update-last (om/get-state owner))))
     om/IRenderState
     (render-state [this state]
-      (let [visit (:visit state)]
-           (html [:section
+      (let [hits (:hits state)]
+        (html
+         [:div
+          [:section
+           [:div.row
+            [:div.col-md-12
+             [:h2 "Summary"]
+             (str "Hits: " hits)]]]
+          [:section
                   [:div.row
                    [:div.col-md-12
                     [:h2 "Last Visit"]]]
                   [:div.row
                    [:div.col-md-2 ]
                    [:div.col-md-8
-                    [:ul.pager
-                     [:li.previous
-                      [:button.btn.btn-primary
-                       {:on-click (fn [e]
-                                    (.preventDefault e)
-                                    (update-previous state))}
-                       "Previous"]]
-                     [:li.next
-                      [:button.btn.btn-primary
-                       {:on-click (fn [e]
-                                    (.preventDefault e)
-                                    (update-previous state))
-                        }
-                       "Next"]]]
+                    [:nav
+                     [:ul.pager
+                      [:li.previous
+                       [:a
+                        {:href "#"
+                         :on-click (fn [e]
+                                     (.preventDefault e)
+                                     (update-previous state))}
+                        "Previous"]]
+                      [:li.next
+                       [:a.disabled
+                        {:href "#"
+                         :on-click (fn [e]
+                                     (.preventDefault e)
+                                     (update-previous state))
+                         }
+                        "Next"]]]]
                     [:a.updateanchor.glyphicon.glyphicon-refresh
                      {:href "#"
-                      :on-click #()}]
+                      :on-click (fn [e]
+                                   (.preventDefault e)
+                                   (update-last state))}]
                     [:span#updating.updating]
-                    ]]]
+                    ]]]]
                  )))))
 
 (om/root map-view app-state {:target (. js/document (getElementById "summary"))})

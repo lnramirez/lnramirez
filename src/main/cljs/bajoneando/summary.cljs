@@ -40,7 +40,7 @@
 
 (defn update-previous [state]
   (bcore/js-xhr {:method :get
-                 :url (str "/visit/previous/" (get (:visit state) "date"))
+                 :uxrl (str "/visit/previous/" (get (:visit state) "date"))
                  :on-complete (fn [upd-visit]
                                 (put! (:visit-chan state) upd-visit))}))
 
@@ -90,7 +90,7 @@
                    [:div.col-md-12
                     [:h2 "Last Visit"]]]
                   [:div.row
-                   ;[:div.col-md-2 ]
+                   [:div.col-md-2 ]
                    [:div.col-md-8
                     [:nav
                      [:ul.pager
