@@ -32,6 +32,12 @@
     (.bestFit map)
     (.setZoomLevel map 13)))
 
+(defn update-last [state]
+  (bcore/js-xhr {:method :get
+                 :url (str "/visit/update")
+                 :on-complete (fn [upd-visit]
+                                (put! (:visit-chan state) upd-visit))}))
+
 (defn update-previous [state]
   (bcore/js-xhr {:method :get
                  :url (str "/visit/previous/" (get (:visit state) "date"))
@@ -68,10 +74,7 @@
                   (om/set-state! owner :visit (get upd-visit "lastVisit"))
                   (om/set-state! owner :hits (get upd-visit "hits"))
                   (draw-map map (get upd-visit "lastVisit"))))))
-        (bcore/js-xhr {:method :get
-                       :url "/visit/update"
-                       :on-complete (fn [upd-visit]
-                                      (put! visit-chan upd-visit))})))
+        (update-last (om/get-state owner))))
     om/IRenderState
     (render-state [this state]
       (let [hits (:hits state)]
@@ -87,25 +90,30 @@
                    [:div.col-md-12
                     [:h2 "Last Visit"]]]
                   [:div.row
-                   [:div.col-md-2 ]
+                   ;[:div.col-md-2 ]
                    [:div.col-md-8
-                    [:ul.pager
-                     [:li.previous
-                      [:button.btn.btn-primary
-                       {:on-click (fn [e]
-                                    (.preventDefault e)
-                                    (update-previous state))}
-                       "Previous"]]
-                     [:li.next
-                      [:button.btn.btn-primary
-                       {:on-click (fn [e]
-                                    (.preventDefault e)
-                                    (update-previous state))
-                        }
-                       "Next"]]]
+                    [:nav
+                     [:ul.pager
+                      [:li.previous
+                       [:a
+                        {:href "#"
+                         :on-click (fn [e]
+                                     (.preventDefault e)
+                                     (update-previous state))}
+                        "Previous"]]
+                      [:li.next
+                       [:a.disabled
+                        {:href "#"
+                         :on-click (fn [e]
+                                     (.preventDefault e)
+                                     (update-previous state))
+                         }
+                        "Next"]]]]
                     [:a.updateanchor.glyphicon.glyphicon-refresh
                      {:href "#"
-                      :on-click #()}]
+                      :on-click (fn [e]
+                                   (.preventDefault e)
+                                   (update-last state))}]
                     [:span#updating.updating]
                     ]]]]
                  )))))
