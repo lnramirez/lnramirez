@@ -34,7 +34,7 @@
 
 (defn update-previous [state]
   (bcore/js-xhr {:method :get
-                 :url (str "/visit/previous/" (str "Date: " (.format date-time-formatter (js/Date. (get visit "date")))))
+                 :url (str "/visit/previous/" (str "Date: " (.format date-time-formatter (js/Date. (get (:visit @state) "date")))))
                  :on-complete (fn [upd-visit]
                                 (put! (:visit-chan state) upd-visit))}))
 
@@ -75,12 +75,13 @@
     (render-state [this state]
       (let [hits (:hits state)]
         (html
-         (comment [:section
-                   [:div.row
-                    [:div.col-md-12
-                     [:h2 "Summary"]
-                     (str "Hits: ")]]])
-         [:section
+         [:div
+          [:section
+           [:div.row
+            [:div.col-md-12
+             [:h2 "Summary"]
+             (str "Hits: " )]]]
+          [:section
                   [:div.row
                    [:div.col-md-12
                     [:h2 "Last Visit"]]]
@@ -105,7 +106,7 @@
                      {:href "#"
                       :on-click #()}]
                     [:span#updating.updating]
-                    ]]]
+                    ]]]]
                  )))))
 
 (om/root map-view app-state {:target (. js/document (getElementById "summary"))})
