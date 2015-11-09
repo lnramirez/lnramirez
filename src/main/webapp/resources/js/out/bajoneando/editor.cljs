@@ -137,32 +137,29 @@
         (render-state [this state]
                       (let [subject (get entry "subject")
                             entry-id (get entry "id")
-                            raw-publish-date (get entry "publishDate")
-                            raw-last-updated-date (get entry "lastUpdateDate")
+                            publish-date (-> entry (get "publishDate") (format-date date-time-formatter))
+                            last-updated (-> entry (get "lastUpdateDate") (format-date date-time-formatter))
                             target (str "art" entry-id)
                             printable-html (get entry "printableHtml")
                             md-article (get entry "article")]
                            (def edit-map {:mode :edit
                                           :article {:subject subject
-                                                    :publish-date raw-publish-date
+                                                    :publish-date (get entry "publishDate")
                                                     :md-article md-article
                                                     :id-article entry-id}})
                            (def editing-init-state
                              (atom edit-map))
                            (html [:article
                                   {:id    entry-id
+                                   :key   entry-id
                                    :class-name "blogcontent"}
                                   [:header
                                    [:h1
                                     [:a {:href (str "/blog/" entry-id "/" subject)}
                                      subject]]
                                    [:p.text-muted
-                                    (str "Published on: ")
-                                    (let [publish-date (format-date raw-publish-date date-formatter)
-                                          in-publish-date (format-date raw-publish-date in-date-formatter)]
-                                         [:time.publishDate
-                                          {:dateTime in-publish-date}
-                                          publish-date])]
+                                    (str "Published on: " publish-date)
+                                    ]
                                    (if (= :editing (om/get-state owner :mode))
                                      (om/build new-article edit-map))
                                    (if (om/get-state owner :editable)
@@ -175,13 +172,9 @@
                                              "Edit"]]))]
                                   [:div.printableHtml
                                    {:dangerouslySetInnerHTML #js {:__html printable-html}}]
-                                  (let [last-updated (format-date raw-last-updated-date date-time-formatter)
-                                        in-last-updated (format-date raw-last-updated-date in-date-time-formatter)]
-                                       [:p.text-muted
-                                        "Last update: "
-                                        [:time
-                                         {:dateTime in-last-updated}
-                                         last-updated]])]))
+                                  [:p.text-muted
+                                   (str "Last update: " last-updated)
+                                   ]]))
                       )))
 
 (defn articles-view [app owner]
