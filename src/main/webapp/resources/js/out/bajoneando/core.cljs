@@ -13,20 +13,16 @@
    :post "POST"
    :delete "DELETE"})
 
-(enable-console-print!)
-
 (defn js-xhr [{:keys [method url data on-complete]}]
-  (println url)
       (let [xhr (XhrIo.)]
-           (if on-complete
+        (when on-complete
              (events/listen xhr goog.net.EventType.COMPLETE
                             (fn [e]
+                              (when (.isSuccess xhr)
                                 (let [ raw (.getResponseText xhr)
-                                      resp (transit/read reader (.getResponseText xhr))]
-                                     (do
-                                       (on-complete resp)))))
-             (println url " invoked succesfully"))
-           (. xhr
-              (send url (meths method) (when data data)
+                                          resp (transit/read reader (.getResponseText xhr))]
+                                      (on-complete resp)))
+                              )))
+        (. xhr (send url (meths method) (when data data)
                     #js {"Accept" "application/json"
                          "Content-Type" "application/json"}))))

@@ -15,10 +15,10 @@ return bajoneando.core.js_xhr.call(null,new cljs.core.PersistentArrayMap(null, 3
 bajoneando.visits.no_location = (function no_location(){
 return bajoneando.core.js_xhr.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"method","method",55703592),new cljs.core.Keyword(null,"post","post",269697687),new cljs.core.Keyword(null,"url","url",276297046),"/visit/add",new cljs.core.Keyword(null,"data","data",-232669377),cognitect.transit.write.call(null,bajoneando.visits.writer,new cljs.core.PersistentArrayMap(null, 1, ["locationPermit",false], null))], null));
 });
-var temp__4124__auto___17755 = navigator.geolocation;
-if(cljs.core.truth_(temp__4124__auto___17755)){
-var locator_17756 = temp__4124__auto___17755;
-locator_17756.getCurrentPosition(bajoneando.visits.add_visit,bajoneando.visits.no_location);
+var temp__4124__auto___18649 = navigator.geolocation;
+if(cljs.core.truth_(temp__4124__auto___18649)){
+var locator_18650 = temp__4124__auto___18649;
+locator_18650.getCurrentPosition(bajoneando.visits.add_visit,bajoneando.visits.no_location);
 } else {
 }
 
